@@ -1,6 +1,7 @@
 package org.tamisemi.iftmis.web.rest;
 
 import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,11 +11,15 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.tamisemi.iftmis.domain.MeetingAttachment;
-import org.tamisemi.iftmis.repository.MeetingAttachmentRepository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.service.MeetingAttachmentService;
+import org.tamisemi.iftmis.service.dto.MeetingAttachmentDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +27,6 @@ import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class MeetingAttachmentResource {
     private final Logger log = LoggerFactory.getLogger(MeetingAttachmentResource.class);
 
@@ -31,27 +35,27 @@ public class MeetingAttachmentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MeetingAttachmentRepository meetingAttachmentRepository;
+    private final MeetingAttachmentService meetingAttachmentService;
 
-    public MeetingAttachmentResource(MeetingAttachmentRepository meetingAttachmentRepository) {
-        this.meetingAttachmentRepository = meetingAttachmentRepository;
+    public MeetingAttachmentResource(MeetingAttachmentService meetingAttachmentService) {
+        this.meetingAttachmentService = meetingAttachmentService;
     }
 
     /**
      * {@code POST  /meeting-attachments} : Create a new meetingAttachment.
      *
-     * @param meetingAttachment the meetingAttachment to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new meetingAttachment, or with status {@code 400 (Bad Request)} if the meetingAttachment has already an ID.
+     * @param meetingAttachmentDTO the meetingAttachmentDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new meetingAttachmentDTO, or with status {@code 400 (Bad Request)} if the meetingAttachment has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/meeting-attachments")
-    public ResponseEntity<MeetingAttachment> createMeetingAttachment(@Valid @RequestBody MeetingAttachment meetingAttachment)
+    public ResponseEntity<MeetingAttachmentDTO> createMeetingAttachment(@Valid @RequestBody MeetingAttachmentDTO meetingAttachmentDTO)
         throws URISyntaxException {
-        log.debug("REST request to save MeetingAttachment : {}", meetingAttachment);
-        if (meetingAttachment.getId() != null) {
+        log.debug("REST request to save MeetingAttachment : {}", meetingAttachmentDTO);
+        if (meetingAttachmentDTO.getId() != null) {
             throw new BadRequestAlertException("A new meetingAttachment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        MeetingAttachment result = meetingAttachmentRepository.save(meetingAttachment);
+        MeetingAttachmentDTO result = meetingAttachmentService.save(meetingAttachmentDTO);
         return ResponseEntity
             .created(new URI("/api/meeting-attachments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -61,60 +65,63 @@ public class MeetingAttachmentResource {
     /**
      * {@code PUT  /meeting-attachments} : Updates an existing meetingAttachment.
      *
-     * @param meetingAttachment the meetingAttachment to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated meetingAttachment,
-     * or with status {@code 400 (Bad Request)} if the meetingAttachment is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the meetingAttachment couldn't be updated.
+     * @param meetingAttachmentDTO the meetingAttachmentDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated meetingAttachmentDTO,
+     * or with status {@code 400 (Bad Request)} if the meetingAttachmentDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the meetingAttachmentDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/meeting-attachments")
-    public ResponseEntity<MeetingAttachment> updateMeetingAttachment(@Valid @RequestBody MeetingAttachment meetingAttachment)
+    public ResponseEntity<MeetingAttachmentDTO> updateMeetingAttachment(@Valid @RequestBody MeetingAttachmentDTO meetingAttachmentDTO)
         throws URISyntaxException {
-        log.debug("REST request to update MeetingAttachment : {}", meetingAttachment);
-        if (meetingAttachment.getId() == null) {
+        log.debug("REST request to update MeetingAttachment : {}", meetingAttachmentDTO);
+        if (meetingAttachmentDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        MeetingAttachment result = meetingAttachmentRepository.save(meetingAttachment);
+        MeetingAttachmentDTO result = meetingAttachmentService.save(meetingAttachmentDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, meetingAttachment.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, meetingAttachmentDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code GET  /meeting-attachments} : get all the meetingAttachments.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of meetingAttachments in body.
      */
     @GetMapping("/meeting-attachments")
-    public List<MeetingAttachment> getAllMeetingAttachments() {
-        log.debug("REST request to get all MeetingAttachments");
-        return meetingAttachmentRepository.findAll();
+    public ResponseEntity<List<MeetingAttachmentDTO>> getAllMeetingAttachments(Pageable pageable) {
+        log.debug("REST request to get a page of MeetingAttachments");
+        Page<MeetingAttachmentDTO> page = meetingAttachmentService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
      * {@code GET  /meeting-attachments/:id} : get the "id" meetingAttachment.
      *
-     * @param id the id of the meetingAttachment to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the meetingAttachment, or with status {@code 404 (Not Found)}.
+     * @param id the id of the meetingAttachmentDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the meetingAttachmentDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/meeting-attachments/{id}")
-    public ResponseEntity<MeetingAttachment> getMeetingAttachment(@PathVariable Long id) {
+    public ResponseEntity<MeetingAttachmentDTO> getMeetingAttachment(@PathVariable Long id) {
         log.debug("REST request to get MeetingAttachment : {}", id);
-        Optional<MeetingAttachment> meetingAttachment = meetingAttachmentRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(meetingAttachment);
+        Optional<MeetingAttachmentDTO> meetingAttachmentDTO = meetingAttachmentService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(meetingAttachmentDTO);
     }
 
     /**
      * {@code DELETE  /meeting-attachments/:id} : delete the "id" meetingAttachment.
      *
-     * @param id the id of the meetingAttachment to delete.
+     * @param id the id of the meetingAttachmentDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/meeting-attachments/{id}")
     public ResponseEntity<Void> deleteMeetingAttachment(@PathVariable Long id) {
         log.debug("REST request to delete MeetingAttachment : {}", id);
-        meetingAttachmentRepository.deleteById(id);
+        meetingAttachmentService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

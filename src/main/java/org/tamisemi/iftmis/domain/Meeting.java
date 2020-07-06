@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -14,7 +13,6 @@ import org.tamisemi.iftmis.domain.enumeration.MeetingType;
 /**
  * The TeamMeeting entity.\n@author Chris
  */
-@ApiModel(description = "The TeamMeeting entity.\n@author Chris")
 @Entity
 @Table(name = "team_meetings")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -40,7 +38,6 @@ public class Meeting extends AbstractAuditingEntity implements Serializable {
     @Column(name = "venue", length = 200, nullable = false)
     private String venue;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "summary")
     private String summary;

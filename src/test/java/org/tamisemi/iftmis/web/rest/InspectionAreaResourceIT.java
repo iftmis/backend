@@ -21,6 +21,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.Inspection;
 import org.tamisemi.iftmis.domain.InspectionArea;
 import org.tamisemi.iftmis.repository.InspectionAreaRepository;
+import org.tamisemi.iftmis.service.InspectionAreaService;
+import org.tamisemi.iftmis.service.dto.InspectionAreaDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionAreaMapper;
 
 /**
  * Integration tests for the {@link InspectionAreaResource} REST controller.
@@ -34,6 +37,12 @@ public class InspectionAreaResourceIT {
 
     @Autowired
     private InspectionAreaRepository inspectionAreaRepository;
+
+    @Autowired
+    private InspectionAreaMapper inspectionAreaMapper;
+
+    @Autowired
+    private InspectionAreaService inspectionAreaService;
 
     @Autowired
     private EntityManager em;
@@ -95,12 +104,13 @@ public class InspectionAreaResourceIT {
     public void createInspectionArea() throws Exception {
         int databaseSizeBeforeCreate = inspectionAreaRepository.findAll().size();
         // Create the InspectionArea
+        InspectionAreaDTO inspectionAreaDTO = inspectionAreaMapper.toDto(inspectionArea);
         restInspectionAreaMockMvc
             .perform(
                 post("/api/inspection-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionAreaDTO))
             )
             .andExpect(status().isCreated());
 
@@ -118,6 +128,7 @@ public class InspectionAreaResourceIT {
 
         // Create the InspectionArea with an existing ID
         inspectionArea.setId(1L);
+        InspectionAreaDTO inspectionAreaDTO = inspectionAreaMapper.toDto(inspectionArea);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionAreaMockMvc
@@ -125,7 +136,7 @@ public class InspectionAreaResourceIT {
                 post("/api/inspection-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionAreaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -142,13 +153,14 @@ public class InspectionAreaResourceIT {
         inspectionArea.setName(null);
 
         // Create the InspectionArea, which fails.
+        InspectionAreaDTO inspectionAreaDTO = inspectionAreaMapper.toDto(inspectionArea);
 
         restInspectionAreaMockMvc
             .perform(
                 post("/api/inspection-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionAreaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -206,13 +218,14 @@ public class InspectionAreaResourceIT {
         // Disconnect from session so that the updates on updatedInspectionArea are not directly saved in db
         em.detach(updatedInspectionArea);
         updatedInspectionArea.name(UPDATED_NAME);
+        InspectionAreaDTO inspectionAreaDTO = inspectionAreaMapper.toDto(updatedInspectionArea);
 
         restInspectionAreaMockMvc
             .perform(
                 put("/api/inspection-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionAreaDTO))
             )
             .andExpect(status().isOk());
 
@@ -228,13 +241,16 @@ public class InspectionAreaResourceIT {
     public void updateNonExistingInspectionArea() throws Exception {
         int databaseSizeBeforeUpdate = inspectionAreaRepository.findAll().size();
 
+        // Create the InspectionArea
+        InspectionAreaDTO inspectionAreaDTO = inspectionAreaMapper.toDto(inspectionArea);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionAreaMockMvc
             .perform(
                 put("/api/inspection-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionAreaDTO))
             )
             .andExpect(status().isBadRequest());
 

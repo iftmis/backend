@@ -21,6 +21,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.InspectionArea;
 import org.tamisemi.iftmis.domain.InspectionObjective;
 import org.tamisemi.iftmis.repository.InspectionObjectiveRepository;
+import org.tamisemi.iftmis.service.InspectionObjectiveService;
+import org.tamisemi.iftmis.service.dto.InspectionObjectiveDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionObjectiveMapper;
 
 /**
  * Integration tests for the {@link InspectionObjectiveResource} REST controller.
@@ -34,6 +37,12 @@ public class InspectionObjectiveResourceIT {
 
     @Autowired
     private InspectionObjectiveRepository inspectionObjectiveRepository;
+
+    @Autowired
+    private InspectionObjectiveMapper inspectionObjectiveMapper;
+
+    @Autowired
+    private InspectionObjectiveService inspectionObjectiveService;
 
     @Autowired
     private EntityManager em;
@@ -95,12 +104,13 @@ public class InspectionObjectiveResourceIT {
     public void createInspectionObjective() throws Exception {
         int databaseSizeBeforeCreate = inspectionObjectiveRepository.findAll().size();
         // Create the InspectionObjective
+        InspectionObjectiveDTO inspectionObjectiveDTO = inspectionObjectiveMapper.toDto(inspectionObjective);
         restInspectionObjectiveMockMvc
             .perform(
                 post("/api/inspection-objectives")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjective))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjectiveDTO))
             )
             .andExpect(status().isCreated());
 
@@ -118,6 +128,7 @@ public class InspectionObjectiveResourceIT {
 
         // Create the InspectionObjective with an existing ID
         inspectionObjective.setId(1L);
+        InspectionObjectiveDTO inspectionObjectiveDTO = inspectionObjectiveMapper.toDto(inspectionObjective);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionObjectiveMockMvc
@@ -125,7 +136,7 @@ public class InspectionObjectiveResourceIT {
                 post("/api/inspection-objectives")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjective))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjectiveDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -142,13 +153,14 @@ public class InspectionObjectiveResourceIT {
         inspectionObjective.setName(null);
 
         // Create the InspectionObjective, which fails.
+        InspectionObjectiveDTO inspectionObjectiveDTO = inspectionObjectiveMapper.toDto(inspectionObjective);
 
         restInspectionObjectiveMockMvc
             .perform(
                 post("/api/inspection-objectives")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjective))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjectiveDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -206,13 +218,14 @@ public class InspectionObjectiveResourceIT {
         // Disconnect from session so that the updates on updatedInspectionObjective are not directly saved in db
         em.detach(updatedInspectionObjective);
         updatedInspectionObjective.name(UPDATED_NAME);
+        InspectionObjectiveDTO inspectionObjectiveDTO = inspectionObjectiveMapper.toDto(updatedInspectionObjective);
 
         restInspectionObjectiveMockMvc
             .perform(
                 put("/api/inspection-objectives")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionObjective))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjectiveDTO))
             )
             .andExpect(status().isOk());
 
@@ -228,13 +241,16 @@ public class InspectionObjectiveResourceIT {
     public void updateNonExistingInspectionObjective() throws Exception {
         int databaseSizeBeforeUpdate = inspectionObjectiveRepository.findAll().size();
 
+        // Create the InspectionObjective
+        InspectionObjectiveDTO inspectionObjectiveDTO = inspectionObjectiveMapper.toDto(inspectionObjective);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionObjectiveMockMvc
             .perform(
                 put("/api/inspection-objectives")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjective))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionObjectiveDTO))
             )
             .andExpect(status().isBadRequest());
 

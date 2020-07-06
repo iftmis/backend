@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -14,7 +13,6 @@ import org.tamisemi.iftmis.domain.enumeration.FindingSource;
 /**
  * The Finding(findings) entity.\n@author Chris
  */
-@ApiModel(description = "The Finding(findings) entity.\n@author Chris")
 @Entity
 @Table(name = "findings")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -34,7 +32,6 @@ public class Finding extends AbstractAuditingEntity implements Serializable {
     @Column(name = "code")
     private String code;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description", nullable = false)
     private String description;

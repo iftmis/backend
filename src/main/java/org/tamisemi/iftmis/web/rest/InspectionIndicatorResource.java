@@ -1,6 +1,7 @@
 package org.tamisemi.iftmis.web.rest;
 
 import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,11 +11,15 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.tamisemi.iftmis.domain.InspectionIndicator;
-import org.tamisemi.iftmis.repository.InspectionIndicatorRepository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.service.InspectionIndicatorService;
+import org.tamisemi.iftmis.service.dto.InspectionIndicatorDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +27,6 @@ import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class InspectionIndicatorResource {
     private final Logger log = LoggerFactory.getLogger(InspectionIndicatorResource.class);
 
@@ -31,27 +35,29 @@ public class InspectionIndicatorResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final InspectionIndicatorRepository inspectionIndicatorRepository;
+    private final InspectionIndicatorService inspectionIndicatorService;
 
-    public InspectionIndicatorResource(InspectionIndicatorRepository inspectionIndicatorRepository) {
-        this.inspectionIndicatorRepository = inspectionIndicatorRepository;
+    public InspectionIndicatorResource(InspectionIndicatorService inspectionIndicatorService) {
+        this.inspectionIndicatorService = inspectionIndicatorService;
     }
 
     /**
      * {@code POST  /inspection-indicators} : Create a new inspectionIndicator.
      *
-     * @param inspectionIndicator the inspectionIndicator to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new inspectionIndicator, or with status {@code 400 (Bad Request)} if the inspectionIndicator has already an ID.
+     * @param inspectionIndicatorDTO the inspectionIndicatorDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new inspectionIndicatorDTO, or with status {@code 400 (Bad Request)} if the inspectionIndicator has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/inspection-indicators")
-    public ResponseEntity<InspectionIndicator> createInspectionIndicator(@Valid @RequestBody InspectionIndicator inspectionIndicator)
+    public ResponseEntity<InspectionIndicatorDTO> createInspectionIndicator(
+        @Valid @RequestBody InspectionIndicatorDTO inspectionIndicatorDTO
+    )
         throws URISyntaxException {
-        log.debug("REST request to save InspectionIndicator : {}", inspectionIndicator);
-        if (inspectionIndicator.getId() != null) {
+        log.debug("REST request to save InspectionIndicator : {}", inspectionIndicatorDTO);
+        if (inspectionIndicatorDTO.getId() != null) {
             throw new BadRequestAlertException("A new inspectionIndicator cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        InspectionIndicator result = inspectionIndicatorRepository.save(inspectionIndicator);
+        InspectionIndicatorDTO result = inspectionIndicatorService.save(inspectionIndicatorDTO);
         return ResponseEntity
             .created(new URI("/api/inspection-indicators/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -61,60 +67,65 @@ public class InspectionIndicatorResource {
     /**
      * {@code PUT  /inspection-indicators} : Updates an existing inspectionIndicator.
      *
-     * @param inspectionIndicator the inspectionIndicator to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated inspectionIndicator,
-     * or with status {@code 400 (Bad Request)} if the inspectionIndicator is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the inspectionIndicator couldn't be updated.
+     * @param inspectionIndicatorDTO the inspectionIndicatorDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated inspectionIndicatorDTO,
+     * or with status {@code 400 (Bad Request)} if the inspectionIndicatorDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the inspectionIndicatorDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/inspection-indicators")
-    public ResponseEntity<InspectionIndicator> updateInspectionIndicator(@Valid @RequestBody InspectionIndicator inspectionIndicator)
+    public ResponseEntity<InspectionIndicatorDTO> updateInspectionIndicator(
+        @Valid @RequestBody InspectionIndicatorDTO inspectionIndicatorDTO
+    )
         throws URISyntaxException {
-        log.debug("REST request to update InspectionIndicator : {}", inspectionIndicator);
-        if (inspectionIndicator.getId() == null) {
+        log.debug("REST request to update InspectionIndicator : {}", inspectionIndicatorDTO);
+        if (inspectionIndicatorDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        InspectionIndicator result = inspectionIndicatorRepository.save(inspectionIndicator);
+        InspectionIndicatorDTO result = inspectionIndicatorService.save(inspectionIndicatorDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, inspectionIndicator.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, inspectionIndicatorDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code GET  /inspection-indicators} : get all the inspectionIndicators.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspectionIndicators in body.
      */
     @GetMapping("/inspection-indicators")
-    public List<InspectionIndicator> getAllInspectionIndicators() {
-        log.debug("REST request to get all InspectionIndicators");
-        return inspectionIndicatorRepository.findAll();
+    public ResponseEntity<List<InspectionIndicatorDTO>> getAllInspectionIndicators(Pageable pageable) {
+        log.debug("REST request to get a page of InspectionIndicators");
+        Page<InspectionIndicatorDTO> page = inspectionIndicatorService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
      * {@code GET  /inspection-indicators/:id} : get the "id" inspectionIndicator.
      *
-     * @param id the id of the inspectionIndicator to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the inspectionIndicator, or with status {@code 404 (Not Found)}.
+     * @param id the id of the inspectionIndicatorDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the inspectionIndicatorDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/inspection-indicators/{id}")
-    public ResponseEntity<InspectionIndicator> getInspectionIndicator(@PathVariable Long id) {
+    public ResponseEntity<InspectionIndicatorDTO> getInspectionIndicator(@PathVariable Long id) {
         log.debug("REST request to get InspectionIndicator : {}", id);
-        Optional<InspectionIndicator> inspectionIndicator = inspectionIndicatorRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(inspectionIndicator);
+        Optional<InspectionIndicatorDTO> inspectionIndicatorDTO = inspectionIndicatorService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(inspectionIndicatorDTO);
     }
 
     /**
      * {@code DELETE  /inspection-indicators/:id} : delete the "id" inspectionIndicator.
      *
-     * @param id the id of the inspectionIndicator to delete.
+     * @param id the id of the inspectionIndicatorDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/inspection-indicators/{id}")
     public ResponseEntity<Void> deleteInspectionIndicator(@PathVariable Long id) {
         log.debug("REST request to delete InspectionIndicator : {}", id);
-        inspectionIndicatorRepository.deleteById(id);
+        inspectionIndicatorService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

@@ -22,6 +22,9 @@ import org.tamisemi.iftmis.domain.InspectionObjective;
 import org.tamisemi.iftmis.domain.InspectionSubArea;
 import org.tamisemi.iftmis.domain.SubArea;
 import org.tamisemi.iftmis.repository.InspectionSubAreaRepository;
+import org.tamisemi.iftmis.service.InspectionSubAreaService;
+import org.tamisemi.iftmis.service.dto.InspectionSubAreaDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionSubAreaMapper;
 
 /**
  * Integration tests for the {@link InspectionSubAreaResource} REST controller.
@@ -35,6 +38,12 @@ public class InspectionSubAreaResourceIT {
 
     @Autowired
     private InspectionSubAreaRepository inspectionSubAreaRepository;
+
+    @Autowired
+    private InspectionSubAreaMapper inspectionSubAreaMapper;
+
+    @Autowired
+    private InspectionSubAreaService inspectionSubAreaService;
 
     @Autowired
     private EntityManager em;
@@ -116,12 +125,13 @@ public class InspectionSubAreaResourceIT {
     public void createInspectionSubArea() throws Exception {
         int databaseSizeBeforeCreate = inspectionSubAreaRepository.findAll().size();
         // Create the InspectionSubArea
+        InspectionSubAreaDTO inspectionSubAreaDTO = inspectionSubAreaMapper.toDto(inspectionSubArea);
         restInspectionSubAreaMockMvc
             .perform(
                 post("/api/inspection-sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubAreaDTO))
             )
             .andExpect(status().isCreated());
 
@@ -139,6 +149,7 @@ public class InspectionSubAreaResourceIT {
 
         // Create the InspectionSubArea with an existing ID
         inspectionSubArea.setId(1L);
+        InspectionSubAreaDTO inspectionSubAreaDTO = inspectionSubAreaMapper.toDto(inspectionSubArea);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionSubAreaMockMvc
@@ -146,7 +157,7 @@ public class InspectionSubAreaResourceIT {
                 post("/api/inspection-sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubAreaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -163,13 +174,14 @@ public class InspectionSubAreaResourceIT {
         inspectionSubArea.setName(null);
 
         // Create the InspectionSubArea, which fails.
+        InspectionSubAreaDTO inspectionSubAreaDTO = inspectionSubAreaMapper.toDto(inspectionSubArea);
 
         restInspectionSubAreaMockMvc
             .perform(
                 post("/api/inspection-sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubAreaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -227,13 +239,14 @@ public class InspectionSubAreaResourceIT {
         // Disconnect from session so that the updates on updatedInspectionSubArea are not directly saved in db
         em.detach(updatedInspectionSubArea);
         updatedInspectionSubArea.name(UPDATED_NAME);
+        InspectionSubAreaDTO inspectionSubAreaDTO = inspectionSubAreaMapper.toDto(updatedInspectionSubArea);
 
         restInspectionSubAreaMockMvc
             .perform(
                 put("/api/inspection-sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionSubArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubAreaDTO))
             )
             .andExpect(status().isOk());
 
@@ -249,13 +262,16 @@ public class InspectionSubAreaResourceIT {
     public void updateNonExistingInspectionSubArea() throws Exception {
         int databaseSizeBeforeUpdate = inspectionSubAreaRepository.findAll().size();
 
+        // Create the InspectionSubArea
+        InspectionSubAreaDTO inspectionSubAreaDTO = inspectionSubAreaMapper.toDto(inspectionSubArea);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionSubAreaMockMvc
             .perform(
                 put("/api/inspection-sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubArea))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubAreaDTO))
             )
             .andExpect(status().isBadRequest());
 

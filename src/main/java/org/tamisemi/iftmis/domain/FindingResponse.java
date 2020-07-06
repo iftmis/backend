@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -13,7 +12,6 @@ import org.tamisemi.iftmis.domain.enumeration.ResponseType;
 /**
  * The FindingResponse(inspection_responses) entity.\n@author Chris
  */
-@ApiModel(description = "The FindingResponse(inspection_responses) entity.\n@author Chris")
 @Entity
 @Table(name = "finding_responses")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -30,7 +28,6 @@ public class FindingResponse extends AbstractAuditingEntity implements Serializa
     @Column(name = "source", nullable = false)
     private ResponseType source;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description", nullable = false)
     private String description;

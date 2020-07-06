@@ -1,6 +1,5 @@
 package org.tamisemi.iftmis.domain;
 
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,7 +9,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * The FindingSubCategory(finding_sub_categories) entity.\n@author Chris
  */
-@ApiModel(description = "The FindingSubCategory(finding_sub_categories) entity.\n@author Chris")
 @Entity
 @Table(name = "finding_sub_categories")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

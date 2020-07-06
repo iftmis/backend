@@ -21,6 +21,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.AuditableArea;
 import org.tamisemi.iftmis.domain.Indicator;
 import org.tamisemi.iftmis.repository.IndicatorRepository;
+import org.tamisemi.iftmis.service.IndicatorService;
+import org.tamisemi.iftmis.service.dto.IndicatorDTO;
+import org.tamisemi.iftmis.service.mapper.IndicatorMapper;
 
 /**
  * Integration tests for the {@link IndicatorResource} REST controller.
@@ -34,6 +37,12 @@ public class IndicatorResourceIT {
 
     @Autowired
     private IndicatorRepository indicatorRepository;
+
+    @Autowired
+    private IndicatorMapper indicatorMapper;
+
+    @Autowired
+    private IndicatorService indicatorService;
 
     @Autowired
     private EntityManager em;
@@ -95,12 +104,13 @@ public class IndicatorResourceIT {
     public void createIndicator() throws Exception {
         int databaseSizeBeforeCreate = indicatorRepository.findAll().size();
         // Create the Indicator
+        IndicatorDTO indicatorDTO = indicatorMapper.toDto(indicator);
         restIndicatorMockMvc
             .perform(
                 post("/api/indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(indicator))
+                    .content(TestUtil.convertObjectToJsonBytes(indicatorDTO))
             )
             .andExpect(status().isCreated());
 
@@ -118,6 +128,7 @@ public class IndicatorResourceIT {
 
         // Create the Indicator with an existing ID
         indicator.setId(1L);
+        IndicatorDTO indicatorDTO = indicatorMapper.toDto(indicator);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restIndicatorMockMvc
@@ -125,7 +136,7 @@ public class IndicatorResourceIT {
                 post("/api/indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(indicator))
+                    .content(TestUtil.convertObjectToJsonBytes(indicatorDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -142,13 +153,14 @@ public class IndicatorResourceIT {
         indicator.setName(null);
 
         // Create the Indicator, which fails.
+        IndicatorDTO indicatorDTO = indicatorMapper.toDto(indicator);
 
         restIndicatorMockMvc
             .perform(
                 post("/api/indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(indicator))
+                    .content(TestUtil.convertObjectToJsonBytes(indicatorDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -206,13 +218,14 @@ public class IndicatorResourceIT {
         // Disconnect from session so that the updates on updatedIndicator are not directly saved in db
         em.detach(updatedIndicator);
         updatedIndicator.name(UPDATED_NAME);
+        IndicatorDTO indicatorDTO = indicatorMapper.toDto(updatedIndicator);
 
         restIndicatorMockMvc
             .perform(
                 put("/api/indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedIndicator))
+                    .content(TestUtil.convertObjectToJsonBytes(indicatorDTO))
             )
             .andExpect(status().isOk());
 
@@ -228,13 +241,16 @@ public class IndicatorResourceIT {
     public void updateNonExistingIndicator() throws Exception {
         int databaseSizeBeforeUpdate = indicatorRepository.findAll().size();
 
+        // Create the Indicator
+        IndicatorDTO indicatorDTO = indicatorMapper.toDto(indicator);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restIndicatorMockMvc
             .perform(
                 put("/api/indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(indicator))
+                    .content(TestUtil.convertObjectToJsonBytes(indicatorDTO))
             )
             .andExpect(status().isBadRequest());
 

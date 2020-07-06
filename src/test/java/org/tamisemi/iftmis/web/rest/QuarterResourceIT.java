@@ -23,6 +23,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.FinancialYear;
 import org.tamisemi.iftmis.domain.Quarter;
 import org.tamisemi.iftmis.repository.QuarterRepository;
+import org.tamisemi.iftmis.service.QuarterService;
+import org.tamisemi.iftmis.service.dto.QuarterDTO;
+import org.tamisemi.iftmis.service.mapper.QuarterMapper;
 
 /**
  * Integration tests for the {@link QuarterResource} REST controller.
@@ -45,6 +48,12 @@ public class QuarterResourceIT {
 
     @Autowired
     private QuarterRepository quarterRepository;
+
+    @Autowired
+    private QuarterMapper quarterMapper;
+
+    @Autowired
+    private QuarterService quarterService;
 
     @Autowired
     private EntityManager em;
@@ -106,12 +115,13 @@ public class QuarterResourceIT {
     public void createQuarter() throws Exception {
         int databaseSizeBeforeCreate = quarterRepository.findAll().size();
         // Create the Quarter
+        QuarterDTO quarterDTO = quarterMapper.toDto(quarter);
         restQuarterMockMvc
             .perform(
                 post("/api/quarters")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(quarter))
+                    .content(TestUtil.convertObjectToJsonBytes(quarterDTO))
             )
             .andExpect(status().isCreated());
 
@@ -132,6 +142,7 @@ public class QuarterResourceIT {
 
         // Create the Quarter with an existing ID
         quarter.setId(1L);
+        QuarterDTO quarterDTO = quarterMapper.toDto(quarter);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restQuarterMockMvc
@@ -139,7 +150,7 @@ public class QuarterResourceIT {
                 post("/api/quarters")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(quarter))
+                    .content(TestUtil.convertObjectToJsonBytes(quarterDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -156,13 +167,14 @@ public class QuarterResourceIT {
         quarter.setName(null);
 
         // Create the Quarter, which fails.
+        QuarterDTO quarterDTO = quarterMapper.toDto(quarter);
 
         restQuarterMockMvc
             .perform(
                 post("/api/quarters")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(quarter))
+                    .content(TestUtil.convertObjectToJsonBytes(quarterDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -178,13 +190,14 @@ public class QuarterResourceIT {
         quarter.setStartDate(null);
 
         // Create the Quarter, which fails.
+        QuarterDTO quarterDTO = quarterMapper.toDto(quarter);
 
         restQuarterMockMvc
             .perform(
                 post("/api/quarters")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(quarter))
+                    .content(TestUtil.convertObjectToJsonBytes(quarterDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -200,13 +213,14 @@ public class QuarterResourceIT {
         quarter.setEndDate(null);
 
         // Create the Quarter, which fails.
+        QuarterDTO quarterDTO = quarterMapper.toDto(quarter);
 
         restQuarterMockMvc
             .perform(
                 post("/api/quarters")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(quarter))
+                    .content(TestUtil.convertObjectToJsonBytes(quarterDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -270,13 +284,14 @@ public class QuarterResourceIT {
         // Disconnect from session so that the updates on updatedQuarter are not directly saved in db
         em.detach(updatedQuarter);
         updatedQuarter.code(UPDATED_CODE).name(UPDATED_NAME).startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE);
+        QuarterDTO quarterDTO = quarterMapper.toDto(updatedQuarter);
 
         restQuarterMockMvc
             .perform(
                 put("/api/quarters")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedQuarter))
+                    .content(TestUtil.convertObjectToJsonBytes(quarterDTO))
             )
             .andExpect(status().isOk());
 
@@ -295,13 +310,16 @@ public class QuarterResourceIT {
     public void updateNonExistingQuarter() throws Exception {
         int databaseSizeBeforeUpdate = quarterRepository.findAll().size();
 
+        // Create the Quarter
+        QuarterDTO quarterDTO = quarterMapper.toDto(quarter);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restQuarterMockMvc
             .perform(
                 put("/api/quarters")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(quarter))
+                    .content(TestUtil.convertObjectToJsonBytes(quarterDTO))
             )
             .andExpect(status().isBadRequest());
 

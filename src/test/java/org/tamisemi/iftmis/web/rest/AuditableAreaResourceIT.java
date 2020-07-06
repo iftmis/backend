@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.AuditableArea;
 import org.tamisemi.iftmis.repository.AuditableAreaRepository;
+import org.tamisemi.iftmis.service.AuditableAreaService;
+import org.tamisemi.iftmis.service.dto.AuditableAreaDTO;
+import org.tamisemi.iftmis.service.mapper.AuditableAreaMapper;
 
 /**
  * Integration tests for the {@link AuditableAreaResource} REST controller.
@@ -36,6 +39,12 @@ public class AuditableAreaResourceIT {
 
     @Autowired
     private AuditableAreaRepository auditableAreaRepository;
+
+    @Autowired
+    private AuditableAreaMapper auditableAreaMapper;
+
+    @Autowired
+    private AuditableAreaService auditableAreaService;
 
     @Autowired
     private EntityManager em;
@@ -77,12 +86,13 @@ public class AuditableAreaResourceIT {
     public void createAuditableArea() throws Exception {
         int databaseSizeBeforeCreate = auditableAreaRepository.findAll().size();
         // Create the AuditableArea
+        AuditableAreaDTO auditableAreaDTO = auditableAreaMapper.toDto(auditableArea);
         restAuditableAreaMockMvc
             .perform(
                 post("/api/auditable-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(auditableArea))
+                    .content(TestUtil.convertObjectToJsonBytes(auditableAreaDTO))
             )
             .andExpect(status().isCreated());
 
@@ -101,6 +111,7 @@ public class AuditableAreaResourceIT {
 
         // Create the AuditableArea with an existing ID
         auditableArea.setId(1L);
+        AuditableAreaDTO auditableAreaDTO = auditableAreaMapper.toDto(auditableArea);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAuditableAreaMockMvc
@@ -108,7 +119,7 @@ public class AuditableAreaResourceIT {
                 post("/api/auditable-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(auditableArea))
+                    .content(TestUtil.convertObjectToJsonBytes(auditableAreaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -125,13 +136,14 @@ public class AuditableAreaResourceIT {
         auditableArea.setName(null);
 
         // Create the AuditableArea, which fails.
+        AuditableAreaDTO auditableAreaDTO = auditableAreaMapper.toDto(auditableArea);
 
         restAuditableAreaMockMvc
             .perform(
                 post("/api/auditable-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(auditableArea))
+                    .content(TestUtil.convertObjectToJsonBytes(auditableAreaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -191,13 +203,14 @@ public class AuditableAreaResourceIT {
         // Disconnect from session so that the updates on updatedAuditableArea are not directly saved in db
         em.detach(updatedAuditableArea);
         updatedAuditableArea.code(UPDATED_CODE).name(UPDATED_NAME);
+        AuditableAreaDTO auditableAreaDTO = auditableAreaMapper.toDto(updatedAuditableArea);
 
         restAuditableAreaMockMvc
             .perform(
                 put("/api/auditable-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedAuditableArea))
+                    .content(TestUtil.convertObjectToJsonBytes(auditableAreaDTO))
             )
             .andExpect(status().isOk());
 
@@ -214,13 +227,16 @@ public class AuditableAreaResourceIT {
     public void updateNonExistingAuditableArea() throws Exception {
         int databaseSizeBeforeUpdate = auditableAreaRepository.findAll().size();
 
+        // Create the AuditableArea
+        AuditableAreaDTO auditableAreaDTO = auditableAreaMapper.toDto(auditableArea);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAuditableAreaMockMvc
             .perform(
                 put("/api/auditable-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(auditableArea))
+                    .content(TestUtil.convertObjectToJsonBytes(auditableAreaDTO))
             )
             .andExpect(status().isBadRequest());
 

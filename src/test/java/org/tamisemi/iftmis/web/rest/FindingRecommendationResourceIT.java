@@ -23,6 +23,9 @@ import org.tamisemi.iftmis.domain.Finding;
 import org.tamisemi.iftmis.domain.FindingRecommendation;
 import org.tamisemi.iftmis.domain.enumeration.ImplementationStatus;
 import org.tamisemi.iftmis.repository.FindingRecommendationRepository;
+import org.tamisemi.iftmis.service.FindingRecommendationService;
+import org.tamisemi.iftmis.service.dto.FindingRecommendationDTO;
+import org.tamisemi.iftmis.service.mapper.FindingRecommendationMapper;
 
 /**
  * Integration tests for the {@link FindingRecommendationResource} REST controller.
@@ -39,6 +42,12 @@ public class FindingRecommendationResourceIT {
 
     @Autowired
     private FindingRecommendationRepository findingRecommendationRepository;
+
+    @Autowired
+    private FindingRecommendationMapper findingRecommendationMapper;
+
+    @Autowired
+    private FindingRecommendationService findingRecommendationService;
 
     @Autowired
     private EntityManager em;
@@ -104,12 +113,13 @@ public class FindingRecommendationResourceIT {
     public void createFindingRecommendation() throws Exception {
         int databaseSizeBeforeCreate = findingRecommendationRepository.findAll().size();
         // Create the FindingRecommendation
+        FindingRecommendationDTO findingRecommendationDTO = findingRecommendationMapper.toDto(findingRecommendation);
         restFindingRecommendationMockMvc
             .perform(
                 post("/api/finding-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendationDTO))
             )
             .andExpect(status().isCreated());
 
@@ -128,6 +138,7 @@ public class FindingRecommendationResourceIT {
 
         // Create the FindingRecommendation with an existing ID
         findingRecommendation.setId(1L);
+        FindingRecommendationDTO findingRecommendationDTO = findingRecommendationMapper.toDto(findingRecommendation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFindingRecommendationMockMvc
@@ -135,7 +146,7 @@ public class FindingRecommendationResourceIT {
                 post("/api/finding-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -152,13 +163,14 @@ public class FindingRecommendationResourceIT {
         findingRecommendation.setImplementationStatus(null);
 
         // Create the FindingRecommendation, which fails.
+        FindingRecommendationDTO findingRecommendationDTO = findingRecommendationMapper.toDto(findingRecommendation);
 
         restFindingRecommendationMockMvc
             .perform(
                 post("/api/finding-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -218,13 +230,14 @@ public class FindingRecommendationResourceIT {
         // Disconnect from session so that the updates on updatedFindingRecommendation are not directly saved in db
         em.detach(updatedFindingRecommendation);
         updatedFindingRecommendation.description(UPDATED_DESCRIPTION).implementationStatus(UPDATED_IMPLEMENTATION_STATUS);
+        FindingRecommendationDTO findingRecommendationDTO = findingRecommendationMapper.toDto(updatedFindingRecommendation);
 
         restFindingRecommendationMockMvc
             .perform(
                 put("/api/finding-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedFindingRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendationDTO))
             )
             .andExpect(status().isOk());
 
@@ -241,13 +254,16 @@ public class FindingRecommendationResourceIT {
     public void updateNonExistingFindingRecommendation() throws Exception {
         int databaseSizeBeforeUpdate = findingRecommendationRepository.findAll().size();
 
+        // Create the FindingRecommendation
+        FindingRecommendationDTO findingRecommendationDTO = findingRecommendationMapper.toDto(findingRecommendation);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFindingRecommendationMockMvc
             .perform(
                 put("/api/finding-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(findingRecommendationDTO))
             )
             .andExpect(status().isBadRequest());
 

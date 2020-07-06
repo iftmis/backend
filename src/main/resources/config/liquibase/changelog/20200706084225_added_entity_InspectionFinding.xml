@@ -18,7 +18,7 @@
             <column name="code" type="varchar(5)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="${clobType}">
+            <column name="description" type="text">
                 <constraints nullable="true" />
             </column>
             <column name="condition" type="varchar(255)">
@@ -27,13 +27,13 @@
             <column name="disclosed_last_inspection" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="causes" type="${clobType}">
+            <column name="causes" type="text">
                 <constraints nullable="true" />
             </column>
             <column name="action_plan_category" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="implication" type="${clobType}">
+            <column name="implication" type="text">
                 <constraints nullable="true" />
             </column>
             <column name="is_closed" type="boolean">

@@ -22,6 +22,9 @@ import org.tamisemi.iftmis.domain.FileResource;
 import org.tamisemi.iftmis.domain.FindingResponse;
 import org.tamisemi.iftmis.domain.ResponseAttachment;
 import org.tamisemi.iftmis.repository.ResponseAttachmentRepository;
+import org.tamisemi.iftmis.service.ResponseAttachmentService;
+import org.tamisemi.iftmis.service.dto.ResponseAttachmentDTO;
+import org.tamisemi.iftmis.service.mapper.ResponseAttachmentMapper;
 
 /**
  * Integration tests for the {@link ResponseAttachmentResource} REST controller.
@@ -35,6 +38,12 @@ public class ResponseAttachmentResourceIT {
 
     @Autowired
     private ResponseAttachmentRepository responseAttachmentRepository;
+
+    @Autowired
+    private ResponseAttachmentMapper responseAttachmentMapper;
+
+    @Autowired
+    private ResponseAttachmentService responseAttachmentService;
 
     @Autowired
     private EntityManager em;
@@ -116,12 +125,13 @@ public class ResponseAttachmentResourceIT {
     public void createResponseAttachment() throws Exception {
         int databaseSizeBeforeCreate = responseAttachmentRepository.findAll().size();
         // Create the ResponseAttachment
+        ResponseAttachmentDTO responseAttachmentDTO = responseAttachmentMapper.toDto(responseAttachment);
         restResponseAttachmentMockMvc
             .perform(
                 post("/api/response-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(responseAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(responseAttachmentDTO))
             )
             .andExpect(status().isCreated());
 
@@ -139,6 +149,7 @@ public class ResponseAttachmentResourceIT {
 
         // Create the ResponseAttachment with an existing ID
         responseAttachment.setId(1L);
+        ResponseAttachmentDTO responseAttachmentDTO = responseAttachmentMapper.toDto(responseAttachment);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restResponseAttachmentMockMvc
@@ -146,7 +157,7 @@ public class ResponseAttachmentResourceIT {
                 post("/api/response-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(responseAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(responseAttachmentDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -163,13 +174,14 @@ public class ResponseAttachmentResourceIT {
         responseAttachment.setName(null);
 
         // Create the ResponseAttachment, which fails.
+        ResponseAttachmentDTO responseAttachmentDTO = responseAttachmentMapper.toDto(responseAttachment);
 
         restResponseAttachmentMockMvc
             .perform(
                 post("/api/response-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(responseAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(responseAttachmentDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -227,13 +239,14 @@ public class ResponseAttachmentResourceIT {
         // Disconnect from session so that the updates on updatedResponseAttachment are not directly saved in db
         em.detach(updatedResponseAttachment);
         updatedResponseAttachment.name(UPDATED_NAME);
+        ResponseAttachmentDTO responseAttachmentDTO = responseAttachmentMapper.toDto(updatedResponseAttachment);
 
         restResponseAttachmentMockMvc
             .perform(
                 put("/api/response-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedResponseAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(responseAttachmentDTO))
             )
             .andExpect(status().isOk());
 
@@ -249,13 +262,16 @@ public class ResponseAttachmentResourceIT {
     public void updateNonExistingResponseAttachment() throws Exception {
         int databaseSizeBeforeUpdate = responseAttachmentRepository.findAll().size();
 
+        // Create the ResponseAttachment
+        ResponseAttachmentDTO responseAttachmentDTO = responseAttachmentMapper.toDto(responseAttachment);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restResponseAttachmentMockMvc
             .perform(
                 put("/api/response-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(responseAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(responseAttachmentDTO))
             )
             .andExpect(status().isBadRequest());
 

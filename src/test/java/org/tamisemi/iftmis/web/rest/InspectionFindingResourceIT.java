@@ -25,6 +25,9 @@ import org.tamisemi.iftmis.domain.InspectionFinding;
 import org.tamisemi.iftmis.domain.InspectionWorkDone;
 import org.tamisemi.iftmis.domain.enumeration.ActionPlanCategory;
 import org.tamisemi.iftmis.repository.InspectionFindingRepository;
+import org.tamisemi.iftmis.service.InspectionFindingService;
+import org.tamisemi.iftmis.service.dto.InspectionFindingDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionFindingMapper;
 
 /**
  * Integration tests for the {@link InspectionFindingResource} REST controller.
@@ -38,12 +41,6 @@ public class InspectionFindingResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CATEGORY = "AAAAAAAAAA";
-    private static final String UPDATED_CATEGORY = "BBBBBBBBBB";
-
-    private static final String DEFAULT_SUB_CATEGORY = "AAAAAAAAAA";
-    private static final String UPDATED_SUB_CATEGORY = "BBBBBBBBBB";
 
     private static final String DEFAULT_CONDITION = "AAAAAAAAAA";
     private static final String UPDATED_CONDITION = "BBBBBBBBBB";
@@ -65,6 +62,12 @@ public class InspectionFindingResourceIT {
 
     @Autowired
     private InspectionFindingRepository inspectionFindingRepository;
+
+    @Autowired
+    private InspectionFindingMapper inspectionFindingMapper;
+
+    @Autowired
+    private InspectionFindingService inspectionFindingService;
 
     @Autowired
     private EntityManager em;
@@ -182,12 +185,13 @@ public class InspectionFindingResourceIT {
     public void createInspectionFinding() throws Exception {
         int databaseSizeBeforeCreate = inspectionFindingRepository.findAll().size();
         // Create the InspectionFinding
+        InspectionFindingDTO inspectionFindingDTO = inspectionFindingMapper.toDto(inspectionFinding);
         restInspectionFindingMockMvc
             .perform(
                 post("/api/inspection-findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionFinding))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionFindingDTO))
             )
             .andExpect(status().isCreated());
 
@@ -197,8 +201,6 @@ public class InspectionFindingResourceIT {
         InspectionFinding testInspectionFinding = inspectionFindingList.get(inspectionFindingList.size() - 1);
         assertThat(testInspectionFinding.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testInspectionFinding.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testInspectionFinding.getCategory()).isEqualTo(DEFAULT_CATEGORY);
-        assertThat(testInspectionFinding.getSubCategory()).isEqualTo(DEFAULT_SUB_CATEGORY);
         assertThat(testInspectionFinding.getCondition()).isEqualTo(DEFAULT_CONDITION);
         assertThat(testInspectionFinding.isDisclosedLastInspection()).isEqualTo(DEFAULT_DISCLOSED_LAST_INSPECTION);
         assertThat(testInspectionFinding.getCauses()).isEqualTo(DEFAULT_CAUSES);
@@ -214,6 +216,7 @@ public class InspectionFindingResourceIT {
 
         // Create the InspectionFinding with an existing ID
         inspectionFinding.setId(1L);
+        InspectionFindingDTO inspectionFindingDTO = inspectionFindingMapper.toDto(inspectionFinding);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionFindingMockMvc
@@ -221,7 +224,7 @@ public class InspectionFindingResourceIT {
                 post("/api/inspection-findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionFinding))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionFindingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -238,13 +241,14 @@ public class InspectionFindingResourceIT {
         inspectionFinding.setCode(null);
 
         // Create the InspectionFinding, which fails.
+        InspectionFindingDTO inspectionFindingDTO = inspectionFindingMapper.toDto(inspectionFinding);
 
         restInspectionFindingMockMvc
             .perform(
                 post("/api/inspection-findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionFinding))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionFindingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -266,8 +270,6 @@ public class InspectionFindingResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(inspectionFinding.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
-            .andExpect(jsonPath("$.[*].subCategory").value(hasItem(DEFAULT_SUB_CATEGORY)))
             .andExpect(jsonPath("$.[*].condition").value(hasItem(DEFAULT_CONDITION)))
             .andExpect(jsonPath("$.[*].disclosedLastInspection").value(hasItem(DEFAULT_DISCLOSED_LAST_INSPECTION.booleanValue())))
             .andExpect(jsonPath("$.[*].causes").value(hasItem(DEFAULT_CAUSES.toString())))
@@ -290,8 +292,6 @@ public class InspectionFindingResourceIT {
             .andExpect(jsonPath("$.id").value(inspectionFinding.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY))
-            .andExpect(jsonPath("$.subCategory").value(DEFAULT_SUB_CATEGORY))
             .andExpect(jsonPath("$.condition").value(DEFAULT_CONDITION))
             .andExpect(jsonPath("$.disclosedLastInspection").value(DEFAULT_DISCLOSED_LAST_INSPECTION.booleanValue()))
             .andExpect(jsonPath("$.causes").value(DEFAULT_CAUSES.toString()))
@@ -328,13 +328,14 @@ public class InspectionFindingResourceIT {
             .actionPlanCategory(UPDATED_ACTION_PLAN_CATEGORY)
             .implication(UPDATED_IMPLICATION)
             .isClosed(UPDATED_IS_CLOSED);
+        InspectionFindingDTO inspectionFindingDTO = inspectionFindingMapper.toDto(updatedInspectionFinding);
 
         restInspectionFindingMockMvc
             .perform(
                 put("/api/inspection-findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionFinding))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionFindingDTO))
             )
             .andExpect(status().isOk());
 
@@ -344,8 +345,6 @@ public class InspectionFindingResourceIT {
         InspectionFinding testInspectionFinding = inspectionFindingList.get(inspectionFindingList.size() - 1);
         assertThat(testInspectionFinding.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testInspectionFinding.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testInspectionFinding.getCategory()).isEqualTo(UPDATED_CATEGORY);
-        assertThat(testInspectionFinding.getSubCategory()).isEqualTo(UPDATED_SUB_CATEGORY);
         assertThat(testInspectionFinding.getCondition()).isEqualTo(UPDATED_CONDITION);
         assertThat(testInspectionFinding.isDisclosedLastInspection()).isEqualTo(UPDATED_DISCLOSED_LAST_INSPECTION);
         assertThat(testInspectionFinding.getCauses()).isEqualTo(UPDATED_CAUSES);
@@ -359,13 +358,16 @@ public class InspectionFindingResourceIT {
     public void updateNonExistingInspectionFinding() throws Exception {
         int databaseSizeBeforeUpdate = inspectionFindingRepository.findAll().size();
 
+        // Create the InspectionFinding
+        InspectionFindingDTO inspectionFindingDTO = inspectionFindingMapper.toDto(inspectionFinding);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionFindingMockMvc
             .perform(
                 put("/api/inspection-findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionFinding))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionFindingDTO))
             )
             .andExpect(status().isBadRequest());
 

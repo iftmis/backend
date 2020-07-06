@@ -21,6 +21,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.AuditableArea;
 import org.tamisemi.iftmis.domain.SubArea;
 import org.tamisemi.iftmis.repository.SubAreaRepository;
+import org.tamisemi.iftmis.service.SubAreaService;
+import org.tamisemi.iftmis.service.dto.SubAreaDTO;
+import org.tamisemi.iftmis.service.mapper.SubAreaMapper;
 
 /**
  * Integration tests for the {@link SubAreaResource} REST controller.
@@ -34,6 +37,12 @@ public class SubAreaResourceIT {
 
     @Autowired
     private SubAreaRepository subAreaRepository;
+
+    @Autowired
+    private SubAreaMapper subAreaMapper;
+
+    @Autowired
+    private SubAreaService subAreaService;
 
     @Autowired
     private EntityManager em;
@@ -95,12 +104,13 @@ public class SubAreaResourceIT {
     public void createSubArea() throws Exception {
         int databaseSizeBeforeCreate = subAreaRepository.findAll().size();
         // Create the SubArea
+        SubAreaDTO subAreaDTO = subAreaMapper.toDto(subArea);
         restSubAreaMockMvc
             .perform(
                 post("/api/sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(subArea))
+                    .content(TestUtil.convertObjectToJsonBytes(subAreaDTO))
             )
             .andExpect(status().isCreated());
 
@@ -118,6 +128,7 @@ public class SubAreaResourceIT {
 
         // Create the SubArea with an existing ID
         subArea.setId(1L);
+        SubAreaDTO subAreaDTO = subAreaMapper.toDto(subArea);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restSubAreaMockMvc
@@ -125,7 +136,7 @@ public class SubAreaResourceIT {
                 post("/api/sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(subArea))
+                    .content(TestUtil.convertObjectToJsonBytes(subAreaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -142,13 +153,14 @@ public class SubAreaResourceIT {
         subArea.setName(null);
 
         // Create the SubArea, which fails.
+        SubAreaDTO subAreaDTO = subAreaMapper.toDto(subArea);
 
         restSubAreaMockMvc
             .perform(
                 post("/api/sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(subArea))
+                    .content(TestUtil.convertObjectToJsonBytes(subAreaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -206,13 +218,14 @@ public class SubAreaResourceIT {
         // Disconnect from session so that the updates on updatedSubArea are not directly saved in db
         em.detach(updatedSubArea);
         updatedSubArea.name(UPDATED_NAME);
+        SubAreaDTO subAreaDTO = subAreaMapper.toDto(updatedSubArea);
 
         restSubAreaMockMvc
             .perform(
                 put("/api/sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedSubArea))
+                    .content(TestUtil.convertObjectToJsonBytes(subAreaDTO))
             )
             .andExpect(status().isOk());
 
@@ -228,13 +241,16 @@ public class SubAreaResourceIT {
     public void updateNonExistingSubArea() throws Exception {
         int databaseSizeBeforeUpdate = subAreaRepository.findAll().size();
 
+        // Create the SubArea
+        SubAreaDTO subAreaDTO = subAreaMapper.toDto(subArea);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSubAreaMockMvc
             .perform(
                 put("/api/sub-areas")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(subArea))
+                    .content(TestUtil.convertObjectToJsonBytes(subAreaDTO))
             )
             .andExpect(status().isBadRequest());
 

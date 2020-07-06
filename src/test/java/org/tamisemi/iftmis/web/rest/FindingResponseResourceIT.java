@@ -23,6 +23,9 @@ import org.tamisemi.iftmis.domain.FindingRecommendation;
 import org.tamisemi.iftmis.domain.FindingResponse;
 import org.tamisemi.iftmis.domain.enumeration.ResponseType;
 import org.tamisemi.iftmis.repository.FindingResponseRepository;
+import org.tamisemi.iftmis.service.FindingResponseService;
+import org.tamisemi.iftmis.service.dto.FindingResponseDTO;
+import org.tamisemi.iftmis.service.mapper.FindingResponseMapper;
 
 /**
  * Integration tests for the {@link FindingResponseResource} REST controller.
@@ -39,6 +42,12 @@ public class FindingResponseResourceIT {
 
     @Autowired
     private FindingResponseRepository findingResponseRepository;
+
+    @Autowired
+    private FindingResponseMapper findingResponseMapper;
+
+    @Autowired
+    private FindingResponseService findingResponseService;
 
     @Autowired
     private EntityManager em;
@@ -100,12 +109,13 @@ public class FindingResponseResourceIT {
     public void createFindingResponse() throws Exception {
         int databaseSizeBeforeCreate = findingResponseRepository.findAll().size();
         // Create the FindingResponse
+        FindingResponseDTO findingResponseDTO = findingResponseMapper.toDto(findingResponse);
         restFindingResponseMockMvc
             .perform(
                 post("/api/finding-responses")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingResponse))
+                    .content(TestUtil.convertObjectToJsonBytes(findingResponseDTO))
             )
             .andExpect(status().isCreated());
 
@@ -124,6 +134,7 @@ public class FindingResponseResourceIT {
 
         // Create the FindingResponse with an existing ID
         findingResponse.setId(1L);
+        FindingResponseDTO findingResponseDTO = findingResponseMapper.toDto(findingResponse);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFindingResponseMockMvc
@@ -131,7 +142,7 @@ public class FindingResponseResourceIT {
                 post("/api/finding-responses")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingResponse))
+                    .content(TestUtil.convertObjectToJsonBytes(findingResponseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -148,13 +159,14 @@ public class FindingResponseResourceIT {
         findingResponse.setSource(null);
 
         // Create the FindingResponse, which fails.
+        FindingResponseDTO findingResponseDTO = findingResponseMapper.toDto(findingResponse);
 
         restFindingResponseMockMvc
             .perform(
                 post("/api/finding-responses")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingResponse))
+                    .content(TestUtil.convertObjectToJsonBytes(findingResponseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -214,13 +226,14 @@ public class FindingResponseResourceIT {
         // Disconnect from session so that the updates on updatedFindingResponse are not directly saved in db
         em.detach(updatedFindingResponse);
         updatedFindingResponse.source(UPDATED_SOURCE).description(UPDATED_DESCRIPTION);
+        FindingResponseDTO findingResponseDTO = findingResponseMapper.toDto(updatedFindingResponse);
 
         restFindingResponseMockMvc
             .perform(
                 put("/api/finding-responses")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedFindingResponse))
+                    .content(TestUtil.convertObjectToJsonBytes(findingResponseDTO))
             )
             .andExpect(status().isOk());
 
@@ -237,13 +250,16 @@ public class FindingResponseResourceIT {
     public void updateNonExistingFindingResponse() throws Exception {
         int databaseSizeBeforeUpdate = findingResponseRepository.findAll().size();
 
+        // Create the FindingResponse
+        FindingResponseDTO findingResponseDTO = findingResponseMapper.toDto(findingResponse);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFindingResponseMockMvc
             .perform(
                 put("/api/finding-responses")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingResponse))
+                    .content(TestUtil.convertObjectToJsonBytes(findingResponseDTO))
             )
             .andExpect(status().isBadRequest());
 

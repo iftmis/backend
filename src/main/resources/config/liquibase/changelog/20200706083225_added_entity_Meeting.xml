@@ -24,7 +24,7 @@
             <column name="venue" type="varchar(200)">
                 <constraints nullable="false" />
             </column>
-            <column name="summary" type="${clobType}">
+            <column name="summary" type="text">
                 <constraints nullable="true" />
             </column>
             <column name="inspection_id" type="bigint">

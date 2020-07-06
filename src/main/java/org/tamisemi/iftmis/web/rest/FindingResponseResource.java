@@ -1,6 +1,7 @@
 package org.tamisemi.iftmis.web.rest;
 
 import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,11 +11,15 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.tamisemi.iftmis.domain.FindingResponse;
-import org.tamisemi.iftmis.repository.FindingResponseRepository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.service.FindingResponseService;
+import org.tamisemi.iftmis.service.dto.FindingResponseDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +27,6 @@ import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class FindingResponseResource {
     private final Logger log = LoggerFactory.getLogger(FindingResponseResource.class);
 
@@ -31,27 +35,27 @@ public class FindingResponseResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final FindingResponseRepository findingResponseRepository;
+    private final FindingResponseService findingResponseService;
 
-    public FindingResponseResource(FindingResponseRepository findingResponseRepository) {
-        this.findingResponseRepository = findingResponseRepository;
+    public FindingResponseResource(FindingResponseService findingResponseService) {
+        this.findingResponseService = findingResponseService;
     }
 
     /**
      * {@code POST  /finding-responses} : Create a new findingResponse.
      *
-     * @param findingResponse the findingResponse to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new findingResponse, or with status {@code 400 (Bad Request)} if the findingResponse has already an ID.
+     * @param findingResponseDTO the findingResponseDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new findingResponseDTO, or with status {@code 400 (Bad Request)} if the findingResponse has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/finding-responses")
-    public ResponseEntity<FindingResponse> createFindingResponse(@Valid @RequestBody FindingResponse findingResponse)
+    public ResponseEntity<FindingResponseDTO> createFindingResponse(@Valid @RequestBody FindingResponseDTO findingResponseDTO)
         throws URISyntaxException {
-        log.debug("REST request to save FindingResponse : {}", findingResponse);
-        if (findingResponse.getId() != null) {
+        log.debug("REST request to save FindingResponse : {}", findingResponseDTO);
+        if (findingResponseDTO.getId() != null) {
             throw new BadRequestAlertException("A new findingResponse cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        FindingResponse result = findingResponseRepository.save(findingResponse);
+        FindingResponseDTO result = findingResponseService.save(findingResponseDTO);
         return ResponseEntity
             .created(new URI("/api/finding-responses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -61,60 +65,63 @@ public class FindingResponseResource {
     /**
      * {@code PUT  /finding-responses} : Updates an existing findingResponse.
      *
-     * @param findingResponse the findingResponse to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated findingResponse,
-     * or with status {@code 400 (Bad Request)} if the findingResponse is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the findingResponse couldn't be updated.
+     * @param findingResponseDTO the findingResponseDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated findingResponseDTO,
+     * or with status {@code 400 (Bad Request)} if the findingResponseDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the findingResponseDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/finding-responses")
-    public ResponseEntity<FindingResponse> updateFindingResponse(@Valid @RequestBody FindingResponse findingResponse)
+    public ResponseEntity<FindingResponseDTO> updateFindingResponse(@Valid @RequestBody FindingResponseDTO findingResponseDTO)
         throws URISyntaxException {
-        log.debug("REST request to update FindingResponse : {}", findingResponse);
-        if (findingResponse.getId() == null) {
+        log.debug("REST request to update FindingResponse : {}", findingResponseDTO);
+        if (findingResponseDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        FindingResponse result = findingResponseRepository.save(findingResponse);
+        FindingResponseDTO result = findingResponseService.save(findingResponseDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, findingResponse.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, findingResponseDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code GET  /finding-responses} : get all the findingResponses.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of findingResponses in body.
      */
     @GetMapping("/finding-responses")
-    public List<FindingResponse> getAllFindingResponses() {
-        log.debug("REST request to get all FindingResponses");
-        return findingResponseRepository.findAll();
+    public ResponseEntity<List<FindingResponseDTO>> getAllFindingResponses(Pageable pageable) {
+        log.debug("REST request to get a page of FindingResponses");
+        Page<FindingResponseDTO> page = findingResponseService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
      * {@code GET  /finding-responses/:id} : get the "id" findingResponse.
      *
-     * @param id the id of the findingResponse to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the findingResponse, or with status {@code 404 (Not Found)}.
+     * @param id the id of the findingResponseDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the findingResponseDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/finding-responses/{id}")
-    public ResponseEntity<FindingResponse> getFindingResponse(@PathVariable Long id) {
+    public ResponseEntity<FindingResponseDTO> getFindingResponse(@PathVariable Long id) {
         log.debug("REST request to get FindingResponse : {}", id);
-        Optional<FindingResponse> findingResponse = findingResponseRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(findingResponse);
+        Optional<FindingResponseDTO> findingResponseDTO = findingResponseService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(findingResponseDTO);
     }
 
     /**
      * {@code DELETE  /finding-responses/:id} : delete the "id" findingResponse.
      *
-     * @param id the id of the findingResponse to delete.
+     * @param id the id of the findingResponseDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/finding-responses/{id}")
     public ResponseEntity<Void> deleteFindingResponse(@PathVariable Long id) {
         log.debug("REST request to delete FindingResponse : {}", id);
-        findingResponseRepository.deleteById(id);
+        findingResponseService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

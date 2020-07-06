@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.FileResource;
 import org.tamisemi.iftmis.repository.FileResourceRepository;
+import org.tamisemi.iftmis.service.FileResourceService;
+import org.tamisemi.iftmis.service.dto.FileResourceDTO;
+import org.tamisemi.iftmis.service.mapper.FileResourceMapper;
 
 /**
  * Integration tests for the {@link FileResourceResource} REST controller.
@@ -51,6 +54,12 @@ public class FileResourceResourceIT {
 
     @Autowired
     private FileResourceRepository fileResourceRepository;
+
+    @Autowired
+    private FileResourceMapper fileResourceMapper;
+
+    @Autowired
+    private FileResourceService fileResourceService;
 
     @Autowired
     private EntityManager em;
@@ -106,12 +115,13 @@ public class FileResourceResourceIT {
     public void createFileResource() throws Exception {
         int databaseSizeBeforeCreate = fileResourceRepository.findAll().size();
         // Create the FileResource
+        FileResourceDTO fileResourceDTO = fileResourceMapper.toDto(fileResource);
         restFileResourceMockMvc
             .perform(
                 post("/api/file-resources")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(fileResource))
+                    .content(TestUtil.convertObjectToJsonBytes(fileResourceDTO))
             )
             .andExpect(status().isCreated());
 
@@ -135,6 +145,7 @@ public class FileResourceResourceIT {
 
         // Create the FileResource with an existing ID
         fileResource.setId(1L);
+        FileResourceDTO fileResourceDTO = fileResourceMapper.toDto(fileResource);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFileResourceMockMvc
@@ -142,7 +153,7 @@ public class FileResourceResourceIT {
                 post("/api/file-resources")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(fileResource))
+                    .content(TestUtil.convertObjectToJsonBytes(fileResourceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -159,13 +170,14 @@ public class FileResourceResourceIT {
         fileResource.setName(null);
 
         // Create the FileResource, which fails.
+        FileResourceDTO fileResourceDTO = fileResourceMapper.toDto(fileResource);
 
         restFileResourceMockMvc
             .perform(
                 post("/api/file-resources")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(fileResource))
+                    .content(TestUtil.convertObjectToJsonBytes(fileResourceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -181,13 +193,14 @@ public class FileResourceResourceIT {
         fileResource.setContextMd5(null);
 
         // Create the FileResource, which fails.
+        FileResourceDTO fileResourceDTO = fileResourceMapper.toDto(fileResource);
 
         restFileResourceMockMvc
             .perform(
                 post("/api/file-resources")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(fileResource))
+                    .content(TestUtil.convertObjectToJsonBytes(fileResourceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -203,13 +216,14 @@ public class FileResourceResourceIT {
         fileResource.setSize(null);
 
         // Create the FileResource, which fails.
+        FileResourceDTO fileResourceDTO = fileResourceMapper.toDto(fileResource);
 
         restFileResourceMockMvc
             .perform(
                 post("/api/file-resources")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(fileResource))
+                    .content(TestUtil.convertObjectToJsonBytes(fileResourceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -225,13 +239,14 @@ public class FileResourceResourceIT {
         fileResource.setType(null);
 
         // Create the FileResource, which fails.
+        FileResourceDTO fileResourceDTO = fileResourceMapper.toDto(fileResource);
 
         restFileResourceMockMvc
             .perform(
                 post("/api/file-resources")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(fileResource))
+                    .content(TestUtil.convertObjectToJsonBytes(fileResourceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -308,13 +323,14 @@ public class FileResourceResourceIT {
             .size(UPDATED_SIZE)
             .isAssigned(UPDATED_IS_ASSIGNED)
             .type(UPDATED_TYPE);
+        FileResourceDTO fileResourceDTO = fileResourceMapper.toDto(updatedFileResource);
 
         restFileResourceMockMvc
             .perform(
                 put("/api/file-resources")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedFileResource))
+                    .content(TestUtil.convertObjectToJsonBytes(fileResourceDTO))
             )
             .andExpect(status().isOk());
 
@@ -336,13 +352,16 @@ public class FileResourceResourceIT {
     public void updateNonExistingFileResource() throws Exception {
         int databaseSizeBeforeUpdate = fileResourceRepository.findAll().size();
 
+        // Create the FileResource
+        FileResourceDTO fileResourceDTO = fileResourceMapper.toDto(fileResource);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFileResourceMockMvc
             .perform(
                 put("/api/file-resources")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(fileResource))
+                    .content(TestUtil.convertObjectToJsonBytes(fileResourceDTO))
             )
             .andExpect(status().isBadRequest());
 

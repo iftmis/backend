@@ -1,6 +1,5 @@
 package org.tamisemi.iftmis.domain;
 
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,7 +9,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * The OrganisationUnitLevel(organisation_unit_levels) entity.\n@author Chris
  */
-@ApiModel(description = "The OrganisationUnitLevel(organisation_unit_levels) entity.\n@author Chris")
 @Entity
 @Table(name = "organisation_unit_levels")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

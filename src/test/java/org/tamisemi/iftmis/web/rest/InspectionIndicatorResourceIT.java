@@ -22,6 +22,9 @@ import org.tamisemi.iftmis.domain.Indicator;
 import org.tamisemi.iftmis.domain.InspectionIndicator;
 import org.tamisemi.iftmis.domain.InspectionSubArea;
 import org.tamisemi.iftmis.repository.InspectionIndicatorRepository;
+import org.tamisemi.iftmis.service.InspectionIndicatorService;
+import org.tamisemi.iftmis.service.dto.InspectionIndicatorDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionIndicatorMapper;
 
 /**
  * Integration tests for the {@link InspectionIndicatorResource} REST controller.
@@ -35,6 +38,12 @@ public class InspectionIndicatorResourceIT {
 
     @Autowired
     private InspectionIndicatorRepository inspectionIndicatorRepository;
+
+    @Autowired
+    private InspectionIndicatorMapper inspectionIndicatorMapper;
+
+    @Autowired
+    private InspectionIndicatorService inspectionIndicatorService;
 
     @Autowired
     private EntityManager em;
@@ -116,12 +125,13 @@ public class InspectionIndicatorResourceIT {
     public void createInspectionIndicator() throws Exception {
         int databaseSizeBeforeCreate = inspectionIndicatorRepository.findAll().size();
         // Create the InspectionIndicator
+        InspectionIndicatorDTO inspectionIndicatorDTO = inspectionIndicatorMapper.toDto(inspectionIndicator);
         restInspectionIndicatorMockMvc
             .perform(
                 post("/api/inspection-indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicator))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicatorDTO))
             )
             .andExpect(status().isCreated());
 
@@ -139,6 +149,7 @@ public class InspectionIndicatorResourceIT {
 
         // Create the InspectionIndicator with an existing ID
         inspectionIndicator.setId(1L);
+        InspectionIndicatorDTO inspectionIndicatorDTO = inspectionIndicatorMapper.toDto(inspectionIndicator);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionIndicatorMockMvc
@@ -146,7 +157,7 @@ public class InspectionIndicatorResourceIT {
                 post("/api/inspection-indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicator))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicatorDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -163,13 +174,14 @@ public class InspectionIndicatorResourceIT {
         inspectionIndicator.setName(null);
 
         // Create the InspectionIndicator, which fails.
+        InspectionIndicatorDTO inspectionIndicatorDTO = inspectionIndicatorMapper.toDto(inspectionIndicator);
 
         restInspectionIndicatorMockMvc
             .perform(
                 post("/api/inspection-indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicator))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicatorDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -227,13 +239,14 @@ public class InspectionIndicatorResourceIT {
         // Disconnect from session so that the updates on updatedInspectionIndicator are not directly saved in db
         em.detach(updatedInspectionIndicator);
         updatedInspectionIndicator.name(UPDATED_NAME);
+        InspectionIndicatorDTO inspectionIndicatorDTO = inspectionIndicatorMapper.toDto(updatedInspectionIndicator);
 
         restInspectionIndicatorMockMvc
             .perform(
                 put("/api/inspection-indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionIndicator))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicatorDTO))
             )
             .andExpect(status().isOk());
 
@@ -249,13 +262,16 @@ public class InspectionIndicatorResourceIT {
     public void updateNonExistingInspectionIndicator() throws Exception {
         int databaseSizeBeforeUpdate = inspectionIndicatorRepository.findAll().size();
 
+        // Create the InspectionIndicator
+        InspectionIndicatorDTO inspectionIndicatorDTO = inspectionIndicatorMapper.toDto(inspectionIndicator);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionIndicatorMockMvc
             .perform(
                 put("/api/inspection-indicators")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicator))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionIndicatorDTO))
             )
             .andExpect(status().isBadRequest());
 

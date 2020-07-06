@@ -21,6 +21,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.InspectionProcedure;
 import org.tamisemi.iftmis.domain.InspectionWorkDone;
 import org.tamisemi.iftmis.repository.InspectionWorkDoneRepository;
+import org.tamisemi.iftmis.service.InspectionWorkDoneService;
+import org.tamisemi.iftmis.service.dto.InspectionWorkDoneDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionWorkDoneMapper;
 
 /**
  * Integration tests for the {@link InspectionWorkDoneResource} REST controller.
@@ -37,6 +40,12 @@ public class InspectionWorkDoneResourceIT {
 
     @Autowired
     private InspectionWorkDoneRepository inspectionWorkDoneRepository;
+
+    @Autowired
+    private InspectionWorkDoneMapper inspectionWorkDoneMapper;
+
+    @Autowired
+    private InspectionWorkDoneService inspectionWorkDoneService;
 
     @Autowired
     private EntityManager em;
@@ -98,12 +107,13 @@ public class InspectionWorkDoneResourceIT {
     public void createInspectionWorkDone() throws Exception {
         int databaseSizeBeforeCreate = inspectionWorkDoneRepository.findAll().size();
         // Create the InspectionWorkDone
+        InspectionWorkDoneDTO inspectionWorkDoneDTO = inspectionWorkDoneMapper.toDto(inspectionWorkDone);
         restInspectionWorkDoneMockMvc
             .perform(
                 post("/api/inspection-work-dones")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDone))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDoneDTO))
             )
             .andExpect(status().isCreated());
 
@@ -122,6 +132,7 @@ public class InspectionWorkDoneResourceIT {
 
         // Create the InspectionWorkDone with an existing ID
         inspectionWorkDone.setId(1L);
+        InspectionWorkDoneDTO inspectionWorkDoneDTO = inspectionWorkDoneMapper.toDto(inspectionWorkDone);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionWorkDoneMockMvc
@@ -129,7 +140,7 @@ public class InspectionWorkDoneResourceIT {
                 post("/api/inspection-work-dones")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDone))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDoneDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -146,13 +157,14 @@ public class InspectionWorkDoneResourceIT {
         inspectionWorkDone.setName(null);
 
         // Create the InspectionWorkDone, which fails.
+        InspectionWorkDoneDTO inspectionWorkDoneDTO = inspectionWorkDoneMapper.toDto(inspectionWorkDone);
 
         restInspectionWorkDoneMockMvc
             .perform(
                 post("/api/inspection-work-dones")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDone))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDoneDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -212,13 +224,14 @@ public class InspectionWorkDoneResourceIT {
         // Disconnect from session so that the updates on updatedInspectionWorkDone are not directly saved in db
         em.detach(updatedInspectionWorkDone);
         updatedInspectionWorkDone.name(UPDATED_NAME).isOk(UPDATED_IS_OK);
+        InspectionWorkDoneDTO inspectionWorkDoneDTO = inspectionWorkDoneMapper.toDto(updatedInspectionWorkDone);
 
         restInspectionWorkDoneMockMvc
             .perform(
                 put("/api/inspection-work-dones")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionWorkDone))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDoneDTO))
             )
             .andExpect(status().isOk());
 
@@ -235,13 +248,16 @@ public class InspectionWorkDoneResourceIT {
     public void updateNonExistingInspectionWorkDone() throws Exception {
         int databaseSizeBeforeUpdate = inspectionWorkDoneRepository.findAll().size();
 
+        // Create the InspectionWorkDone
+        InspectionWorkDoneDTO inspectionWorkDoneDTO = inspectionWorkDoneMapper.toDto(inspectionWorkDone);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionWorkDoneMockMvc
             .perform(
                 put("/api/inspection-work-dones")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDone))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionWorkDoneDTO))
             )
             .andExpect(status().isBadRequest());
 

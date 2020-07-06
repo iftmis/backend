@@ -25,6 +25,9 @@ import org.tamisemi.iftmis.domain.Inspection;
 import org.tamisemi.iftmis.domain.Meeting;
 import org.tamisemi.iftmis.domain.enumeration.MeetingType;
 import org.tamisemi.iftmis.repository.MeetingRepository;
+import org.tamisemi.iftmis.service.MeetingService;
+import org.tamisemi.iftmis.service.dto.MeetingDTO;
+import org.tamisemi.iftmis.service.mapper.MeetingMapper;
 
 /**
  * Integration tests for the {@link MeetingResource} REST controller.
@@ -47,6 +50,12 @@ public class MeetingResourceIT {
 
     @Autowired
     private MeetingRepository meetingRepository;
+
+    @Autowired
+    private MeetingMapper meetingMapper;
+
+    @Autowired
+    private MeetingService meetingService;
 
     @Autowired
     private EntityManager em;
@@ -108,12 +117,13 @@ public class MeetingResourceIT {
     public void createMeeting() throws Exception {
         int databaseSizeBeforeCreate = meetingRepository.findAll().size();
         // Create the Meeting
+        MeetingDTO meetingDTO = meetingMapper.toDto(meeting);
         restMeetingMockMvc
             .perform(
                 post("/api/meetings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meeting))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingDTO))
             )
             .andExpect(status().isCreated());
 
@@ -134,6 +144,7 @@ public class MeetingResourceIT {
 
         // Create the Meeting with an existing ID
         meeting.setId(1L);
+        MeetingDTO meetingDTO = meetingMapper.toDto(meeting);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMeetingMockMvc
@@ -141,7 +152,7 @@ public class MeetingResourceIT {
                 post("/api/meetings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meeting))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -158,13 +169,14 @@ public class MeetingResourceIT {
         meeting.setType(null);
 
         // Create the Meeting, which fails.
+        MeetingDTO meetingDTO = meetingMapper.toDto(meeting);
 
         restMeetingMockMvc
             .perform(
                 post("/api/meetings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meeting))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -180,13 +192,14 @@ public class MeetingResourceIT {
         meeting.setMeetingDate(null);
 
         // Create the Meeting, which fails.
+        MeetingDTO meetingDTO = meetingMapper.toDto(meeting);
 
         restMeetingMockMvc
             .perform(
                 post("/api/meetings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meeting))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -202,13 +215,14 @@ public class MeetingResourceIT {
         meeting.setVenue(null);
 
         // Create the Meeting, which fails.
+        MeetingDTO meetingDTO = meetingMapper.toDto(meeting);
 
         restMeetingMockMvc
             .perform(
                 post("/api/meetings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meeting))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -272,13 +286,14 @@ public class MeetingResourceIT {
         // Disconnect from session so that the updates on updatedMeeting are not directly saved in db
         em.detach(updatedMeeting);
         updatedMeeting.type(UPDATED_TYPE).meetingDate(UPDATED_MEETING_DATE).venue(UPDATED_VENUE).summary(UPDATED_SUMMARY);
+        MeetingDTO meetingDTO = meetingMapper.toDto(updatedMeeting);
 
         restMeetingMockMvc
             .perform(
                 put("/api/meetings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedMeeting))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingDTO))
             )
             .andExpect(status().isOk());
 
@@ -297,13 +312,16 @@ public class MeetingResourceIT {
     public void updateNonExistingMeeting() throws Exception {
         int databaseSizeBeforeUpdate = meetingRepository.findAll().size();
 
+        // Create the Meeting
+        MeetingDTO meetingDTO = meetingMapper.toDto(meeting);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMeetingMockMvc
             .perform(
                 put("/api/meetings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meeting))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingDTO))
             )
             .andExpect(status().isBadRequest());
 

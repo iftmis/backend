@@ -1,6 +1,5 @@
 package org.tamisemi.iftmis.domain;
 
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -11,7 +10,6 @@ import org.hibernate.annotations.Type;
 /**
  * The GfsCodes(gfs_codes) entity.\n@author Chris
  */
-@ApiModel(description = "The GfsCodes(gfs_codes) entity.\n@author Chris")
 @Entity
 @Table(name = "gfs_codes")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -28,7 +26,6 @@ public class GfsCode extends AbstractAuditingEntity implements Serializable {
     @Column(name = "code", length = 64, nullable = false, unique = true)
     private String code;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description", nullable = false)
     private String description;

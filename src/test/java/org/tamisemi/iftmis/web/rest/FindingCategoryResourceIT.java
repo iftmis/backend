@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.FindingCategory;
 import org.tamisemi.iftmis.repository.FindingCategoryRepository;
+import org.tamisemi.iftmis.service.FindingCategoryService;
+import org.tamisemi.iftmis.service.dto.FindingCategoryDTO;
+import org.tamisemi.iftmis.service.mapper.FindingCategoryMapper;
 
 /**
  * Integration tests for the {@link FindingCategoryResource} REST controller.
@@ -36,6 +39,12 @@ public class FindingCategoryResourceIT {
 
     @Autowired
     private FindingCategoryRepository findingCategoryRepository;
+
+    @Autowired
+    private FindingCategoryMapper findingCategoryMapper;
+
+    @Autowired
+    private FindingCategoryService findingCategoryService;
 
     @Autowired
     private EntityManager em;
@@ -77,12 +86,13 @@ public class FindingCategoryResourceIT {
     public void createFindingCategory() throws Exception {
         int databaseSizeBeforeCreate = findingCategoryRepository.findAll().size();
         // Create the FindingCategory
+        FindingCategoryDTO findingCategoryDTO = findingCategoryMapper.toDto(findingCategory);
         restFindingCategoryMockMvc
             .perform(
                 post("/api/finding-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingCategoryDTO))
             )
             .andExpect(status().isCreated());
 
@@ -101,6 +111,7 @@ public class FindingCategoryResourceIT {
 
         // Create the FindingCategory with an existing ID
         findingCategory.setId(1L);
+        FindingCategoryDTO findingCategoryDTO = findingCategoryMapper.toDto(findingCategory);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFindingCategoryMockMvc
@@ -108,7 +119,7 @@ public class FindingCategoryResourceIT {
                 post("/api/finding-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingCategoryDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -125,13 +136,14 @@ public class FindingCategoryResourceIT {
         findingCategory.setName(null);
 
         // Create the FindingCategory, which fails.
+        FindingCategoryDTO findingCategoryDTO = findingCategoryMapper.toDto(findingCategory);
 
         restFindingCategoryMockMvc
             .perform(
                 post("/api/finding-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingCategoryDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -191,13 +203,14 @@ public class FindingCategoryResourceIT {
         // Disconnect from session so that the updates on updatedFindingCategory are not directly saved in db
         em.detach(updatedFindingCategory);
         updatedFindingCategory.code(UPDATED_CODE).name(UPDATED_NAME);
+        FindingCategoryDTO findingCategoryDTO = findingCategoryMapper.toDto(updatedFindingCategory);
 
         restFindingCategoryMockMvc
             .perform(
                 put("/api/finding-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedFindingCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingCategoryDTO))
             )
             .andExpect(status().isOk());
 
@@ -214,13 +227,16 @@ public class FindingCategoryResourceIT {
     public void updateNonExistingFindingCategory() throws Exception {
         int databaseSizeBeforeUpdate = findingCategoryRepository.findAll().size();
 
+        // Create the FindingCategory
+        FindingCategoryDTO findingCategoryDTO = findingCategoryMapper.toDto(findingCategory);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFindingCategoryMockMvc
             .perform(
                 put("/api/finding-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingCategoryDTO))
             )
             .andExpect(status().isBadRequest());
 

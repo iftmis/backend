@@ -1,6 +1,7 @@
 package org.tamisemi.iftmis.web.rest;
 
 import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,11 +11,15 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.tamisemi.iftmis.domain.FinancialYear;
-import org.tamisemi.iftmis.repository.FinancialYearRepository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.service.FinancialYearService;
+import org.tamisemi.iftmis.service.dto.FinancialYearDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +27,6 @@ import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class FinancialYearResource {
     private final Logger log = LoggerFactory.getLogger(FinancialYearResource.class);
 
@@ -31,26 +35,27 @@ public class FinancialYearResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final FinancialYearRepository financialYearRepository;
+    private final FinancialYearService financialYearService;
 
-    public FinancialYearResource(FinancialYearRepository financialYearRepository) {
-        this.financialYearRepository = financialYearRepository;
+    public FinancialYearResource(FinancialYearService financialYearService) {
+        this.financialYearService = financialYearService;
     }
 
     /**
      * {@code POST  /financial-years} : Create a new financialYear.
      *
-     * @param financialYear the financialYear to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new financialYear, or with status {@code 400 (Bad Request)} if the financialYear has already an ID.
+     * @param financialYearDTO the financialYearDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new financialYearDTO, or with status {@code 400 (Bad Request)} if the financialYear has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/financial-years")
-    public ResponseEntity<FinancialYear> createFinancialYear(@Valid @RequestBody FinancialYear financialYear) throws URISyntaxException {
-        log.debug("REST request to save FinancialYear : {}", financialYear);
-        if (financialYear.getId() != null) {
+    public ResponseEntity<FinancialYearDTO> createFinancialYear(@Valid @RequestBody FinancialYearDTO financialYearDTO)
+        throws URISyntaxException {
+        log.debug("REST request to save FinancialYear : {}", financialYearDTO);
+        if (financialYearDTO.getId() != null) {
             throw new BadRequestAlertException("A new financialYear cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        FinancialYear result = financialYearRepository.save(financialYear);
+        FinancialYearDTO result = financialYearService.save(financialYearDTO);
         return ResponseEntity
             .created(new URI("/api/financial-years/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -60,59 +65,63 @@ public class FinancialYearResource {
     /**
      * {@code PUT  /financial-years} : Updates an existing financialYear.
      *
-     * @param financialYear the financialYear to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated financialYear,
-     * or with status {@code 400 (Bad Request)} if the financialYear is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the financialYear couldn't be updated.
+     * @param financialYearDTO the financialYearDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated financialYearDTO,
+     * or with status {@code 400 (Bad Request)} if the financialYearDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the financialYearDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/financial-years")
-    public ResponseEntity<FinancialYear> updateFinancialYear(@Valid @RequestBody FinancialYear financialYear) throws URISyntaxException {
-        log.debug("REST request to update FinancialYear : {}", financialYear);
-        if (financialYear.getId() == null) {
+    public ResponseEntity<FinancialYearDTO> updateFinancialYear(@Valid @RequestBody FinancialYearDTO financialYearDTO)
+        throws URISyntaxException {
+        log.debug("REST request to update FinancialYear : {}", financialYearDTO);
+        if (financialYearDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        FinancialYear result = financialYearRepository.save(financialYear);
+        FinancialYearDTO result = financialYearService.save(financialYearDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, financialYear.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, financialYearDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code GET  /financial-years} : get all the financialYears.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of financialYears in body.
      */
     @GetMapping("/financial-years")
-    public List<FinancialYear> getAllFinancialYears() {
-        log.debug("REST request to get all FinancialYears");
-        return financialYearRepository.findAll();
+    public ResponseEntity<List<FinancialYearDTO>> getAllFinancialYears(Pageable pageable) {
+        log.debug("REST request to get a page of FinancialYears");
+        Page<FinancialYearDTO> page = financialYearService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
      * {@code GET  /financial-years/:id} : get the "id" financialYear.
      *
-     * @param id the id of the financialYear to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the financialYear, or with status {@code 404 (Not Found)}.
+     * @param id the id of the financialYearDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the financialYearDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/financial-years/{id}")
-    public ResponseEntity<FinancialYear> getFinancialYear(@PathVariable Long id) {
+    public ResponseEntity<FinancialYearDTO> getFinancialYear(@PathVariable Long id) {
         log.debug("REST request to get FinancialYear : {}", id);
-        Optional<FinancialYear> financialYear = financialYearRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(financialYear);
+        Optional<FinancialYearDTO> financialYearDTO = financialYearService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(financialYearDTO);
     }
 
     /**
      * {@code DELETE  /financial-years/:id} : delete the "id" financialYear.
      *
-     * @param id the id of the financialYear to delete.
+     * @param id the id of the financialYearDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/financial-years/{id}")
     public ResponseEntity<Void> deleteFinancialYear(@PathVariable Long id) {
         log.debug("REST request to delete FinancialYear : {}", id);
-        financialYearRepository.deleteById(id);
+        financialYearService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

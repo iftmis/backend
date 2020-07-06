@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -13,7 +12,6 @@ import org.tamisemi.iftmis.domain.enumeration.InspectionType;
 /**
  * The Inspection(inspections) entity.\n@author Chris
  */
-@ApiModel(description = "The Inspection(inspections) entity.\n@author Chris")
 @Entity
 @Table(name = "inspections")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

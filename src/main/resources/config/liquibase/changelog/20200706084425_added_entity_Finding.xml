@@ -21,7 +21,7 @@
             <column name="code" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="description" type="${clobType}">
+            <column name="description" type="text">
                 <constraints nullable="false" />
             </column>
             <column name="action_plan_category" type="varchar(255)">

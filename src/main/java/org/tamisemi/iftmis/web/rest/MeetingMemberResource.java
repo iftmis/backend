@@ -1,6 +1,7 @@
 package org.tamisemi.iftmis.web.rest;
 
 import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,11 +11,15 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.tamisemi.iftmis.domain.MeetingMember;
-import org.tamisemi.iftmis.repository.MeetingMemberRepository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.service.MeetingMemberService;
+import org.tamisemi.iftmis.service.dto.MeetingMemberDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +27,6 @@ import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class MeetingMemberResource {
     private final Logger log = LoggerFactory.getLogger(MeetingMemberResource.class);
 
@@ -31,26 +35,27 @@ public class MeetingMemberResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final MeetingMemberRepository meetingMemberRepository;
+    private final MeetingMemberService meetingMemberService;
 
-    public MeetingMemberResource(MeetingMemberRepository meetingMemberRepository) {
-        this.meetingMemberRepository = meetingMemberRepository;
+    public MeetingMemberResource(MeetingMemberService meetingMemberService) {
+        this.meetingMemberService = meetingMemberService;
     }
 
     /**
      * {@code POST  /meeting-members} : Create a new meetingMember.
      *
-     * @param meetingMember the meetingMember to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new meetingMember, or with status {@code 400 (Bad Request)} if the meetingMember has already an ID.
+     * @param meetingMemberDTO the meetingMemberDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new meetingMemberDTO, or with status {@code 400 (Bad Request)} if the meetingMember has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/meeting-members")
-    public ResponseEntity<MeetingMember> createMeetingMember(@Valid @RequestBody MeetingMember meetingMember) throws URISyntaxException {
-        log.debug("REST request to save MeetingMember : {}", meetingMember);
-        if (meetingMember.getId() != null) {
+    public ResponseEntity<MeetingMemberDTO> createMeetingMember(@Valid @RequestBody MeetingMemberDTO meetingMemberDTO)
+        throws URISyntaxException {
+        log.debug("REST request to save MeetingMember : {}", meetingMemberDTO);
+        if (meetingMemberDTO.getId() != null) {
             throw new BadRequestAlertException("A new meetingMember cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        MeetingMember result = meetingMemberRepository.save(meetingMember);
+        MeetingMemberDTO result = meetingMemberService.save(meetingMemberDTO);
         return ResponseEntity
             .created(new URI("/api/meeting-members/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -60,59 +65,63 @@ public class MeetingMemberResource {
     /**
      * {@code PUT  /meeting-members} : Updates an existing meetingMember.
      *
-     * @param meetingMember the meetingMember to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated meetingMember,
-     * or with status {@code 400 (Bad Request)} if the meetingMember is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the meetingMember couldn't be updated.
+     * @param meetingMemberDTO the meetingMemberDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated meetingMemberDTO,
+     * or with status {@code 400 (Bad Request)} if the meetingMemberDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the meetingMemberDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/meeting-members")
-    public ResponseEntity<MeetingMember> updateMeetingMember(@Valid @RequestBody MeetingMember meetingMember) throws URISyntaxException {
-        log.debug("REST request to update MeetingMember : {}", meetingMember);
-        if (meetingMember.getId() == null) {
+    public ResponseEntity<MeetingMemberDTO> updateMeetingMember(@Valid @RequestBody MeetingMemberDTO meetingMemberDTO)
+        throws URISyntaxException {
+        log.debug("REST request to update MeetingMember : {}", meetingMemberDTO);
+        if (meetingMemberDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        MeetingMember result = meetingMemberRepository.save(meetingMember);
+        MeetingMemberDTO result = meetingMemberService.save(meetingMemberDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, meetingMember.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, meetingMemberDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code GET  /meeting-members} : get all the meetingMembers.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of meetingMembers in body.
      */
     @GetMapping("/meeting-members")
-    public List<MeetingMember> getAllMeetingMembers() {
-        log.debug("REST request to get all MeetingMembers");
-        return meetingMemberRepository.findAll();
+    public ResponseEntity<List<MeetingMemberDTO>> getAllMeetingMembers(Pageable pageable) {
+        log.debug("REST request to get a page of MeetingMembers");
+        Page<MeetingMemberDTO> page = meetingMemberService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
      * {@code GET  /meeting-members/:id} : get the "id" meetingMember.
      *
-     * @param id the id of the meetingMember to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the meetingMember, or with status {@code 404 (Not Found)}.
+     * @param id the id of the meetingMemberDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the meetingMemberDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/meeting-members/{id}")
-    public ResponseEntity<MeetingMember> getMeetingMember(@PathVariable Long id) {
+    public ResponseEntity<MeetingMemberDTO> getMeetingMember(@PathVariable Long id) {
         log.debug("REST request to get MeetingMember : {}", id);
-        Optional<MeetingMember> meetingMember = meetingMemberRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(meetingMember);
+        Optional<MeetingMemberDTO> meetingMemberDTO = meetingMemberService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(meetingMemberDTO);
     }
 
     /**
      * {@code DELETE  /meeting-members/:id} : delete the "id" meetingMember.
      *
-     * @param id the id of the meetingMember to delete.
+     * @param id the id of the meetingMemberDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/meeting-members/{id}")
     public ResponseEntity<Void> deleteMeetingMember(@PathVariable Long id) {
         log.debug("REST request to delete MeetingMember : {}", id);
-        meetingMemberRepository.deleteById(id);
+        meetingMemberService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

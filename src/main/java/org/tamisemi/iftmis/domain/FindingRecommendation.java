@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -13,7 +12,6 @@ import org.tamisemi.iftmis.domain.enumeration.ImplementationStatus;
 /**
  * The FindingRecommendation(finding_recommendations) entity.\n@author Chris
  */
-@ApiModel(description = "The FindingRecommendation(finding_recommendations) entity.\n@author Chris")
 @Entity
 @Table(name = "finding_recommendations")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -25,7 +23,6 @@ public class FindingRecommendation extends AbstractAuditingEntity implements Ser
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description", nullable = false)
     private String description;

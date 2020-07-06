@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.OrganisationUnitLevel;
 import org.tamisemi.iftmis.repository.OrganisationUnitLevelRepository;
+import org.tamisemi.iftmis.service.OrganisationUnitLevelService;
+import org.tamisemi.iftmis.service.dto.OrganisationUnitLevelDTO;
+import org.tamisemi.iftmis.service.mapper.OrganisationUnitLevelMapper;
 
 /**
  * Integration tests for the {@link OrganisationUnitLevelResource} REST controller.
@@ -42,6 +45,12 @@ public class OrganisationUnitLevelResourceIT {
 
     @Autowired
     private OrganisationUnitLevelRepository organisationUnitLevelRepository;
+
+    @Autowired
+    private OrganisationUnitLevelMapper organisationUnitLevelMapper;
+
+    @Autowired
+    private OrganisationUnitLevelService organisationUnitLevelService;
 
     @Autowired
     private EntityManager em;
@@ -91,12 +100,13 @@ public class OrganisationUnitLevelResourceIT {
     public void createOrganisationUnitLevel() throws Exception {
         int databaseSizeBeforeCreate = organisationUnitLevelRepository.findAll().size();
         // Create the OrganisationUnitLevel
+        OrganisationUnitLevelDTO organisationUnitLevelDTO = organisationUnitLevelMapper.toDto(organisationUnitLevel);
         restOrganisationUnitLevelMockMvc
             .perform(
                 post("/api/organisation-unit-levels")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevelDTO))
             )
             .andExpect(status().isCreated());
 
@@ -117,6 +127,7 @@ public class OrganisationUnitLevelResourceIT {
 
         // Create the OrganisationUnitLevel with an existing ID
         organisationUnitLevel.setId(1L);
+        OrganisationUnitLevelDTO organisationUnitLevelDTO = organisationUnitLevelMapper.toDto(organisationUnitLevel);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOrganisationUnitLevelMockMvc
@@ -124,7 +135,7 @@ public class OrganisationUnitLevelResourceIT {
                 post("/api/organisation-unit-levels")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevelDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -141,13 +152,14 @@ public class OrganisationUnitLevelResourceIT {
         organisationUnitLevel.setName(null);
 
         // Create the OrganisationUnitLevel, which fails.
+        OrganisationUnitLevelDTO organisationUnitLevelDTO = organisationUnitLevelMapper.toDto(organisationUnitLevel);
 
         restOrganisationUnitLevelMockMvc
             .perform(
                 post("/api/organisation-unit-levels")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevelDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -163,13 +175,14 @@ public class OrganisationUnitLevelResourceIT {
         organisationUnitLevel.setLevel(null);
 
         // Create the OrganisationUnitLevel, which fails.
+        OrganisationUnitLevelDTO organisationUnitLevelDTO = organisationUnitLevelMapper.toDto(organisationUnitLevel);
 
         restOrganisationUnitLevelMockMvc
             .perform(
                 post("/api/organisation-unit-levels")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevelDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -185,13 +198,14 @@ public class OrganisationUnitLevelResourceIT {
         organisationUnitLevel.setIsInspectionLevel(null);
 
         // Create the OrganisationUnitLevel, which fails.
+        OrganisationUnitLevelDTO organisationUnitLevelDTO = organisationUnitLevelMapper.toDto(organisationUnitLevel);
 
         restOrganisationUnitLevelMockMvc
             .perform(
                 post("/api/organisation-unit-levels")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevelDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -261,13 +275,14 @@ public class OrganisationUnitLevelResourceIT {
             .name(UPDATED_NAME)
             .level(UPDATED_LEVEL)
             .isInspectionLevel(UPDATED_IS_INSPECTION_LEVEL);
+        OrganisationUnitLevelDTO organisationUnitLevelDTO = organisationUnitLevelMapper.toDto(updatedOrganisationUnitLevel);
 
         restOrganisationUnitLevelMockMvc
             .perform(
                 put("/api/organisation-unit-levels")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedOrganisationUnitLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevelDTO))
             )
             .andExpect(status().isOk());
 
@@ -286,13 +301,16 @@ public class OrganisationUnitLevelResourceIT {
     public void updateNonExistingOrganisationUnitLevel() throws Exception {
         int databaseSizeBeforeUpdate = organisationUnitLevelRepository.findAll().size();
 
+        // Create the OrganisationUnitLevel
+        OrganisationUnitLevelDTO organisationUnitLevelDTO = organisationUnitLevelMapper.toDto(organisationUnitLevel);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOrganisationUnitLevelMockMvc
             .perform(
                 put("/api/organisation-unit-levels")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevel))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitLevelDTO))
             )
             .andExpect(status().isBadRequest());
 

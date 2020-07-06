@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.FindingSubCategory;
 import org.tamisemi.iftmis.repository.FindingSubCategoryRepository;
+import org.tamisemi.iftmis.service.FindingSubCategoryService;
+import org.tamisemi.iftmis.service.dto.FindingSubCategoryDTO;
+import org.tamisemi.iftmis.service.mapper.FindingSubCategoryMapper;
 
 /**
  * Integration tests for the {@link FindingSubCategoryResource} REST controller.
@@ -36,6 +39,12 @@ public class FindingSubCategoryResourceIT {
 
     @Autowired
     private FindingSubCategoryRepository findingSubCategoryRepository;
+
+    @Autowired
+    private FindingSubCategoryMapper findingSubCategoryMapper;
+
+    @Autowired
+    private FindingSubCategoryService findingSubCategoryService;
 
     @Autowired
     private EntityManager em;
@@ -77,12 +86,13 @@ public class FindingSubCategoryResourceIT {
     public void createFindingSubCategory() throws Exception {
         int databaseSizeBeforeCreate = findingSubCategoryRepository.findAll().size();
         // Create the FindingSubCategory
+        FindingSubCategoryDTO findingSubCategoryDTO = findingSubCategoryMapper.toDto(findingSubCategory);
         restFindingSubCategoryMockMvc
             .perform(
                 post("/api/finding-sub-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategoryDTO))
             )
             .andExpect(status().isCreated());
 
@@ -101,6 +111,7 @@ public class FindingSubCategoryResourceIT {
 
         // Create the FindingSubCategory with an existing ID
         findingSubCategory.setId(1L);
+        FindingSubCategoryDTO findingSubCategoryDTO = findingSubCategoryMapper.toDto(findingSubCategory);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFindingSubCategoryMockMvc
@@ -108,7 +119,7 @@ public class FindingSubCategoryResourceIT {
                 post("/api/finding-sub-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategoryDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -125,13 +136,14 @@ public class FindingSubCategoryResourceIT {
         findingSubCategory.setName(null);
 
         // Create the FindingSubCategory, which fails.
+        FindingSubCategoryDTO findingSubCategoryDTO = findingSubCategoryMapper.toDto(findingSubCategory);
 
         restFindingSubCategoryMockMvc
             .perform(
                 post("/api/finding-sub-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategoryDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -191,13 +203,14 @@ public class FindingSubCategoryResourceIT {
         // Disconnect from session so that the updates on updatedFindingSubCategory are not directly saved in db
         em.detach(updatedFindingSubCategory);
         updatedFindingSubCategory.code(UPDATED_CODE).name(UPDATED_NAME);
+        FindingSubCategoryDTO findingSubCategoryDTO = findingSubCategoryMapper.toDto(updatedFindingSubCategory);
 
         restFindingSubCategoryMockMvc
             .perform(
                 put("/api/finding-sub-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedFindingSubCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategoryDTO))
             )
             .andExpect(status().isOk());
 
@@ -214,13 +227,16 @@ public class FindingSubCategoryResourceIT {
     public void updateNonExistingFindingSubCategory() throws Exception {
         int databaseSizeBeforeUpdate = findingSubCategoryRepository.findAll().size();
 
+        // Create the FindingSubCategory
+        FindingSubCategoryDTO findingSubCategoryDTO = findingSubCategoryMapper.toDto(findingSubCategory);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFindingSubCategoryMockMvc
             .perform(
                 put("/api/finding-sub-categories")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategory))
+                    .content(TestUtil.convertObjectToJsonBytes(findingSubCategoryDTO))
             )
             .andExpect(status().isBadRequest());
 

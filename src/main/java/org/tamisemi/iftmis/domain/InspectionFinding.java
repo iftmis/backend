@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -13,7 +12,6 @@ import org.tamisemi.iftmis.domain.enumeration.ActionPlanCategory;
 /**
  * The InspectionFinding(inspection_findings) entity.\n@author Chris
  */
-@ApiModel(description = "The InspectionFinding(inspection_findings) entity.\n@author Chris")
 @Entity
 @Table(name = "inspection_findings")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -30,7 +28,6 @@ public class InspectionFinding extends AbstractAuditingEntity implements Seriali
     @Column(name = "code", length = 5, nullable = false)
     private String code;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description")
     private String description;
@@ -41,7 +38,6 @@ public class InspectionFinding extends AbstractAuditingEntity implements Seriali
     @Column(name = "disclosed_last_inspection")
     private Boolean disclosedLastInspection;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "causes")
     private String causes;
@@ -50,7 +46,6 @@ public class InspectionFinding extends AbstractAuditingEntity implements Seriali
     @Column(name = "action_plan_category")
     private ActionPlanCategory actionPlanCategory;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "implication")
     private String implication;
@@ -250,8 +245,6 @@ public class InspectionFinding extends AbstractAuditingEntity implements Seriali
             "id=" + getId() +
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
-            ", category='" + getCategory() + "'" +
-            ", subCategory='" + getSubCategory() + "'" +
             ", condition='" + getCondition() + "'" +
             ", disclosedLastInspection='" + isDisclosedLastInspection() + "'" +
             ", causes='" + getCauses() + "'" +

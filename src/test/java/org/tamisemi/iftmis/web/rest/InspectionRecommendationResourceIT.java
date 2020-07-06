@@ -24,6 +24,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.InspectionRecommendation;
 import org.tamisemi.iftmis.domain.enumeration.ImplementationStatus;
 import org.tamisemi.iftmis.repository.InspectionRecommendationRepository;
+import org.tamisemi.iftmis.service.InspectionRecommendationService;
+import org.tamisemi.iftmis.service.dto.InspectionRecommendationDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionRecommendationMapper;
 
 /**
  * Integration tests for the {@link InspectionRecommendationResource} REST controller.
@@ -46,6 +49,12 @@ public class InspectionRecommendationResourceIT {
 
     @Autowired
     private InspectionRecommendationRepository inspectionRecommendationRepository;
+
+    @Autowired
+    private InspectionRecommendationMapper inspectionRecommendationMapper;
+
+    @Autowired
+    private InspectionRecommendationService inspectionRecommendationService;
 
     @Autowired
     private EntityManager em;
@@ -95,12 +104,13 @@ public class InspectionRecommendationResourceIT {
     public void createInspectionRecommendation() throws Exception {
         int databaseSizeBeforeCreate = inspectionRecommendationRepository.findAll().size();
         // Create the InspectionRecommendation
+        InspectionRecommendationDTO inspectionRecommendationDTO = inspectionRecommendationMapper.toDto(inspectionRecommendation);
         restInspectionRecommendationMockMvc
             .perform(
                 post("/api/inspection-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendationDTO))
             )
             .andExpect(status().isCreated());
 
@@ -121,6 +131,7 @@ public class InspectionRecommendationResourceIT {
 
         // Create the InspectionRecommendation with an existing ID
         inspectionRecommendation.setId(1L);
+        InspectionRecommendationDTO inspectionRecommendationDTO = inspectionRecommendationMapper.toDto(inspectionRecommendation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionRecommendationMockMvc
@@ -128,7 +139,7 @@ public class InspectionRecommendationResourceIT {
                 post("/api/inspection-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -145,13 +156,14 @@ public class InspectionRecommendationResourceIT {
         inspectionRecommendation.setImplementationStatus(null);
 
         // Create the InspectionRecommendation, which fails.
+        InspectionRecommendationDTO inspectionRecommendationDTO = inspectionRecommendationMapper.toDto(inspectionRecommendation);
 
         restInspectionRecommendationMockMvc
             .perform(
                 post("/api/inspection-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -223,13 +235,14 @@ public class InspectionRecommendationResourceIT {
             .implementationStatus(UPDATED_IMPLEMENTATION_STATUS)
             .completionDate(UPDATED_COMPLETION_DATE)
             .compliancePlan(UPDATED_COMPLIANCE_PLAN);
+        InspectionRecommendationDTO inspectionRecommendationDTO = inspectionRecommendationMapper.toDto(updatedInspectionRecommendation);
 
         restInspectionRecommendationMockMvc
             .perform(
                 put("/api/inspection-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendationDTO))
             )
             .andExpect(status().isOk());
 
@@ -248,13 +261,16 @@ public class InspectionRecommendationResourceIT {
     public void updateNonExistingInspectionRecommendation() throws Exception {
         int databaseSizeBeforeUpdate = inspectionRecommendationRepository.findAll().size();
 
+        // Create the InspectionRecommendation
+        InspectionRecommendationDTO inspectionRecommendationDTO = inspectionRecommendationMapper.toDto(inspectionRecommendation);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionRecommendationMockMvc
             .perform(
                 put("/api/inspection-recommendations")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendation))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionRecommendationDTO))
             )
             .andExpect(status().isBadRequest());
 

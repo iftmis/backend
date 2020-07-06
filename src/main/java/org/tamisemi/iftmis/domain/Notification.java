@@ -1,6 +1,5 @@
 package org.tamisemi.iftmis.domain;
 
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -11,7 +10,6 @@ import org.hibernate.annotations.Type;
 /**
  * The Notification(notifications) entity.\n@author Chris
  */
-@ApiModel(description = "The Notification(notifications) entity.\n@author Chris")
 @Entity
 @Table(name = "notifications")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -32,7 +30,6 @@ public class Notification extends AbstractAuditingEntity implements Serializable
     @Column(name = "subject", length = 200)
     private String subject;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "body")
     private String body;

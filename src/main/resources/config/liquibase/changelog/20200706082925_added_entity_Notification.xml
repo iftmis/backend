@@ -21,7 +21,7 @@
             <column name="subject" type="varchar(200)">
                 <constraints nullable="true" />
             </column>
-            <column name="body" type="${clobType}">
+            <column name="body" type="text">
                 <constraints nullable="true" />
             </column>
             <column name="is_sent" type="boolean">

@@ -22,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.FinancialYear;
 import org.tamisemi.iftmis.repository.FinancialYearRepository;
+import org.tamisemi.iftmis.service.FinancialYearService;
+import org.tamisemi.iftmis.service.dto.FinancialYearDTO;
+import org.tamisemi.iftmis.service.mapper.FinancialYearMapper;
 
 /**
  * Integration tests for the {@link FinancialYearResource} REST controller.
@@ -44,6 +47,12 @@ public class FinancialYearResourceIT {
 
     @Autowired
     private FinancialYearRepository financialYearRepository;
+
+    @Autowired
+    private FinancialYearMapper financialYearMapper;
+
+    @Autowired
+    private FinancialYearService financialYearService;
 
     @Autowired
     private EntityManager em;
@@ -93,12 +102,13 @@ public class FinancialYearResourceIT {
     public void createFinancialYear() throws Exception {
         int databaseSizeBeforeCreate = financialYearRepository.findAll().size();
         // Create the FinancialYear
+        FinancialYearDTO financialYearDTO = financialYearMapper.toDto(financialYear);
         restFinancialYearMockMvc
             .perform(
                 post("/api/financial-years")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(financialYear))
+                    .content(TestUtil.convertObjectToJsonBytes(financialYearDTO))
             )
             .andExpect(status().isCreated());
 
@@ -119,6 +129,7 @@ public class FinancialYearResourceIT {
 
         // Create the FinancialYear with an existing ID
         financialYear.setId(1L);
+        FinancialYearDTO financialYearDTO = financialYearMapper.toDto(financialYear);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFinancialYearMockMvc
@@ -126,7 +137,7 @@ public class FinancialYearResourceIT {
                 post("/api/financial-years")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(financialYear))
+                    .content(TestUtil.convertObjectToJsonBytes(financialYearDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -143,13 +154,14 @@ public class FinancialYearResourceIT {
         financialYear.setName(null);
 
         // Create the FinancialYear, which fails.
+        FinancialYearDTO financialYearDTO = financialYearMapper.toDto(financialYear);
 
         restFinancialYearMockMvc
             .perform(
                 post("/api/financial-years")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(financialYear))
+                    .content(TestUtil.convertObjectToJsonBytes(financialYearDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -165,13 +177,14 @@ public class FinancialYearResourceIT {
         financialYear.setStartDate(null);
 
         // Create the FinancialYear, which fails.
+        FinancialYearDTO financialYearDTO = financialYearMapper.toDto(financialYear);
 
         restFinancialYearMockMvc
             .perform(
                 post("/api/financial-years")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(financialYear))
+                    .content(TestUtil.convertObjectToJsonBytes(financialYearDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -187,13 +200,14 @@ public class FinancialYearResourceIT {
         financialYear.setEndDate(null);
 
         // Create the FinancialYear, which fails.
+        FinancialYearDTO financialYearDTO = financialYearMapper.toDto(financialYear);
 
         restFinancialYearMockMvc
             .perform(
                 post("/api/financial-years")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(financialYear))
+                    .content(TestUtil.convertObjectToJsonBytes(financialYearDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -209,13 +223,14 @@ public class FinancialYearResourceIT {
         financialYear.setIsOpened(null);
 
         // Create the FinancialYear, which fails.
+        FinancialYearDTO financialYearDTO = financialYearMapper.toDto(financialYear);
 
         restFinancialYearMockMvc
             .perform(
                 post("/api/financial-years")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(financialYear))
+                    .content(TestUtil.convertObjectToJsonBytes(financialYearDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -279,13 +294,14 @@ public class FinancialYearResourceIT {
         // Disconnect from session so that the updates on updatedFinancialYear are not directly saved in db
         em.detach(updatedFinancialYear);
         updatedFinancialYear.name(UPDATED_NAME).startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE).isOpened(UPDATED_IS_OPENED);
+        FinancialYearDTO financialYearDTO = financialYearMapper.toDto(updatedFinancialYear);
 
         restFinancialYearMockMvc
             .perform(
                 put("/api/financial-years")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedFinancialYear))
+                    .content(TestUtil.convertObjectToJsonBytes(financialYearDTO))
             )
             .andExpect(status().isOk());
 
@@ -304,13 +320,16 @@ public class FinancialYearResourceIT {
     public void updateNonExistingFinancialYear() throws Exception {
         int databaseSizeBeforeUpdate = financialYearRepository.findAll().size();
 
+        // Create the FinancialYear
+        FinancialYearDTO financialYearDTO = financialYearMapper.toDto(financialYear);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFinancialYearMockMvc
             .perform(
                 put("/api/financial-years")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(financialYear))
+                    .content(TestUtil.convertObjectToJsonBytes(financialYearDTO))
             )
             .andExpect(status().isBadRequest());
 

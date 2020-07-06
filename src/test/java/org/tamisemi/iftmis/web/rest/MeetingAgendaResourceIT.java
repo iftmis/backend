@@ -22,6 +22,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.Meeting;
 import org.tamisemi.iftmis.domain.MeetingAgenda;
 import org.tamisemi.iftmis.repository.MeetingAgendaRepository;
+import org.tamisemi.iftmis.service.MeetingAgendaService;
+import org.tamisemi.iftmis.service.dto.MeetingAgendaDTO;
+import org.tamisemi.iftmis.service.mapper.MeetingAgendaMapper;
 
 /**
  * Integration tests for the {@link MeetingAgendaResource} REST controller.
@@ -35,6 +38,12 @@ public class MeetingAgendaResourceIT {
 
     @Autowired
     private MeetingAgendaRepository meetingAgendaRepository;
+
+    @Autowired
+    private MeetingAgendaMapper meetingAgendaMapper;
+
+    @Autowired
+    private MeetingAgendaService meetingAgendaService;
 
     @Autowired
     private EntityManager em;
@@ -96,12 +105,13 @@ public class MeetingAgendaResourceIT {
     public void createMeetingAgenda() throws Exception {
         int databaseSizeBeforeCreate = meetingAgendaRepository.findAll().size();
         // Create the MeetingAgenda
+        MeetingAgendaDTO meetingAgendaDTO = meetingAgendaMapper.toDto(meetingAgenda);
         restMeetingAgendaMockMvc
             .perform(
                 post("/api/meeting-agenda")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingAgenda))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAgendaDTO))
             )
             .andExpect(status().isCreated());
 
@@ -119,6 +129,7 @@ public class MeetingAgendaResourceIT {
 
         // Create the MeetingAgenda with an existing ID
         meetingAgenda.setId(1L);
+        MeetingAgendaDTO meetingAgendaDTO = meetingAgendaMapper.toDto(meetingAgenda);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMeetingAgendaMockMvc
@@ -126,7 +137,7 @@ public class MeetingAgendaResourceIT {
                 post("/api/meeting-agenda")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingAgenda))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAgendaDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -185,13 +196,14 @@ public class MeetingAgendaResourceIT {
         // Disconnect from session so that the updates on updatedMeetingAgenda are not directly saved in db
         em.detach(updatedMeetingAgenda);
         updatedMeetingAgenda.description(UPDATED_DESCRIPTION);
+        MeetingAgendaDTO meetingAgendaDTO = meetingAgendaMapper.toDto(updatedMeetingAgenda);
 
         restMeetingAgendaMockMvc
             .perform(
                 put("/api/meeting-agenda")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedMeetingAgenda))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAgendaDTO))
             )
             .andExpect(status().isOk());
 
@@ -207,13 +219,16 @@ public class MeetingAgendaResourceIT {
     public void updateNonExistingMeetingAgenda() throws Exception {
         int databaseSizeBeforeUpdate = meetingAgendaRepository.findAll().size();
 
+        // Create the MeetingAgenda
+        MeetingAgendaDTO meetingAgendaDTO = meetingAgendaMapper.toDto(meetingAgenda);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMeetingAgendaMockMvc
             .perform(
                 put("/api/meeting-agenda")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingAgenda))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAgendaDTO))
             )
             .andExpect(status().isBadRequest());
 

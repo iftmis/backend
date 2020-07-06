@@ -21,6 +21,9 @@ import org.springframework.util.Base64Utils;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.GfsCode;
 import org.tamisemi.iftmis.repository.GfsCodeRepository;
+import org.tamisemi.iftmis.service.GfsCodeService;
+import org.tamisemi.iftmis.service.dto.GfsCodeDTO;
+import org.tamisemi.iftmis.service.mapper.GfsCodeMapper;
 
 /**
  * Integration tests for the {@link GfsCodeResource} REST controller.
@@ -37,6 +40,12 @@ public class GfsCodeResourceIT {
 
     @Autowired
     private GfsCodeRepository gfsCodeRepository;
+
+    @Autowired
+    private GfsCodeMapper gfsCodeMapper;
+
+    @Autowired
+    private GfsCodeService gfsCodeService;
 
     @Autowired
     private EntityManager em;
@@ -78,12 +87,13 @@ public class GfsCodeResourceIT {
     public void createGfsCode() throws Exception {
         int databaseSizeBeforeCreate = gfsCodeRepository.findAll().size();
         // Create the GfsCode
+        GfsCodeDTO gfsCodeDTO = gfsCodeMapper.toDto(gfsCode);
         restGfsCodeMockMvc
             .perform(
                 post("/api/gfs-codes")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(gfsCode))
+                    .content(TestUtil.convertObjectToJsonBytes(gfsCodeDTO))
             )
             .andExpect(status().isCreated());
 
@@ -102,6 +112,7 @@ public class GfsCodeResourceIT {
 
         // Create the GfsCode with an existing ID
         gfsCode.setId(1L);
+        GfsCodeDTO gfsCodeDTO = gfsCodeMapper.toDto(gfsCode);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restGfsCodeMockMvc
@@ -109,7 +120,7 @@ public class GfsCodeResourceIT {
                 post("/api/gfs-codes")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(gfsCode))
+                    .content(TestUtil.convertObjectToJsonBytes(gfsCodeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -126,13 +137,14 @@ public class GfsCodeResourceIT {
         gfsCode.setCode(null);
 
         // Create the GfsCode, which fails.
+        GfsCodeDTO gfsCodeDTO = gfsCodeMapper.toDto(gfsCode);
 
         restGfsCodeMockMvc
             .perform(
                 post("/api/gfs-codes")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(gfsCode))
+                    .content(TestUtil.convertObjectToJsonBytes(gfsCodeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -192,13 +204,14 @@ public class GfsCodeResourceIT {
         // Disconnect from session so that the updates on updatedGfsCode are not directly saved in db
         em.detach(updatedGfsCode);
         updatedGfsCode.code(UPDATED_CODE).description(UPDATED_DESCRIPTION);
+        GfsCodeDTO gfsCodeDTO = gfsCodeMapper.toDto(updatedGfsCode);
 
         restGfsCodeMockMvc
             .perform(
                 put("/api/gfs-codes")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedGfsCode))
+                    .content(TestUtil.convertObjectToJsonBytes(gfsCodeDTO))
             )
             .andExpect(status().isOk());
 
@@ -215,13 +228,16 @@ public class GfsCodeResourceIT {
     public void updateNonExistingGfsCode() throws Exception {
         int databaseSizeBeforeUpdate = gfsCodeRepository.findAll().size();
 
+        // Create the GfsCode
+        GfsCodeDTO gfsCodeDTO = gfsCodeMapper.toDto(gfsCode);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restGfsCodeMockMvc
             .perform(
                 put("/api/gfs-codes")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(gfsCode))
+                    .content(TestUtil.convertObjectToJsonBytes(gfsCodeDTO))
             )
             .andExpect(status().isBadRequest());
 

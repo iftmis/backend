@@ -22,6 +22,9 @@ import org.tamisemi.iftmis.domain.FileResource;
 import org.tamisemi.iftmis.domain.Meeting;
 import org.tamisemi.iftmis.domain.MeetingAttachment;
 import org.tamisemi.iftmis.repository.MeetingAttachmentRepository;
+import org.tamisemi.iftmis.service.MeetingAttachmentService;
+import org.tamisemi.iftmis.service.dto.MeetingAttachmentDTO;
+import org.tamisemi.iftmis.service.mapper.MeetingAttachmentMapper;
 
 /**
  * Integration tests for the {@link MeetingAttachmentResource} REST controller.
@@ -35,6 +38,12 @@ public class MeetingAttachmentResourceIT {
 
     @Autowired
     private MeetingAttachmentRepository meetingAttachmentRepository;
+
+    @Autowired
+    private MeetingAttachmentMapper meetingAttachmentMapper;
+
+    @Autowired
+    private MeetingAttachmentService meetingAttachmentService;
 
     @Autowired
     private EntityManager em;
@@ -116,12 +125,13 @@ public class MeetingAttachmentResourceIT {
     public void createMeetingAttachment() throws Exception {
         int databaseSizeBeforeCreate = meetingAttachmentRepository.findAll().size();
         // Create the MeetingAttachment
+        MeetingAttachmentDTO meetingAttachmentDTO = meetingAttachmentMapper.toDto(meetingAttachment);
         restMeetingAttachmentMockMvc
             .perform(
                 post("/api/meeting-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachmentDTO))
             )
             .andExpect(status().isCreated());
 
@@ -139,6 +149,7 @@ public class MeetingAttachmentResourceIT {
 
         // Create the MeetingAttachment with an existing ID
         meetingAttachment.setId(1L);
+        MeetingAttachmentDTO meetingAttachmentDTO = meetingAttachmentMapper.toDto(meetingAttachment);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMeetingAttachmentMockMvc
@@ -146,7 +157,7 @@ public class MeetingAttachmentResourceIT {
                 post("/api/meeting-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachmentDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -163,13 +174,14 @@ public class MeetingAttachmentResourceIT {
         meetingAttachment.setName(null);
 
         // Create the MeetingAttachment, which fails.
+        MeetingAttachmentDTO meetingAttachmentDTO = meetingAttachmentMapper.toDto(meetingAttachment);
 
         restMeetingAttachmentMockMvc
             .perform(
                 post("/api/meeting-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachmentDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -227,13 +239,14 @@ public class MeetingAttachmentResourceIT {
         // Disconnect from session so that the updates on updatedMeetingAttachment are not directly saved in db
         em.detach(updatedMeetingAttachment);
         updatedMeetingAttachment.name(UPDATED_NAME);
+        MeetingAttachmentDTO meetingAttachmentDTO = meetingAttachmentMapper.toDto(updatedMeetingAttachment);
 
         restMeetingAttachmentMockMvc
             .perform(
                 put("/api/meeting-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedMeetingAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachmentDTO))
             )
             .andExpect(status().isOk());
 
@@ -249,13 +262,16 @@ public class MeetingAttachmentResourceIT {
     public void updateNonExistingMeetingAttachment() throws Exception {
         int databaseSizeBeforeUpdate = meetingAttachmentRepository.findAll().size();
 
+        // Create the MeetingAttachment
+        MeetingAttachmentDTO meetingAttachmentDTO = meetingAttachmentMapper.toDto(meetingAttachment);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMeetingAttachmentMockMvc
             .perform(
                 put("/api/meeting-attachments")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachment))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingAttachmentDTO))
             )
             .andExpect(status().isBadRequest());
 

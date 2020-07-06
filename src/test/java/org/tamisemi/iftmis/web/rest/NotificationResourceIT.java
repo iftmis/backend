@@ -21,6 +21,9 @@ import org.springframework.util.Base64Utils;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.Notification;
 import org.tamisemi.iftmis.repository.NotificationRepository;
+import org.tamisemi.iftmis.service.NotificationService;
+import org.tamisemi.iftmis.service.dto.NotificationDTO;
+import org.tamisemi.iftmis.service.mapper.NotificationMapper;
 
 /**
  * Integration tests for the {@link NotificationResource} REST controller.
@@ -49,6 +52,12 @@ public class NotificationResourceIT {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private NotificationMapper notificationMapper;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     private EntityManager em;
@@ -102,12 +111,13 @@ public class NotificationResourceIT {
     public void createNotification() throws Exception {
         int databaseSizeBeforeCreate = notificationRepository.findAll().size();
         // Create the Notification
+        NotificationDTO notificationDTO = notificationMapper.toDto(notification);
         restNotificationMockMvc
             .perform(
                 post("/api/notifications")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(notification))
+                    .content(TestUtil.convertObjectToJsonBytes(notificationDTO))
             )
             .andExpect(status().isCreated());
 
@@ -130,6 +140,7 @@ public class NotificationResourceIT {
 
         // Create the Notification with an existing ID
         notification.setId(1L);
+        NotificationDTO notificationDTO = notificationMapper.toDto(notification);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restNotificationMockMvc
@@ -137,7 +148,7 @@ public class NotificationResourceIT {
                 post("/api/notifications")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(notification))
+                    .content(TestUtil.convertObjectToJsonBytes(notificationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -154,13 +165,14 @@ public class NotificationResourceIT {
         notification.setEmail(null);
 
         // Create the Notification, which fails.
+        NotificationDTO notificationDTO = notificationMapper.toDto(notification);
 
         restNotificationMockMvc
             .perform(
                 post("/api/notifications")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(notification))
+                    .content(TestUtil.convertObjectToJsonBytes(notificationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -234,13 +246,14 @@ public class NotificationResourceIT {
             .isSent(UPDATED_IS_SENT)
             .isRead(UPDATED_IS_READ)
             .attachments(UPDATED_ATTACHMENTS);
+        NotificationDTO notificationDTO = notificationMapper.toDto(updatedNotification);
 
         restNotificationMockMvc
             .perform(
                 put("/api/notifications")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedNotification))
+                    .content(TestUtil.convertObjectToJsonBytes(notificationDTO))
             )
             .andExpect(status().isOk());
 
@@ -261,13 +274,16 @@ public class NotificationResourceIT {
     public void updateNonExistingNotification() throws Exception {
         int databaseSizeBeforeUpdate = notificationRepository.findAll().size();
 
+        // Create the Notification
+        NotificationDTO notificationDTO = notificationMapper.toDto(notification);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restNotificationMockMvc
             .perform(
                 put("/api/notifications")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(notification))
+                    .content(TestUtil.convertObjectToJsonBytes(notificationDTO))
             )
             .andExpect(status().isBadRequest());
 

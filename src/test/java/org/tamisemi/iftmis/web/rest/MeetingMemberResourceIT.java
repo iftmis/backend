@@ -21,6 +21,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.Meeting;
 import org.tamisemi.iftmis.domain.MeetingMember;
 import org.tamisemi.iftmis.repository.MeetingMemberRepository;
+import org.tamisemi.iftmis.service.MeetingMemberService;
+import org.tamisemi.iftmis.service.dto.MeetingMemberDTO;
+import org.tamisemi.iftmis.service.mapper.MeetingMemberMapper;
 
 /**
  * Integration tests for the {@link MeetingMemberResource} REST controller.
@@ -43,6 +46,12 @@ public class MeetingMemberResourceIT {
 
     @Autowired
     private MeetingMemberRepository meetingMemberRepository;
+
+    @Autowired
+    private MeetingMemberMapper meetingMemberMapper;
+
+    @Autowired
+    private MeetingMemberService meetingMemberService;
 
     @Autowired
     private EntityManager em;
@@ -112,12 +121,13 @@ public class MeetingMemberResourceIT {
     public void createMeetingMember() throws Exception {
         int databaseSizeBeforeCreate = meetingMemberRepository.findAll().size();
         // Create the MeetingMember
+        MeetingMemberDTO meetingMemberDTO = meetingMemberMapper.toDto(meetingMember);
         restMeetingMemberMockMvc
             .perform(
                 post("/api/meeting-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingMember))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingMemberDTO))
             )
             .andExpect(status().isCreated());
 
@@ -138,6 +148,7 @@ public class MeetingMemberResourceIT {
 
         // Create the MeetingMember with an existing ID
         meetingMember.setId(1L);
+        MeetingMemberDTO meetingMemberDTO = meetingMemberMapper.toDto(meetingMember);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMeetingMemberMockMvc
@@ -145,7 +156,7 @@ public class MeetingMemberResourceIT {
                 post("/api/meeting-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingMember))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingMemberDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -162,13 +173,14 @@ public class MeetingMemberResourceIT {
         meetingMember.setName(null);
 
         // Create the MeetingMember, which fails.
+        MeetingMemberDTO meetingMemberDTO = meetingMemberMapper.toDto(meetingMember);
 
         restMeetingMemberMockMvc
             .perform(
                 post("/api/meeting-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingMember))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingMemberDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -232,13 +244,14 @@ public class MeetingMemberResourceIT {
         // Disconnect from session so that the updates on updatedMeetingMember are not directly saved in db
         em.detach(updatedMeetingMember);
         updatedMeetingMember.name(UPDATED_NAME).phoneNumber(UPDATED_PHONE_NUMBER).email(UPDATED_EMAIL).title(UPDATED_TITLE);
+        MeetingMemberDTO meetingMemberDTO = meetingMemberMapper.toDto(updatedMeetingMember);
 
         restMeetingMemberMockMvc
             .perform(
                 put("/api/meeting-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedMeetingMember))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingMemberDTO))
             )
             .andExpect(status().isOk());
 
@@ -257,13 +270,16 @@ public class MeetingMemberResourceIT {
     public void updateNonExistingMeetingMember() throws Exception {
         int databaseSizeBeforeUpdate = meetingMemberRepository.findAll().size();
 
+        // Create the MeetingMember
+        MeetingMemberDTO meetingMemberDTO = meetingMemberMapper.toDto(meetingMember);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMeetingMemberMockMvc
             .perform(
                 put("/api/meeting-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(meetingMember))
+                    .content(TestUtil.convertObjectToJsonBytes(meetingMemberDTO))
             )
             .andExpect(status().isBadRequest());
 

@@ -24,6 +24,9 @@ import org.tamisemi.iftmis.domain.OrganisationUnit;
 import org.tamisemi.iftmis.domain.enumeration.ActionPlanCategory;
 import org.tamisemi.iftmis.domain.enumeration.FindingSource;
 import org.tamisemi.iftmis.repository.FindingRepository;
+import org.tamisemi.iftmis.service.FindingService;
+import org.tamisemi.iftmis.service.dto.FindingDTO;
+import org.tamisemi.iftmis.service.mapper.FindingMapper;
 
 /**
  * Integration tests for the {@link FindingResource} REST controller.
@@ -49,6 +52,12 @@ public class FindingResourceIT {
 
     @Autowired
     private FindingRepository findingRepository;
+
+    @Autowired
+    private FindingMapper findingMapper;
+
+    @Autowired
+    private FindingService findingService;
 
     @Autowired
     private EntityManager em;
@@ -120,12 +129,13 @@ public class FindingResourceIT {
     public void createFinding() throws Exception {
         int databaseSizeBeforeCreate = findingRepository.findAll().size();
         // Create the Finding
+        FindingDTO findingDTO = findingMapper.toDto(finding);
         restFindingMockMvc
             .perform(
                 post("/api/findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(finding))
+                    .content(TestUtil.convertObjectToJsonBytes(findingDTO))
             )
             .andExpect(status().isCreated());
 
@@ -147,6 +157,7 @@ public class FindingResourceIT {
 
         // Create the Finding with an existing ID
         finding.setId(1L);
+        FindingDTO findingDTO = findingMapper.toDto(finding);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restFindingMockMvc
@@ -154,7 +165,7 @@ public class FindingResourceIT {
                 post("/api/findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(finding))
+                    .content(TestUtil.convertObjectToJsonBytes(findingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -171,13 +182,14 @@ public class FindingResourceIT {
         finding.setSource(null);
 
         // Create the Finding, which fails.
+        FindingDTO findingDTO = findingMapper.toDto(finding);
 
         restFindingMockMvc
             .perform(
                 post("/api/findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(finding))
+                    .content(TestUtil.convertObjectToJsonBytes(findingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -193,13 +205,14 @@ public class FindingResourceIT {
         finding.setActionPlanCategory(null);
 
         // Create the Finding, which fails.
+        FindingDTO findingDTO = findingMapper.toDto(finding);
 
         restFindingMockMvc
             .perform(
                 post("/api/findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(finding))
+                    .content(TestUtil.convertObjectToJsonBytes(findingDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -270,13 +283,14 @@ public class FindingResourceIT {
             .description(UPDATED_DESCRIPTION)
             .actionPlanCategory(UPDATED_ACTION_PLAN_CATEGORY)
             .isClosed(UPDATED_IS_CLOSED);
+        FindingDTO findingDTO = findingMapper.toDto(updatedFinding);
 
         restFindingMockMvc
             .perform(
                 put("/api/findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedFinding))
+                    .content(TestUtil.convertObjectToJsonBytes(findingDTO))
             )
             .andExpect(status().isOk());
 
@@ -296,13 +310,16 @@ public class FindingResourceIT {
     public void updateNonExistingFinding() throws Exception {
         int databaseSizeBeforeUpdate = findingRepository.findAll().size();
 
+        // Create the Finding
+        FindingDTO findingDTO = findingMapper.toDto(finding);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFindingMockMvc
             .perform(
                 put("/api/findings")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(finding))
+                    .content(TestUtil.convertObjectToJsonBytes(findingDTO))
             )
             .andExpect(status().isBadRequest());
 

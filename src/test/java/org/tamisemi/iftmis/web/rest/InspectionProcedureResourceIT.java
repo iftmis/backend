@@ -22,6 +22,9 @@ import org.tamisemi.iftmis.domain.InspectionIndicator;
 import org.tamisemi.iftmis.domain.InspectionProcedure;
 import org.tamisemi.iftmis.domain.Procedure;
 import org.tamisemi.iftmis.repository.InspectionProcedureRepository;
+import org.tamisemi.iftmis.service.InspectionProcedureService;
+import org.tamisemi.iftmis.service.dto.InspectionProcedureDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionProcedureMapper;
 
 /**
  * Integration tests for the {@link InspectionProcedureResource} REST controller.
@@ -35,6 +38,12 @@ public class InspectionProcedureResourceIT {
 
     @Autowired
     private InspectionProcedureRepository inspectionProcedureRepository;
+
+    @Autowired
+    private InspectionProcedureMapper inspectionProcedureMapper;
+
+    @Autowired
+    private InspectionProcedureService inspectionProcedureService;
 
     @Autowired
     private EntityManager em;
@@ -116,12 +125,13 @@ public class InspectionProcedureResourceIT {
     public void createInspectionProcedure() throws Exception {
         int databaseSizeBeforeCreate = inspectionProcedureRepository.findAll().size();
         // Create the InspectionProcedure
+        InspectionProcedureDTO inspectionProcedureDTO = inspectionProcedureMapper.toDto(inspectionProcedure);
         restInspectionProcedureMockMvc
             .perform(
                 post("/api/inspection-procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedure))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedureDTO))
             )
             .andExpect(status().isCreated());
 
@@ -139,6 +149,7 @@ public class InspectionProcedureResourceIT {
 
         // Create the InspectionProcedure with an existing ID
         inspectionProcedure.setId(1L);
+        InspectionProcedureDTO inspectionProcedureDTO = inspectionProcedureMapper.toDto(inspectionProcedure);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionProcedureMockMvc
@@ -146,7 +157,7 @@ public class InspectionProcedureResourceIT {
                 post("/api/inspection-procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedure))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedureDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -163,13 +174,14 @@ public class InspectionProcedureResourceIT {
         inspectionProcedure.setName(null);
 
         // Create the InspectionProcedure, which fails.
+        InspectionProcedureDTO inspectionProcedureDTO = inspectionProcedureMapper.toDto(inspectionProcedure);
 
         restInspectionProcedureMockMvc
             .perform(
                 post("/api/inspection-procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedure))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedureDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -227,13 +239,14 @@ public class InspectionProcedureResourceIT {
         // Disconnect from session so that the updates on updatedInspectionProcedure are not directly saved in db
         em.detach(updatedInspectionProcedure);
         updatedInspectionProcedure.name(UPDATED_NAME);
+        InspectionProcedureDTO inspectionProcedureDTO = inspectionProcedureMapper.toDto(updatedInspectionProcedure);
 
         restInspectionProcedureMockMvc
             .perform(
                 put("/api/inspection-procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionProcedure))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedureDTO))
             )
             .andExpect(status().isOk());
 
@@ -249,13 +262,16 @@ public class InspectionProcedureResourceIT {
     public void updateNonExistingInspectionProcedure() throws Exception {
         int databaseSizeBeforeUpdate = inspectionProcedureRepository.findAll().size();
 
+        // Create the InspectionProcedure
+        InspectionProcedureDTO inspectionProcedureDTO = inspectionProcedureMapper.toDto(inspectionProcedure);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionProcedureMockMvc
             .perform(
                 put("/api/inspection-procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedure))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionProcedureDTO))
             )
             .andExpect(status().isBadRequest());
 

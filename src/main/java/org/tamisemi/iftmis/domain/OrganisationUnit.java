@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.Type;
 /**
  * The OrganisationUnit entity.\n@author Chris
  */
-@ApiModel(description = "The OrganisationUnit entity.\n@author Chris")
 @Entity
 @Table(name = "organisation_units")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -42,12 +40,10 @@ public class OrganisationUnit extends AbstractAuditingEntity implements Serializ
     @Column(name = "email")
     private String email;
 
-    @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "background")
     private String background;
 
-    @Lob
     @Column(name = "logo")
     private byte[] logo;
 

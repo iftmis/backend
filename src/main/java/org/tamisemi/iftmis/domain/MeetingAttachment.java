@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -11,7 +10,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * The MeetingAttachment entity.\n@author Chris
  */
-@ApiModel(description = "The MeetingAttachment entity.\n@author Chris")
 @Entity
 @Table(name = "meeting_attachments")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * The Quarter(quarters) entity.\n@author Chris
  */
-@ApiModel(description = "The Quarter(quarters) entity.\n@author Chris")
 @Entity
 @Table(name = "quarters")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

@@ -22,6 +22,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.OrganisationUnit;
 import org.tamisemi.iftmis.domain.OrganisationUnitLevel;
 import org.tamisemi.iftmis.repository.OrganisationUnitRepository;
+import org.tamisemi.iftmis.service.OrganisationUnitService;
+import org.tamisemi.iftmis.service.dto.OrganisationUnitDTO;
+import org.tamisemi.iftmis.service.mapper.OrganisationUnitMapper;
 
 /**
  * Integration tests for the {@link OrganisationUnitResource} REST controller.
@@ -55,6 +58,12 @@ public class OrganisationUnitResourceIT {
 
     @Autowired
     private OrganisationUnitRepository organisationUnitRepository;
+
+    @Autowired
+    private OrganisationUnitMapper organisationUnitMapper;
+
+    @Autowired
+    private OrganisationUnitService organisationUnitService;
 
     @Autowired
     private EntityManager em;
@@ -132,12 +141,13 @@ public class OrganisationUnitResourceIT {
     public void createOrganisationUnit() throws Exception {
         int databaseSizeBeforeCreate = organisationUnitRepository.findAll().size();
         // Create the OrganisationUnit
+        OrganisationUnitDTO organisationUnitDTO = organisationUnitMapper.toDto(organisationUnit);
         restOrganisationUnitMockMvc
             .perform(
                 post("/api/organisation-units")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnit))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitDTO))
             )
             .andExpect(status().isCreated());
 
@@ -162,6 +172,7 @@ public class OrganisationUnitResourceIT {
 
         // Create the OrganisationUnit with an existing ID
         organisationUnit.setId(1L);
+        OrganisationUnitDTO organisationUnitDTO = organisationUnitMapper.toDto(organisationUnit);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOrganisationUnitMockMvc
@@ -169,7 +180,7 @@ public class OrganisationUnitResourceIT {
                 post("/api/organisation-units")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnit))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -186,13 +197,14 @@ public class OrganisationUnitResourceIT {
         organisationUnit.setName(null);
 
         // Create the OrganisationUnit, which fails.
+        OrganisationUnitDTO organisationUnitDTO = organisationUnitMapper.toDto(organisationUnit);
 
         restOrganisationUnitMockMvc
             .perform(
                 post("/api/organisation-units")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnit))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -272,13 +284,14 @@ public class OrganisationUnitResourceIT {
             .background(UPDATED_BACKGROUND)
             .logo(UPDATED_LOGO)
             .logoContentType(UPDATED_LOGO_CONTENT_TYPE);
+        OrganisationUnitDTO organisationUnitDTO = organisationUnitMapper.toDto(updatedOrganisationUnit);
 
         restOrganisationUnitMockMvc
             .perform(
                 put("/api/organisation-units")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedOrganisationUnit))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitDTO))
             )
             .andExpect(status().isOk());
 
@@ -301,13 +314,16 @@ public class OrganisationUnitResourceIT {
     public void updateNonExistingOrganisationUnit() throws Exception {
         int databaseSizeBeforeUpdate = organisationUnitRepository.findAll().size();
 
+        // Create the OrganisationUnit
+        OrganisationUnitDTO organisationUnitDTO = organisationUnitMapper.toDto(organisationUnit);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOrganisationUnitMockMvc
             .perform(
                 put("/api/organisation-units")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(organisationUnit))
+                    .content(TestUtil.convertObjectToJsonBytes(organisationUnitDTO))
             )
             .andExpect(status().isBadRequest());
 

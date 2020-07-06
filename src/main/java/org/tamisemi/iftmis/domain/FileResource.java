@@ -1,6 +1,5 @@
 package org.tamisemi.iftmis.domain;
 
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,7 +9,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * The FileResource entity.\n@author Chris
  */
-@ApiModel(description = "The FileResource entity.\n@author Chris")
 @Entity
 @Table(name = "file_resources")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

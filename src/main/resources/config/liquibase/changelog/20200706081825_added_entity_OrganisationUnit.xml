@@ -30,7 +30,7 @@
             <column name="email" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="background" type="${clobType}">
+            <column name="background" type="text">
                 <constraints nullable="true" />
             </column>
             <column name="logo" type="longblob">

@@ -21,6 +21,9 @@ import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.Indicator;
 import org.tamisemi.iftmis.domain.Procedure;
 import org.tamisemi.iftmis.repository.ProcedureRepository;
+import org.tamisemi.iftmis.service.ProcedureService;
+import org.tamisemi.iftmis.service.dto.ProcedureDTO;
+import org.tamisemi.iftmis.service.mapper.ProcedureMapper;
 
 /**
  * Integration tests for the {@link ProcedureResource} REST controller.
@@ -34,6 +37,12 @@ public class ProcedureResourceIT {
 
     @Autowired
     private ProcedureRepository procedureRepository;
+
+    @Autowired
+    private ProcedureMapper procedureMapper;
+
+    @Autowired
+    private ProcedureService procedureService;
 
     @Autowired
     private EntityManager em;
@@ -95,12 +104,13 @@ public class ProcedureResourceIT {
     public void createProcedure() throws Exception {
         int databaseSizeBeforeCreate = procedureRepository.findAll().size();
         // Create the Procedure
+        ProcedureDTO procedureDTO = procedureMapper.toDto(procedure);
         restProcedureMockMvc
             .perform(
                 post("/api/procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(procedure))
+                    .content(TestUtil.convertObjectToJsonBytes(procedureDTO))
             )
             .andExpect(status().isCreated());
 
@@ -118,6 +128,7 @@ public class ProcedureResourceIT {
 
         // Create the Procedure with an existing ID
         procedure.setId(1L);
+        ProcedureDTO procedureDTO = procedureMapper.toDto(procedure);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProcedureMockMvc
@@ -125,7 +136,7 @@ public class ProcedureResourceIT {
                 post("/api/procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(procedure))
+                    .content(TestUtil.convertObjectToJsonBytes(procedureDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -142,13 +153,14 @@ public class ProcedureResourceIT {
         procedure.setName(null);
 
         // Create the Procedure, which fails.
+        ProcedureDTO procedureDTO = procedureMapper.toDto(procedure);
 
         restProcedureMockMvc
             .perform(
                 post("/api/procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(procedure))
+                    .content(TestUtil.convertObjectToJsonBytes(procedureDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -206,13 +218,14 @@ public class ProcedureResourceIT {
         // Disconnect from session so that the updates on updatedProcedure are not directly saved in db
         em.detach(updatedProcedure);
         updatedProcedure.name(UPDATED_NAME);
+        ProcedureDTO procedureDTO = procedureMapper.toDto(updatedProcedure);
 
         restProcedureMockMvc
             .perform(
                 put("/api/procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedProcedure))
+                    .content(TestUtil.convertObjectToJsonBytes(procedureDTO))
             )
             .andExpect(status().isOk());
 
@@ -228,13 +241,16 @@ public class ProcedureResourceIT {
     public void updateNonExistingProcedure() throws Exception {
         int databaseSizeBeforeUpdate = procedureRepository.findAll().size();
 
+        // Create the Procedure
+        ProcedureDTO procedureDTO = procedureMapper.toDto(procedure);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProcedureMockMvc
             .perform(
                 put("/api/procedures")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(procedure))
+                    .content(TestUtil.convertObjectToJsonBytes(procedureDTO))
             )
             .andExpect(status().isBadRequest());
 

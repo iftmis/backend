@@ -399,3 +399,6 @@ relationship ManyToOne {
     ResponseAttachment{attachment(path) required} to FileResource
     ResponseAttachment{response required} to FindingResponse
 }
+
+dto * with mapstruct
+paginate all with pagination

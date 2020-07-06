@@ -1,6 +1,7 @@
 package org.tamisemi.iftmis.web.rest;
 
 import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,11 +11,15 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.tamisemi.iftmis.domain.OrganisationUnit;
-import org.tamisemi.iftmis.repository.OrganisationUnitRepository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.service.OrganisationUnitService;
+import org.tamisemi.iftmis.service.dto.OrganisationUnitDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +27,6 @@ import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class OrganisationUnitResource {
     private final Logger log = LoggerFactory.getLogger(OrganisationUnitResource.class);
 
@@ -31,27 +35,27 @@ public class OrganisationUnitResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final OrganisationUnitRepository organisationUnitRepository;
+    private final OrganisationUnitService organisationUnitService;
 
-    public OrganisationUnitResource(OrganisationUnitRepository organisationUnitRepository) {
-        this.organisationUnitRepository = organisationUnitRepository;
+    public OrganisationUnitResource(OrganisationUnitService organisationUnitService) {
+        this.organisationUnitService = organisationUnitService;
     }
 
     /**
      * {@code POST  /organisation-units} : Create a new organisationUnit.
      *
-     * @param organisationUnit the organisationUnit to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new organisationUnit, or with status {@code 400 (Bad Request)} if the organisationUnit has already an ID.
+     * @param organisationUnitDTO the organisationUnitDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new organisationUnitDTO, or with status {@code 400 (Bad Request)} if the organisationUnit has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/organisation-units")
-    public ResponseEntity<OrganisationUnit> createOrganisationUnit(@Valid @RequestBody OrganisationUnit organisationUnit)
+    public ResponseEntity<OrganisationUnitDTO> createOrganisationUnit(@Valid @RequestBody OrganisationUnitDTO organisationUnitDTO)
         throws URISyntaxException {
-        log.debug("REST request to save OrganisationUnit : {}", organisationUnit);
-        if (organisationUnit.getId() != null) {
+        log.debug("REST request to save OrganisationUnit : {}", organisationUnitDTO);
+        if (organisationUnitDTO.getId() != null) {
             throw new BadRequestAlertException("A new organisationUnit cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        OrganisationUnit result = organisationUnitRepository.save(organisationUnit);
+        OrganisationUnitDTO result = organisationUnitService.save(organisationUnitDTO);
         return ResponseEntity
             .created(new URI("/api/organisation-units/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -61,60 +65,63 @@ public class OrganisationUnitResource {
     /**
      * {@code PUT  /organisation-units} : Updates an existing organisationUnit.
      *
-     * @param organisationUnit the organisationUnit to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated organisationUnit,
-     * or with status {@code 400 (Bad Request)} if the organisationUnit is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the organisationUnit couldn't be updated.
+     * @param organisationUnitDTO the organisationUnitDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated organisationUnitDTO,
+     * or with status {@code 400 (Bad Request)} if the organisationUnitDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the organisationUnitDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/organisation-units")
-    public ResponseEntity<OrganisationUnit> updateOrganisationUnit(@Valid @RequestBody OrganisationUnit organisationUnit)
+    public ResponseEntity<OrganisationUnitDTO> updateOrganisationUnit(@Valid @RequestBody OrganisationUnitDTO organisationUnitDTO)
         throws URISyntaxException {
-        log.debug("REST request to update OrganisationUnit : {}", organisationUnit);
-        if (organisationUnit.getId() == null) {
+        log.debug("REST request to update OrganisationUnit : {}", organisationUnitDTO);
+        if (organisationUnitDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        OrganisationUnit result = organisationUnitRepository.save(organisationUnit);
+        OrganisationUnitDTO result = organisationUnitService.save(organisationUnitDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, organisationUnit.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, organisationUnitDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code GET  /organisation-units} : get all the organisationUnits.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of organisationUnits in body.
      */
     @GetMapping("/organisation-units")
-    public List<OrganisationUnit> getAllOrganisationUnits() {
-        log.debug("REST request to get all OrganisationUnits");
-        return organisationUnitRepository.findAll();
+    public ResponseEntity<List<OrganisationUnitDTO>> getAllOrganisationUnits(Pageable pageable) {
+        log.debug("REST request to get a page of OrganisationUnits");
+        Page<OrganisationUnitDTO> page = organisationUnitService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
      * {@code GET  /organisation-units/:id} : get the "id" organisationUnit.
      *
-     * @param id the id of the organisationUnit to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the organisationUnit, or with status {@code 404 (Not Found)}.
+     * @param id the id of the organisationUnitDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the organisationUnitDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/organisation-units/{id}")
-    public ResponseEntity<OrganisationUnit> getOrganisationUnit(@PathVariable Long id) {
+    public ResponseEntity<OrganisationUnitDTO> getOrganisationUnit(@PathVariable Long id) {
         log.debug("REST request to get OrganisationUnit : {}", id);
-        Optional<OrganisationUnit> organisationUnit = organisationUnitRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(organisationUnit);
+        Optional<OrganisationUnitDTO> organisationUnitDTO = organisationUnitService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(organisationUnitDTO);
     }
 
     /**
      * {@code DELETE  /organisation-units/:id} : delete the "id" organisationUnit.
      *
-     * @param id the id of the organisationUnit to delete.
+     * @param id the id of the organisationUnitDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/organisation-units/{id}")
     public ResponseEntity<Void> deleteOrganisationUnit(@PathVariable Long id) {
         log.debug("REST request to delete OrganisationUnit : {}", id);
-        organisationUnitRepository.deleteById(id);
+        organisationUnitService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

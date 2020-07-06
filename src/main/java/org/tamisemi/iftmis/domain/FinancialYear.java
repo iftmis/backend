@@ -1,6 +1,5 @@
 package org.tamisemi.iftmis.domain;
 
-import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -11,7 +10,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * The FinancialYear(financial_years) entity.\n@author Chris
  */
-@ApiModel(description = "The FinancialYear(financial_years) entity.\n@author Chris")
 @Entity
 @Table(name = "financial_years")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

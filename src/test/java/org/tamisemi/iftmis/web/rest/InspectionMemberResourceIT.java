@@ -22,6 +22,9 @@ import org.tamisemi.iftmis.domain.InspectionMember;
 import org.tamisemi.iftmis.domain.User;
 import org.tamisemi.iftmis.domain.enumeration.InspectionRole;
 import org.tamisemi.iftmis.repository.InspectionMemberRepository;
+import org.tamisemi.iftmis.service.InspectionMemberService;
+import org.tamisemi.iftmis.service.dto.InspectionMemberDTO;
+import org.tamisemi.iftmis.service.mapper.InspectionMemberMapper;
 
 /**
  * Integration tests for the {@link InspectionMemberResource} REST controller.
@@ -41,6 +44,12 @@ public class InspectionMemberResourceIT {
 
     @Autowired
     private InspectionMemberRepository inspectionMemberRepository;
+
+    @Autowired
+    private InspectionMemberMapper inspectionMemberMapper;
+
+    @Autowired
+    private InspectionMemberService inspectionMemberService;
 
     @Autowired
     private EntityManager em;
@@ -92,12 +101,13 @@ public class InspectionMemberResourceIT {
     public void createInspectionMember() throws Exception {
         int databaseSizeBeforeCreate = inspectionMemberRepository.findAll().size();
         // Create the InspectionMember
+        InspectionMemberDTO inspectionMemberDTO = inspectionMemberMapper.toDto(inspectionMember);
         restInspectionMemberMockMvc
             .perform(
                 post("/api/inspection-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionMember))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionMemberDTO))
             )
             .andExpect(status().isCreated());
 
@@ -117,6 +127,7 @@ public class InspectionMemberResourceIT {
 
         // Create the InspectionMember with an existing ID
         inspectionMember.setId(1L);
+        InspectionMemberDTO inspectionMemberDTO = inspectionMemberMapper.toDto(inspectionMember);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restInspectionMemberMockMvc
@@ -124,7 +135,7 @@ public class InspectionMemberResourceIT {
                 post("/api/inspection-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionMember))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionMemberDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -141,13 +152,14 @@ public class InspectionMemberResourceIT {
         inspectionMember.setFullName(null);
 
         // Create the InspectionMember, which fails.
+        InspectionMemberDTO inspectionMemberDTO = inspectionMemberMapper.toDto(inspectionMember);
 
         restInspectionMemberMockMvc
             .perform(
                 post("/api/inspection-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionMember))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionMemberDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -163,13 +175,14 @@ public class InspectionMemberResourceIT {
         inspectionMember.setEmail(null);
 
         // Create the InspectionMember, which fails.
+        InspectionMemberDTO inspectionMemberDTO = inspectionMemberMapper.toDto(inspectionMember);
 
         restInspectionMemberMockMvc
             .perform(
                 post("/api/inspection-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionMember))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionMemberDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -185,13 +198,14 @@ public class InspectionMemberResourceIT {
         inspectionMember.setRole(null);
 
         // Create the InspectionMember, which fails.
+        InspectionMemberDTO inspectionMemberDTO = inspectionMemberMapper.toDto(inspectionMember);
 
         restInspectionMemberMockMvc
             .perform(
                 post("/api/inspection-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionMember))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionMemberDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -253,13 +267,14 @@ public class InspectionMemberResourceIT {
         // Disconnect from session so that the updates on updatedInspectionMember are not directly saved in db
         em.detach(updatedInspectionMember);
         updatedInspectionMember.fullName(UPDATED_FULL_NAME).email(UPDATED_EMAIL).role(UPDATED_ROLE);
+        InspectionMemberDTO inspectionMemberDTO = inspectionMemberMapper.toDto(updatedInspectionMember);
 
         restInspectionMemberMockMvc
             .perform(
                 put("/api/inspection-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedInspectionMember))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionMemberDTO))
             )
             .andExpect(status().isOk());
 
@@ -277,13 +292,16 @@ public class InspectionMemberResourceIT {
     public void updateNonExistingInspectionMember() throws Exception {
         int databaseSizeBeforeUpdate = inspectionMemberRepository.findAll().size();
 
+        // Create the InspectionMember
+        InspectionMemberDTO inspectionMemberDTO = inspectionMemberMapper.toDto(inspectionMember);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restInspectionMemberMockMvc
             .perform(
                 put("/api/inspection-members")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionMember))
+                    .content(TestUtil.convertObjectToJsonBytes(inspectionMemberDTO))
             )
             .andExpect(status().isBadRequest());
 
