@@ -21,7 +21,7 @@ import org.tamisemi.iftmis.config.Constants;
  * A user.
  */
 @Entity
-@Table(name = "iftmis_user")
+@Table(name = "users")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -84,7 +84,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-        name = "iftmis_user_authority",
+        name = "user_authorities",
         joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
         inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
     )
