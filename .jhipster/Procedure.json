@@ -1,0 +1,40 @@
+{
+    "name": "Procedure",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": "2000",
+            "fieldValidateRulesMinlength": "2"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "indicator",
+            "otherEntityRelationshipName": "procedure",
+            "relationshipValidateRules": "required",
+            "relationshipName": "indicator",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200706082825",
+    "javadoc": "The Procedure(procedures) entity.\\n@author Chris",
+    "entityTableName": "procedures",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

@@ -1,0 +1,65 @@
+{
+    "name": "Quarter",
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": "64",
+            "fieldValidateRulesMinlength": "1"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": "200",
+            "fieldValidateRulesMinlength": "2"
+        },
+        {
+            "fieldName": "startDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "financialYear",
+            "otherEntityRelationshipName": "quarter",
+            "relationshipValidateRules": "required",
+            "relationshipName": "financialYear",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200706082025",
+    "javadoc": "The Quarter(quarters) entity.\\n@author Chris",
+    "entityTableName": "quarters",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

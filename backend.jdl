@@ -1,0 +1,401 @@
+/**
+ * The OrganisationUnitLevel(organisation_unit_levels) entity.
+ * @author Chris
+ */
+entity OrganisationUnitLevel(organisation_unit_levels) {
+   code String unique maxlength(64) minlength(1)
+   name String required unique maxlength(200) minlength(2)
+   level Integer required
+   isInspectionLevel Boolean required
+}
+
+/**
+ * The OrganisationUnit entity.
+ * @author Chris
+ */
+entity OrganisationUnit(organisation_units) {
+    code String unique maxlength(64) minlength(1)
+    name String required unique maxlength(200) minlength(2)
+    address String
+    phoneNumber String
+    email String
+    background TextBlob
+    logo ImageBlob
+}
+relationship ManyToOne {
+    OrganisationUnit{organisationUnitLevel(name) required} to OrganisationUnitLevel
+    OrganisationUnit{parent(name)} to OrganisationUnit
+}
+
+/**
+ * The FinancialYear(financial_years) entity.
+ * @author Chris
+ */
+entity FinancialYear(financial_years) {
+    name String required unique maxlength(200) minlength(2)
+    startDate LocalDate required
+    endDate LocalDate required
+    isOpened Boolean required
+}
+
+/**
+ * The Quarter(quarters) entity.
+ * @author Chris
+ */
+entity Quarter(quarters) {
+    code String unique maxlength(64) minlength(1)
+    name String required unique maxlength(200) minlength(2)
+    startDate LocalDate required
+    endDate LocalDate required
+}
+relationship ManyToOne {
+    Quarter{financialYear(name) required} to FinancialYear
+}
+
+/**
+ * The FileResource entity.
+ * @author Chris
+ */
+entity FileResource(file_resources) {
+    name String required maxlength(200) minlength(2)
+    path String maxlength(300)
+    contentType String maxlength(200)
+    contextMd5 String required maxlength(32)
+    size Double required
+    isAssigned Boolean
+    type String maxlength(100) required
+}
+
+/**
+ * The GfsCodes(gfs_codes) entity.
+ * @author Chris
+ */
+entity GfsCode(gfs_codes) {
+    code String required unique maxlength(64) minlength(1)
+    description TextBlob required
+}
+
+/**
+ * The FindingCategory(finding_categories) entity.
+ * @author Chris
+ */
+entity FindingCategory(finding_categories) {
+    code String unique maxlength(64) minlength(1)
+    name String required unique maxlength(200) minlength(2)
+}
+
+/**
+ * The FindingSubCategory(finding_sub_categories) entity.
+ * @author Chris
+ */
+entity FindingSubCategory(finding_sub_categories) {
+    code String unique maxlength(64) minlength(1)
+    name String required unique maxlength(200) minlength(2)
+}
+
+/**
+ * The AuditableArea entity. Area of audit used when create an audit engagement
+ * @author Chris
+ */
+entity AuditableArea(auditable_areas) {
+    code String unique maxlength(64) minlength(1)
+    name String required unique maxlength(2000) minlength(2)
+}
+/**
+ * The InspectionProgram(inspection_programs) entity.
+ * @author Chris
+ */
+entity SubArea(sub_areas) {
+  name String required unique maxlength(200) minlength(2)
+}
+relationship ManyToOne {
+    SubArea{area(name) required} to AuditableArea
+}
+
+/**
+ * The Indicator(indicators) entity.
+ * @author Chris
+ */
+entity Indicator(indicators) {
+  name String required unique maxlength(1000) minlength(2)
+}
+relationship ManyToOne {
+    Indicator{subArea(name) required} to AuditableArea
+}
+
+/**
+ * The Procedure(procedures) entity.
+ * @author Chris
+ */
+entity Procedure(procedures) {
+    name String required unique maxlength(2000) minlength(2)
+}
+relationship ManyToOne {
+    Procedure{indicator(name) required} to Indicator
+}
+
+/**
+ * The Notification(notifications) entity.
+ * @author Chris
+ */
+entity Notification(notifications) {
+    email String maxlength(100) required
+    subject String maxlength(200)
+    body TextBlob
+    isSent Boolean
+    isRead Boolean
+    attachments String maxlength(3000)
+}
+
+enum InspectionType {
+    PLANNED,SPECIAL
+}
+/**
+ * The Inspection(inspections) entity.
+ * @author Chris
+ */
+entity Inspection(inspections) {
+   name String required unique maxlength(200) minlength(2)
+   startDate LocalDate required
+   endDate LocalDate required
+   inspectionType InspectionType required
+}
+relationship ManyToOne {
+    Inspection{financialYear(name) required} to FinancialYear
+    Inspection{organisationUnit(name) required} to OrganisationUnit
+}
+
+enum InspectionRole {
+    TEAM_LEAD,MEMBER
+}
+/**
+ * The InspectionMember entity.
+ * @author Chris
+ */
+entity InspectionMember(inspection_members) {
+    fullName String required maxlength(100)
+    email String required maxlength(100)
+    role InspectionRole required
+}
+relationship ManyToOne {
+    InspectionMember{user(fullName) required} to User
+    InspectionMember{letterAttachment(path) } to FileResource
+    InspectionMember{declarationAttachment(path) } to FileResource
+}
+
+enum MeetingType {
+    TEAM,ENTRANCE
+}
+
+/**
+ * The TeamMeeting entity.
+ * @author Chris
+ */
+entity Meeting(team_meetings) {
+   type MeetingType required
+   meetingDate LocalDate required
+   venue String maxlength(200) required
+   summary TextBlob
+}
+relationship ManyToOne {
+    Meeting{inspection required} to Inspection
+}
+/**
+ * The MeetingMember entity.
+ * @author Chris
+ */
+entity MeetingMember(meeting_members) {
+   name String required maxlength(200) minlength(2)
+   phoneNumber String maxlength(20)
+   email String maxlength(200)
+   title String maxlength(200)
+}
+relationship ManyToOne {
+    MeetingMember{meeting required} to Meeting
+}
+
+/**
+ * The MeetingAgenda entity.
+ * @author Chris
+ */
+entity MeetingAgenda(meeting_agendas) {
+    description TextBlob  required
+}
+/**
+ * The MeetingAttachment entity.
+ * @author Chris
+ */
+entity MeetingAttachment(meeting_attachments) {
+    name String required unique maxlength(200) minlength(2)
+}
+relationship ManyToOne {
+    MeetingAgenda{meeting required} to Meeting
+    MeetingAttachment{meeting required} to Meeting
+    MeetingAttachment{attachment(path) required} to FileResource
+}
+
+/**
+ * The InspectionAuditableArea(inspection_auditable_areas) entity.
+ * @author Chris
+ */
+entity InspectionArea(inspection_areas) {
+    name String required maxlength(2000)
+}
+relationship ManyToOne {
+    InspectionArea{inspection required} to Inspection
+    InspectionArea{auditableArea(name)} to AuditableArea
+}
+
+/**
+ * The InspectionGeneralIndicator entity.
+ * @author Chris
+ */
+entity InspectionObjective(inspection_objectives) {
+    name String required maxlength(1000)
+}
+relationship ManyToOne {
+    InspectionObjective{inspectionArea(name) required} to InspectionArea
+}
+
+/**
+ * The InspectionSubArea(inspection_sub_areas) entity.
+ * @author Chris
+ */
+entity InspectionSubArea(inspection_sub_areas) {
+    name String required maxlength(1000)
+}
+relationship ManyToOne {
+    InspectionSubArea{inspectionObjective(name) required} to InspectionObjective
+    InspectionSubArea{subArea(name) required} to SubArea
+}
+
+/**
+ * The InspectionIndicator(inspection_indicators) entity.
+ * @author Chris
+ */
+entity InspectionIndicator(inspection_indicators) {
+    name String required maxlength(1000)
+}
+relationship ManyToOne {
+    InspectionIndicator{inspectionSubArea(name) required} to InspectionSubArea
+    InspectionIndicator{indicator(name) required} to Indicator
+}
+
+/**
+ * The InspectionProcedure entity.
+ * @author Chris
+ */
+entity InspectionProcedure(inspection_procedures) {
+    name String required maxlength(1000)
+}
+relationship ManyToOne {
+    InspectionProcedure{inspectionIndicator(name) required} to InspectionIndicator
+    InspectionProcedure{procedure(name) required} to Procedure
+}
+
+/**
+ * The InspectionWorkDone(inspection_work_dones) entity.
+ * @author Chris
+ */
+entity InspectionWorkDone(inspection_work_dones) {
+    name String required
+    isOk Boolean
+}
+relationship ManyToOne {
+    InspectionWorkDone{procedure(name) required} to InspectionProcedure
+}
+enum ActionPlanCategory {
+    LOW,MEDIUM,HIGH
+}
+
+enum ImplementationStatus {
+    IMPLEMENTED,NOT_IMPLEMENTED,PARTIAL_IMPLEMENTED,TAKEN_BY_EVENT
+}
+/**
+ * The InspectionFinding(inspection_findings) entity.
+ * @author Chris
+ */
+entity InspectionFinding(inspection_findings) {
+   code String required maxlength(5)
+   description TextBlob
+   condition String
+   disclosedLastInspection Boolean
+   causes TextBlob
+   actionPlanCategory ActionPlanCategory
+   implication TextBlob
+   isClosed Boolean
+}
+relationship ManyToOne {
+    InspectionFinding{workDone(name) required}  to InspectionWorkDone
+    InspectionFinding{category(name) required} to FindingCategory
+    InspectionFinding{subCategory(name) required} to FindingSubCategory
+}
+
+/**
+ * The InspectionRecommendation entity.
+ * @author Chris
+ */
+entity InspectionRecommendation(inspection_recommendations) {
+    description TextBlob required
+    implementationStatus ImplementationStatus required
+    completionDate LocalDate
+    compliancePlan TextBlob
+}
+
+// Finding Management Module Start
+/**
+* Source of findings i.e who raised the finding during audit or inspection
+**/
+enum FindingSource {
+    CAIG,PPRA,LAAC,INSPECTION,IA
+}
+/**
+ * The Finding(findings) entity.
+ * @author Chris
+ */
+entity Finding(findings) {
+    source FindingSource required
+    code String
+    description TextBlob required
+    actionPlanCategory ActionPlanCategory required
+    isClosed Boolean
+}
+relationship ManyToOne {
+    Finding{organisationUnit(name) required} to OrganisationUnit
+}
+enum ResponseType {
+    AUDITOR,INSPECTOR,CLIENT
+}
+/**
+ * The FindingRecommendation(finding_recommendations) entity.
+ * @author Chris
+ */
+entity FindingRecommendation(finding_recommendations) {
+    description TextBlob required
+    implementationStatus ImplementationStatus required
+}
+relationship ManyToOne {
+    FindingRecommendation{finding required} to Finding
+}
+/**
+ * The FindingResponse(inspection_responses) entity.
+ * @author Chris
+ */
+entity FindingResponse(finding_responses) {
+    source ResponseType required
+    description TextBlob required
+}
+relationship ManyToOne {
+    FindingResponse{recommendation(description) required} to FindingRecommendation
+}
+/**
+ * The InspectionResponseAttachment entity.
+ * @author Chris
+ */
+entity ResponseAttachment(response_attachments) {
+    name String required maxlength(100)
+}
+relationship ManyToOne {
+    ResponseAttachment{attachment(path) required} to FileResource
+    ResponseAttachment{response required} to FindingResponse
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <!--
+        Added the entity OrganisationUnitLevel.
+    -->
+    <changeSet id="20200706081725-1" author="Chris">
+        <createTable tableName="organisation_unit_levels" remarks="The OrganisationUnitLevel(organisation_unit_levels) entity.\n@author Chris">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(64)">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_organisation_unit_levels_code" />
+            </column>
+            <column name="name" type="varchar(200)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_organisation_unit_levels_name" />
+            </column>
+            <column name="level" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="is_inspection_level" type="boolean">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- Added the entity audit columns -->
+    <changeSet id="20200706081725-audit-1" author="Chris">
+        <addColumn tableName="organisation_unit_levels">
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+</databaseChangeLog>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity InspectionFinding.
+    -->
+    <changeSet id="20200706084225-2" author="Chris">
+
+        <addForeignKeyConstraint baseColumnNames="work_done_id"
+                                 baseTableName="inspection_findings"
+                                 constraintName="fk_inspection_findings_work_done_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_work_dones"/>
+
+        <addForeignKeyConstraint baseColumnNames="category_id"
+                                 baseTableName="inspection_findings"
+                                 constraintName="fk_inspection_findings_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="finding_categories"/>
+
+        <addForeignKeyConstraint baseColumnNames="sub_category_id"
+                                 baseTableName="inspection_findings"
+                                 constraintName="fk_inspection_findings_sub_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="finding_sub_categories"/>
+
+    </changeSet>
+</databaseChangeLog>

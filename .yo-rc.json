@@ -36,5 +36,10 @@
     "blueprints": [],
     "skipFakeData": true,
     "prettierJava": true
+  },
+  "generator-jhipster-entity-audit": {
+    "auditFramework": "custom",
+    "auditPage": false,
+    "lastLiquibaseTimestamp": 1594023603000
   }
 }

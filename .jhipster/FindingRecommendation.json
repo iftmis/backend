@@ -1,0 +1,44 @@
+{
+    "name": "FindingRecommendation",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "implementationStatus",
+            "fieldType": "ImplementationStatus",
+            "fieldValues": "IMPLEMENTED,NOT_IMPLEMENTED,PARTIAL_IMPLEMENTED,TAKEN_BY_EVENT",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "finding",
+            "otherEntityRelationshipName": "findingRecommendation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "finding",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200706084525",
+    "javadoc": "The FindingRecommendation(finding_recommendations) entity.\\n@author Chris",
+    "entityTableName": "finding_recommendations",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

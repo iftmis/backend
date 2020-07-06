@@ -1,0 +1,40 @@
+{
+    "name": "Indicator",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": "1000",
+            "fieldValidateRulesMinlength": "2"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "auditableArea",
+            "otherEntityRelationshipName": "indicator",
+            "relationshipValidateRules": "required",
+            "relationshipName": "subArea",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200706082725",
+    "javadoc": "The Indicator(indicators) entity.\\n@author Chris",
+    "entityTableName": "indicators",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

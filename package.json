@@ -13,7 +13,8 @@
     "husky": "4.2.5",
     "lint-staged": "8.2.1",
     "prettier": "2.0.5",
-    "prettier-plugin-java": "0.8.0"
+    "prettier-plugin-java": "0.8.0",
+    "generator-jhipster-entity-audit": "3.3.0"
   },
   "engines": {
     "node": ">=12.16.1"

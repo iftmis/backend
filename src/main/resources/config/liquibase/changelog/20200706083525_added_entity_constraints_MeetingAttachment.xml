@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity MeetingAttachment.
+    -->
+    <changeSet id="20200706083525-2" author="Chris">
+
+        <addForeignKeyConstraint baseColumnNames="meeting_id"
+                                 baseTableName="meeting_attachments"
+                                 constraintName="fk_meeting_attachments_meeting_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="team_meetings"/>
+
+        <addForeignKeyConstraint baseColumnNames="attachment_id"
+                                 baseTableName="meeting_attachments"
+                                 constraintName="fk_meeting_attachments_attachment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="file_resources"/>
+
+    </changeSet>
+</databaseChangeLog>

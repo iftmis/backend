@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <!--
+        Added the entity InspectionFinding.
+    -->
+    <changeSet id="20200706084225-1" author="Chris">
+        <createTable tableName="inspection_findings" remarks="The InspectionFinding(inspection_findings) entity.\n@author Chris">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(5)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="condition" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="disclosed_last_inspection" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="causes" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="action_plan_category" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="implication" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_closed" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="work_done_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="sub_category_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- Added the entity audit columns -->
+    <changeSet id="20200706084225-audit-1" author="Chris">
+        <addColumn tableName="inspection_findings">
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+</databaseChangeLog>

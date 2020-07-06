@@ -49,6 +49,38 @@ public class CacheConfiguration {
             createCache(cm, org.tamisemi.iftmis.domain.User.class.getName() + ".authorities");
             createCache(cm, org.tamisemi.iftmis.domain.PersistentToken.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.User.class.getName() + ".persistentTokens");
+            createCache(cm, org.tamisemi.iftmis.domain.ResponseAttachment.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.EntityAuditEvent.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.OrganisationUnitLevel.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.OrganisationUnit.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.FinancialYear.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Quarter.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.FileResource.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.GfsCode.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.FindingCategory.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.FindingSubCategory.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.AuditableArea.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.SubArea.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Indicator.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Procedure.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Notification.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Inspection.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionMember.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Meeting.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.MeetingMember.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.MeetingAgenda.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.MeetingAttachment.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionArea.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionObjective.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionSubArea.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionIndicator.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionProcedure.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionWorkDone.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionFinding.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionRecommendation.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Finding.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.FindingRecommendation.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.FindingResponse.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

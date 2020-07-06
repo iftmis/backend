@@ -1,0 +1,36 @@
+{
+    "name": "MeetingAgenda",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "meeting",
+            "otherEntityRelationshipName": "meetingAgenda",
+            "relationshipValidateRules": "required",
+            "relationshipName": "meeting",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200706083425",
+    "javadoc": "The MeetingAgenda entity.\\n@author Chris",
+    "entityTableName": "meeting_agendas",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

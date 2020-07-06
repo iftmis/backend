@@ -1,0 +1,60 @@
+{
+    "name": "Finding",
+    "fields": [
+        {
+            "fieldName": "source",
+            "fieldType": "FindingSource",
+            "fieldValues": "CAIG,PPRA,LAAC,INSPECTION,IA",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "code",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "actionPlanCategory",
+            "fieldType": "ActionPlanCategory",
+            "fieldValues": "LOW,MEDIUM,HIGH",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "isClosed",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "organisationUnit",
+            "otherEntityRelationshipName": "finding",
+            "relationshipValidateRules": "required",
+            "relationshipName": "organisationUnit",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200706084425",
+    "javadoc": "The Finding(findings) entity.\\n@author Chris",
+    "entityTableName": "findings",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

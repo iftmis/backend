@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity FindingRecommendation.
+    -->
+    <changeSet id="20200706084525-2" author="Chris">
+
+        <addForeignKeyConstraint baseColumnNames="finding_id"
+                                 baseTableName="finding_recommendations"
+                                 constraintName="fk_finding_recommendations_finding_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="findings"/>
+
+    </changeSet>
+</databaseChangeLog>

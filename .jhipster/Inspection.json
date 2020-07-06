@@ -1,0 +1,70 @@
+{
+    "name": "Inspection",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": "200",
+            "fieldValidateRulesMinlength": "2"
+        },
+        {
+            "fieldName": "startDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "inspectionType",
+            "fieldType": "InspectionType",
+            "fieldValues": "PLANNED,SPECIAL",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "financialYear",
+            "otherEntityRelationshipName": "inspection",
+            "relationshipValidateRules": "required",
+            "relationshipName": "financialYear",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "organisationUnit",
+            "otherEntityRelationshipName": "inspection",
+            "relationshipValidateRules": "required",
+            "relationshipName": "organisationUnit",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200706083025",
+    "javadoc": "The Inspection(inspections) entity.\\n@author Chris",
+    "entityTableName": "inspections",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

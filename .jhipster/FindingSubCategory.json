@@ -1,0 +1,42 @@
+{
+    "name": "FindingSubCategory",
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": "64",
+            "fieldValidateRulesMinlength": "1"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique",
+                "maxlength",
+                "minlength"
+            ],
+            "fieldValidateRulesMaxlength": "200",
+            "fieldValidateRulesMinlength": "2"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200706082425",
+    "javadoc": "The FindingSubCategory(finding_sub_categories) entity.\\n@author Chris",
+    "entityTableName": "finding_sub_categories",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

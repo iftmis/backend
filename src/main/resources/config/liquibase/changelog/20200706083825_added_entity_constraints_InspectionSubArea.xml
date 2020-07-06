@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity InspectionSubArea.
+    -->
+    <changeSet id="20200706083825-2" author="Chris">
+
+        <addForeignKeyConstraint baseColumnNames="inspection_objective_id"
+                                 baseTableName="inspection_sub_areas"
+                                 constraintName="fk_inspection_sub_areas_inspection_objective_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_objectives"/>
+
+        <addForeignKeyConstraint baseColumnNames="sub_area_id"
+                                 baseTableName="inspection_sub_areas"
+                                 constraintName="fk_inspection_sub_areas_sub_area_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sub_areas"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,37 @@
+{
+    "name": "InspectionObjective",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1000"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "inspectionArea",
+            "otherEntityRelationshipName": "inspectionObjective",
+            "relationshipValidateRules": "required",
+            "relationshipName": "inspectionArea",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200706083725",
+    "javadoc": "The InspectionGeneralIndicator entity.\\n@author Chris",
+    "entityTableName": "inspection_objectives",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

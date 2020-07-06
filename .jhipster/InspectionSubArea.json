@@ -1,0 +1,45 @@
+{
+    "name": "InspectionSubArea",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1000"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "inspectionObjective",
+            "otherEntityRelationshipName": "inspectionSubArea",
+            "relationshipValidateRules": "required",
+            "relationshipName": "inspectionObjective",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "subArea",
+            "otherEntityRelationshipName": "inspectionSubArea",
+            "relationshipValidateRules": "required",
+            "relationshipName": "subArea",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200706083825",
+    "javadoc": "The InspectionSubArea(inspection_sub_areas) entity.\\n@author Chris",
+    "entityTableName": "inspection_sub_areas",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}
