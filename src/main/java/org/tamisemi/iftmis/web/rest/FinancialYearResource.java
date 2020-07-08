@@ -86,17 +86,15 @@ public class FinancialYearResource {
     }
 
     /**
-     * {@code GET  /financial-years} : get all the financialYears.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of financialYears in body.
+     * @param pageable
+     * @return
      */
     @GetMapping("/financial-years")
-    public ResponseEntity<List<FinancialYearDTO>> getAllFinancialYears(Pageable pageable) {
+    public ResponseEntity<?> getAllFinancialYears(Pageable pageable) {
         log.debug("REST request to get a page of FinancialYears");
         Page<FinancialYearDTO> page = financialYearService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().body(page);
     }
 
     /**
