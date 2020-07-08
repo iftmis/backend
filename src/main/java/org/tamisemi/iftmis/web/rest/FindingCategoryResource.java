@@ -92,11 +92,10 @@ public class FindingCategoryResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of findingCategories in body.
      */
     @GetMapping("/finding-categories")
-    public ResponseEntity<List<FindingCategoryDTO>> getAllFindingCategories(Pageable pageable) {
+    public ResponseEntity<?> getAllFindingCategories(Pageable pageable) {
         log.debug("REST request to get a page of FindingCategories");
         Page<FindingCategoryDTO> page = findingCategoryService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().body(page);
     }
 
     /**
