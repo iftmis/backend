@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,16 @@ public class FinancialYearService {
     public Page<FinancialYearDTO> findAll(Pageable pageable) {
         log.debug("Request to get all FinancialYears");
         return financialYearRepository.findAll(pageable).map(financialYearMapper::toDto);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<FinancialYear> findAll() {
+        log.debug("Request to get all FinancialYears");
+        return financialYearRepository.findAll();
     }
 
     /**

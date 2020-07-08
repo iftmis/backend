@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.domain.FinancialYear;
 import org.tamisemi.iftmis.service.FinancialYearService;
 import org.tamisemi.iftmis.service.dto.FinancialYearDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -85,16 +86,20 @@ public class FinancialYearResource {
             .body(result);
     }
 
-    /**
-     *
-     * @param pageable
-     * @return
-     */
+
     @GetMapping("/financial-years")
-    public ResponseEntity<?> getAllFinancialYears(Pageable pageable) {
+    public ResponseEntity<List<FinancialYear>> getAllFinancialYears() {
+        log.debug("REST request to get a list of FinancialYears");
+        List<FinancialYear> items = financialYearService.findAll();
+        return ResponseEntity.ok().body(items);
+    }
+
+    @GetMapping("/financial-years/page")
+    public ResponseEntity<List<FinancialYearDTO>> getAllPagedFinancialYears(Pageable pageable) {
         log.debug("REST request to get a page of FinancialYears");
         Page<FinancialYearDTO> page = financialYearService.findAll(pageable);
-        return ResponseEntity.ok().body(page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
