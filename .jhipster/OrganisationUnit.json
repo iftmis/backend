@@ -1,80 +1,71 @@
 {
-    "name": "OrganisationUnit",
-    "fields": [
-        {
-            "fieldName": "code",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "unique",
-                "maxlength",
-                "minlength"
-            ],
-            "fieldValidateRulesMaxlength": "64",
-            "fieldValidateRulesMinlength": "1"
-        },
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "unique",
-                "maxlength",
-                "minlength"
-            ],
-            "fieldValidateRulesMaxlength": "200",
-            "fieldValidateRulesMinlength": "2"
-        },
-        {
-            "fieldName": "address",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "phoneNumber",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "email",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "background",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
-        },
-        {
-            "fieldName": "logo",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "image"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "organisationUnitLevel",
-            "otherEntityRelationshipName": "organisationUnit",
-            "relationshipValidateRules": "required",
-            "relationshipName": "organisationUnitLevel",
-            "otherEntityField": "name"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "organisationUnit",
-            "otherEntityRelationshipName": "organisationUnit",
-            "relationshipName": "parent",
-            "otherEntityField": "name"
-        }
-    ],
-    "changelogDate": "20200706081825",
-    "javadoc": "The OrganisationUnit entity.\\n@author Chris",
-    "entityTableName": "organisation_units",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "OrganisationUnit",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "64",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "200",
+      "fieldValidateRulesMinlength": "2"
+    },
+    {
+      "fieldName": "address",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "phoneNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "background",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "logo",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "organisationUnitLevel",
+      "otherEntityRelationshipName": "organisationUnit",
+      "relationshipValidateRules": "required",
+      "relationshipName": "organisationUnitLevel",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "organisationUnit",
+      "otherEntityRelationshipName": "organisationUnit",
+      "relationshipName": "parent",
+      "otherEntityField": "name"
+    }
+  ],
+  "changelogDate": "20200706081825",
+  "javadoc": "The OrganisationUnit entity.\\n@author Chris",
+  "entityTableName": "organisation_units",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

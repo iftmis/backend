@@ -1,45 +1,42 @@
 {
-    "name": "ResponseAttachment",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "100"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "fileResource",
-            "otherEntityRelationshipName": "responseAttachment",
-            "relationshipValidateRules": "required",
-            "relationshipName": "attachment",
-            "otherEntityField": "path"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "findingResponse",
-            "otherEntityRelationshipName": "responseAttachment",
-            "relationshipValidateRules": "required",
-            "relationshipName": "response",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200706084725",
-    "javadoc": "The InspectionResponseAttachment entity.\\n@author Chris",
-    "entityTableName": "response_attachments",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "ResponseAttachment",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "fileResource",
+      "otherEntityRelationshipName": "responseAttachment",
+      "relationshipValidateRules": "required",
+      "relationshipName": "attachment",
+      "otherEntityField": "path"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "findingResponse",
+      "otherEntityRelationshipName": "responseAttachment",
+      "relationshipValidateRules": "required",
+      "relationshipName": "response",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200706084725",
+  "javadoc": "The InspectionResponseAttachment entity.\\n@author Chris",
+  "entityTableName": "response_attachments",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

@@ -16,12 +16,14 @@
     ],
     "relationships": [
         {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "auditableArea",
-            "otherEntityRelationshipName": "indicator",
-            "relationshipValidateRules": "required",
             "relationshipName": "subArea",
-            "otherEntityField": "name"
+            "otherEntityName": "subArea",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "indicator"
         }
     ],
     "changelogDate": "20200706082725",
@@ -36,5 +38,7 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "enableEntityAudit": true
+    "enableEntityAudit": true,
+    "searchEngine": false,
+    "databaseType": "sql"
 }

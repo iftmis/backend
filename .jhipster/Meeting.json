@@ -1,57 +1,50 @@
 {
-    "name": "Meeting",
-    "fields": [
-        {
-            "fieldName": "type",
-            "fieldType": "MeetingType",
-            "fieldValues": "TEAM,ENTRANCE",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "meetingDate",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "venue",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength",
-                "required"
-            ],
-            "fieldValidateRulesMaxlength": "200"
-        },
-        {
-            "fieldName": "summary",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "inspection",
-            "otherEntityRelationshipName": "meeting",
-            "relationshipValidateRules": "required",
-            "relationshipName": "inspection",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200706083225",
-    "javadoc": "The TeamMeeting entity.\\n@author Chris",
-    "entityTableName": "team_meetings",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "Meeting",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "MeetingType",
+      "fieldValues": "TEAM,ENTRANCE",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "meetingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "venue",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "required"],
+      "fieldValidateRulesMaxlength": "200"
+    },
+    {
+      "fieldName": "summary",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "inspection",
+      "otherEntityRelationshipName": "meeting",
+      "relationshipValidateRules": "required",
+      "relationshipName": "inspection",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200706083225",
+  "javadoc": "The TeamMeeting entity.\\n@author Chris",
+  "entityTableName": "team_meetings",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

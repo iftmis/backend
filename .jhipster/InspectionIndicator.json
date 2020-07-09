@@ -1,45 +1,42 @@
 {
-    "name": "InspectionIndicator",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "1000"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "inspectionSubArea",
-            "otherEntityRelationshipName": "inspectionIndicator",
-            "relationshipValidateRules": "required",
-            "relationshipName": "inspectionSubArea",
-            "otherEntityField": "name"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "indicator",
-            "otherEntityRelationshipName": "inspectionIndicator",
-            "relationshipValidateRules": "required",
-            "relationshipName": "indicator",
-            "otherEntityField": "name"
-        }
-    ],
-    "changelogDate": "20200706083925",
-    "javadoc": "The InspectionIndicator(inspection_indicators) entity.\\n@author Chris",
-    "entityTableName": "inspection_indicators",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "InspectionIndicator",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "inspectionSubArea",
+      "otherEntityRelationshipName": "inspectionIndicator",
+      "relationshipValidateRules": "required",
+      "relationshipName": "inspectionSubArea",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "indicator",
+      "otherEntityRelationshipName": "inspectionIndicator",
+      "relationshipValidateRules": "required",
+      "relationshipName": "indicator",
+      "otherEntityField": "name"
+    }
+  ],
+  "changelogDate": "20200706083925",
+  "javadoc": "The InspectionIndicator(inspection_indicators) entity.\\n@author Chris",
+  "entityTableName": "inspection_indicators",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

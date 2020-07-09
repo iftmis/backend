@@ -1,44 +1,41 @@
 {
-    "name": "InspectionArea",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "2000"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "inspection",
-            "otherEntityRelationshipName": "inspectionArea",
-            "relationshipValidateRules": "required",
-            "relationshipName": "inspection",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "auditableArea",
-            "otherEntityRelationshipName": "inspectionArea",
-            "relationshipName": "auditableArea",
-            "otherEntityField": "name"
-        }
-    ],
-    "changelogDate": "20200706083625",
-    "javadoc": "The InspectionAuditableArea(inspection_auditable_areas) entity.\\n@author Chris",
-    "entityTableName": "inspection_areas",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "InspectionArea",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "2000"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "inspection",
+      "otherEntityRelationshipName": "inspectionArea",
+      "relationshipValidateRules": "required",
+      "relationshipName": "inspection",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "auditableArea",
+      "otherEntityRelationshipName": "inspectionArea",
+      "relationshipName": "auditableArea",
+      "otherEntityField": "name"
+    }
+  ],
+  "changelogDate": "20200706083625",
+  "javadoc": "The InspectionAuditableArea(inspection_auditable_areas) entity.\\n@author Chris",
+  "entityTableName": "inspection_areas",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

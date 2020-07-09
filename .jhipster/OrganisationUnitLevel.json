@@ -1,56 +1,43 @@
 {
-    "name": "OrganisationUnitLevel",
-    "fields": [
-        {
-            "fieldName": "code",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "unique",
-                "maxlength",
-                "minlength"
-            ],
-            "fieldValidateRulesMaxlength": "64",
-            "fieldValidateRulesMinlength": "1"
-        },
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "unique",
-                "maxlength",
-                "minlength"
-            ],
-            "fieldValidateRulesMaxlength": "200",
-            "fieldValidateRulesMinlength": "2"
-        },
-        {
-            "fieldName": "level",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "isInspectionLevel",
-            "fieldType": "Boolean",
-            "fieldValidateRules": [
-                "required"
-            ]
-        }
-    ],
-    "relationships": [],
-    "changelogDate": "20200706081725",
-    "javadoc": "The OrganisationUnitLevel(organisation_unit_levels) entity.\\n@author Chris",
-    "entityTableName": "organisation_unit_levels",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "OrganisationUnitLevel",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "64",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "200",
+      "fieldValidateRulesMinlength": "2"
+    },
+    {
+      "fieldName": "level",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isInspectionLevel",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20200706081725",
+  "javadoc": "The OrganisationUnitLevel(organisation_unit_levels) entity.\\n@author Chris",
+  "entityTableName": "organisation_unit_levels",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

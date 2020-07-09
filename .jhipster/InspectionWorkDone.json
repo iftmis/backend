@@ -1,39 +1,37 @@
 {
-    "name": "InspectionWorkDone",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "isOk",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "inspectionProcedure",
-            "otherEntityRelationshipName": "inspectionWorkDone",
-            "relationshipValidateRules": "required",
-            "relationshipName": "procedure",
-            "otherEntityField": "name"
-        }
-    ],
-    "changelogDate": "20200706084125",
-    "javadoc": "The InspectionWorkDone(inspection_work_dones) entity.\\n@author Chris",
-    "entityTableName": "inspection_work_dones",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "InspectionWorkDone",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isOk",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "inspectionProcedure",
+      "otherEntityRelationshipName": "inspectionWorkDone",
+      "relationshipValidateRules": "required",
+      "relationshipName": "procedure",
+      "otherEntityField": "name"
+    }
+  ],
+  "changelogDate": "20200706084125",
+  "javadoc": "The InspectionWorkDone(inspection_work_dones) entity.\\n@author Chris",
+  "entityTableName": "inspection_work_dones",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

@@ -2,8 +2,7 @@ package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link org.tamisemi.iftmis.domain.Indicator} entity.
@@ -40,16 +39,16 @@ public class IndicatorDTO extends AbstractAuditingDTO implements Serializable {
         return subAreaId;
     }
 
-    public void setSubAreaId(Long auditableAreaId) {
-        this.subAreaId = auditableAreaId;
+    public void setSubAreaId(Long subAreaId) {
+        this.subAreaId = subAreaId;
     }
 
     public String getSubAreaName() {
         return subAreaName;
     }
 
-    public void setSubAreaName(String auditableAreaName) {
-        this.subAreaName = auditableAreaName;
+    public void setSubAreaName(String subAreaName) {
+        this.subAreaName = subAreaName;
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.tamisemi.iftmis.service.dto.IndicatorDTO;
 /**
  * Mapper for the entity {@link Indicator} and its DTO {@link IndicatorDTO}.
  */
-@Mapper(componentModel = "spring", uses = { AuditableAreaMapper.class })
+@Mapper(componentModel = "spring", uses = { SubAreaMapper.class })
 public interface IndicatorMapper extends EntityMapper<IndicatorDTO, Indicator> {
     @Mapping(source = "subArea.id", target = "subAreaId")
     @Mapping(source = "subArea.name", target = "subAreaName")
