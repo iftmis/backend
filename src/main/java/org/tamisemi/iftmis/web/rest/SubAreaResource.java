@@ -3,21 +3,26 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.domain.SubArea;
 import org.tamisemi.iftmis.service.SubAreaService;
 import org.tamisemi.iftmis.service.dto.SubAreaDTO;
@@ -85,7 +90,6 @@ public class SubAreaResource {
     }
 
     /**
-     *
      * @return
      */
     @GetMapping("/sub-areas")
@@ -96,11 +100,20 @@ public class SubAreaResource {
     }
 
     @GetMapping("/sub-areas/page")
-    public ResponseEntity<List<SubAreaDTO>> getAllPagedSubAreas(Pageable pageable) {
+    public ResponseEntity<List<SubAreaDTO>> getAllPagedSubAreas(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+                                                                @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+                                                                @RequestParam(value = "areaId", defaultValue = Constants.ZERO) Long areaId,
+                                                                @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
         log.debug("REST request to get a page of SubAreas");
-        Page<SubAreaDTO> page = subAreaService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        Page<SubAreaDTO> items;
+        if (areaId == 0) {
+            items = subAreaService.findAll(pageable);
+        } else {
+            items = subAreaService.findAll(areaId, pageable);
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
+        return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
 
     /**
