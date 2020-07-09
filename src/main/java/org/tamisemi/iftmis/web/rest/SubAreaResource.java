@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.domain.SubArea;
 import org.tamisemi.iftmis.service.SubAreaService;
 import org.tamisemi.iftmis.service.dto.SubAreaDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -84,13 +85,18 @@ public class SubAreaResource {
     }
 
     /**
-     * {@code GET  /sub-areas} : get all the subAreas.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of subAreas in body.
+     * @return
      */
     @GetMapping("/sub-areas")
-    public ResponseEntity<List<SubAreaDTO>> getAllSubAreas(Pageable pageable) {
+    public ResponseEntity<List<SubArea>> getAllSubAreas() {
+        log.debug("REST request to get a page of SubAreas");
+        List<SubArea> items = subAreaService.findAll();
+        return ResponseEntity.ok().body(items);
+    }
+
+    @GetMapping("/sub-areas/page")
+    public ResponseEntity<List<SubAreaDTO>> getAllPagedSubAreas(Pageable pageable) {
         log.debug("REST request to get a page of SubAreas");
         Page<SubAreaDTO> page = subAreaService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

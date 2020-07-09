@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.domain.AuditableArea;
 import org.tamisemi.iftmis.service.AuditableAreaService;
 import org.tamisemi.iftmis.service.dto.AuditableAreaDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -86,13 +87,23 @@ public class AuditableAreaResource {
     }
 
     /**
-     * {@code GET  /auditable-areas} : get all the auditableAreas.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of auditableAreas in body.
+     * @return
      */
     @GetMapping("/auditable-areas")
-    public ResponseEntity<List<AuditableAreaDTO>> getAllAuditableAreas(Pageable pageable) {
+    public ResponseEntity<List<AuditableArea>> getAllAuditableAreas() {
+        log.debug("REST request to get a page of Auditable Areas");
+        List<AuditableArea> items = auditableAreaService.findAll();
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     *
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/auditable-areas/page")
+    public ResponseEntity<List<AuditableAreaDTO>> getAllPagedAuditableAreas(Pageable pageable) {
         log.debug("REST request to get a page of AuditableAreas");
         Page<AuditableAreaDTO> page = auditableAreaService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
