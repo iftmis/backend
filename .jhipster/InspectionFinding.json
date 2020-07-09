@@ -1,85 +1,82 @@
 {
-    "name": "InspectionFinding",
-    "fields": [
-        {
-            "fieldName": "code",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "5"
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
-        },
-        {
-            "fieldName": "condition",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "disclosedLastInspection",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "causes",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
-        },
-        {
-            "fieldName": "actionPlanCategory",
-            "fieldType": "ActionPlanCategory",
-            "fieldValues": "LOW,MEDIUM,HIGH"
-        },
-        {
-            "fieldName": "implication",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
-        },
-        {
-            "fieldName": "isClosed",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "inspectionWorkDone",
-            "otherEntityRelationshipName": "inspectionFinding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "workDone",
-            "otherEntityField": "name"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "findingCategory",
-            "otherEntityRelationshipName": "inspectionFinding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "category",
-            "otherEntityField": "name"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "findingSubCategory",
-            "otherEntityRelationshipName": "inspectionFinding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "subCategory",
-            "otherEntityField": "name"
-        }
-    ],
-    "changelogDate": "20200706084225",
-    "javadoc": "The InspectionFinding(inspection_findings) entity.\\n@author Chris",
-    "entityTableName": "inspection_findings",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "InspectionFinding",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "5"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "condition",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "disclosedLastInspection",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "causes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "actionPlanCategory",
+      "fieldType": "ActionPlanCategory",
+      "fieldValues": "LOW,MEDIUM,HIGH"
+    },
+    {
+      "fieldName": "implication",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "isClosed",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "inspectionWorkDone",
+      "otherEntityRelationshipName": "inspectionFinding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "workDone",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "findingCategory",
+      "otherEntityRelationshipName": "inspectionFinding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "category",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "findingSubCategory",
+      "otherEntityRelationshipName": "inspectionFinding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "subCategory",
+      "otherEntityField": "name"
+    }
+  ],
+  "changelogDate": "20200706084225",
+  "javadoc": "The InspectionFinding(inspection_findings) entity.\\n@author Chris",
+  "entityTableName": "inspection_findings",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

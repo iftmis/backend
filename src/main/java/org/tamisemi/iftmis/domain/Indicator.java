@@ -29,7 +29,7 @@ public class Indicator extends AbstractAuditingEntity implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "indicators", allowSetters = true)
-    private AuditableArea subArea;
+    private SubArea subArea;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -53,17 +53,17 @@ public class Indicator extends AbstractAuditingEntity implements Serializable {
         this.name = name;
     }
 
-    public AuditableArea getSubArea() {
+    public SubArea getSubArea() {
         return subArea;
     }
 
-    public Indicator subArea(AuditableArea auditableArea) {
-        this.subArea = auditableArea;
+    public Indicator subArea(SubArea subArea) {
+        this.subArea = subArea;
         return this;
     }
 
-    public void setSubArea(AuditableArea auditableArea) {
-        this.subArea = auditableArea;
+    public void setSubArea(SubArea subArea) {
+        this.subArea = subArea;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

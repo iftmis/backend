@@ -1,48 +1,43 @@
 {
-    "name": "MeetingAttachment",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "unique",
-                "maxlength",
-                "minlength"
-            ],
-            "fieldValidateRulesMaxlength": "200",
-            "fieldValidateRulesMinlength": "2"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "meeting",
-            "otherEntityRelationshipName": "meetingAttachment",
-            "relationshipValidateRules": "required",
-            "relationshipName": "meeting",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "fileResource",
-            "otherEntityRelationshipName": "meetingAttachment",
-            "relationshipValidateRules": "required",
-            "relationshipName": "attachment",
-            "otherEntityField": "path"
-        }
-    ],
-    "changelogDate": "20200706083525",
-    "javadoc": "The MeetingAttachment entity.\\n@author Chris",
-    "entityTableName": "meeting_attachments",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "MeetingAttachment",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "200",
+      "fieldValidateRulesMinlength": "2"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "meeting",
+      "otherEntityRelationshipName": "meetingAttachment",
+      "relationshipValidateRules": "required",
+      "relationshipName": "meeting",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "fileResource",
+      "otherEntityRelationshipName": "meetingAttachment",
+      "relationshipValidateRules": "required",
+      "relationshipName": "attachment",
+      "otherEntityField": "path"
+    }
+  ],
+  "changelogDate": "20200706083525",
+  "javadoc": "The MeetingAttachment entity.\\n@author Chris",
+  "entityTableName": "meeting_attachments",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

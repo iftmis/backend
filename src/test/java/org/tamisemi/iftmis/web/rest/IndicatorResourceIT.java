@@ -18,8 +18,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
-import org.tamisemi.iftmis.domain.AuditableArea;
 import org.tamisemi.iftmis.domain.Indicator;
+import org.tamisemi.iftmis.domain.SubArea;
 import org.tamisemi.iftmis.repository.IndicatorRepository;
 import org.tamisemi.iftmis.service.IndicatorService;
 import org.tamisemi.iftmis.service.dto.IndicatorDTO;
@@ -61,15 +61,15 @@ public class IndicatorResourceIT {
     public static Indicator createEntity(EntityManager em) {
         Indicator indicator = new Indicator().name(DEFAULT_NAME);
         // Add required entity
-        AuditableArea auditableArea;
-        if (TestUtil.findAll(em, AuditableArea.class).isEmpty()) {
-            auditableArea = AuditableAreaResourceIT.createEntity(em);
-            em.persist(auditableArea);
+        SubArea subArea;
+        if (TestUtil.findAll(em, SubArea.class).isEmpty()) {
+            subArea = SubAreaResourceIT.createEntity(em);
+            em.persist(subArea);
             em.flush();
         } else {
-            auditableArea = TestUtil.findAll(em, AuditableArea.class).get(0);
+            subArea = TestUtil.findAll(em, SubArea.class).get(0);
         }
-        indicator.setSubArea(auditableArea);
+        indicator.setSubArea(subArea);
         return indicator;
     }
 
@@ -82,15 +82,15 @@ public class IndicatorResourceIT {
     public static Indicator createUpdatedEntity(EntityManager em) {
         Indicator indicator = new Indicator().name(UPDATED_NAME);
         // Add required entity
-        AuditableArea auditableArea;
-        if (TestUtil.findAll(em, AuditableArea.class).isEmpty()) {
-            auditableArea = AuditableAreaResourceIT.createUpdatedEntity(em);
-            em.persist(auditableArea);
+        SubArea subArea;
+        if (TestUtil.findAll(em, SubArea.class).isEmpty()) {
+            subArea = SubAreaResourceIT.createUpdatedEntity(em);
+            em.persist(subArea);
             em.flush();
         } else {
-            auditableArea = TestUtil.findAll(em, AuditableArea.class).get(0);
+            subArea = TestUtil.findAll(em, SubArea.class).get(0);
         }
-        indicator.setSubArea(auditableArea);
+        indicator.setSubArea(subArea);
         return indicator;
     }
 

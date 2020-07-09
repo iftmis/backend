@@ -120,7 +120,7 @@ entity Indicator(indicators) {
   name String required unique maxlength(1000) minlength(2)
 }
 relationship ManyToOne {
-    Indicator{subArea(name) required} to AuditableArea
+    Indicator{subArea(name) required} to SubArea
 }
 
 /**

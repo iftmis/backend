@@ -15,4 +15,13 @@
                                  referencedTableName="auditable_areas"/>
 
     </changeSet>
+
+    <changeSet id="" author="Chris">
+        <dropForeignKeyConstraint baseTableName="indicators" constraintName="fk_indicators_sub_area_id" />
+        <addForeignKeyConstraint baseColumnNames="sub_area_id"
+                                 baseTableName="indicators"
+                                 constraintName="fk_indicators_sub_area_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sub_areas"/>
+    </changeSet>
 </databaseChangeLog>

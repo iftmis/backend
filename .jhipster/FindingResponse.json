@@ -1,44 +1,40 @@
 {
-    "name": "FindingResponse",
-    "fields": [
-        {
-            "fieldName": "source",
-            "fieldType": "ResponseType",
-            "fieldValues": "AUDITOR,INSPECTOR,CLIENT",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "required"
-            ]
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "findingRecommendation",
-            "otherEntityRelationshipName": "findingResponse",
-            "relationshipValidateRules": "required",
-            "relationshipName": "recommendation",
-            "otherEntityField": "description"
-        }
-    ],
-    "changelogDate": "20200706084625",
-    "javadoc": "The FindingResponse(inspection_responses) entity.\\n@author Chris",
-    "entityTableName": "finding_responses",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "FindingResponse",
+  "fields": [
+    {
+      "fieldName": "source",
+      "fieldType": "ResponseType",
+      "fieldValues": "AUDITOR,INSPECTOR,CLIENT",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "findingRecommendation",
+      "otherEntityRelationshipName": "findingResponse",
+      "relationshipValidateRules": "required",
+      "relationshipName": "recommendation",
+      "otherEntityField": "description"
+    }
+  ],
+  "changelogDate": "20200706084625",
+  "javadoc": "The FindingResponse(inspection_responses) entity.\\n@author Chris",
+  "entityTableName": "finding_responses",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }

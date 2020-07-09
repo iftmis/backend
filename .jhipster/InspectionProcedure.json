@@ -1,45 +1,42 @@
 {
-    "name": "InspectionProcedure",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "1000"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "inspectionIndicator",
-            "otherEntityRelationshipName": "inspectionProcedure",
-            "relationshipValidateRules": "required",
-            "relationshipName": "inspectionIndicator",
-            "otherEntityField": "name"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "procedure",
-            "otherEntityRelationshipName": "inspectionProcedure",
-            "relationshipValidateRules": "required",
-            "relationshipName": "procedure",
-            "otherEntityField": "name"
-        }
-    ],
-    "changelogDate": "20200706084025",
-    "javadoc": "The InspectionProcedure entity.\\n@author Chris",
-    "entityTableName": "inspection_procedures",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true
+  "name": "InspectionProcedure",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "inspectionIndicator",
+      "otherEntityRelationshipName": "inspectionProcedure",
+      "relationshipValidateRules": "required",
+      "relationshipName": "inspectionIndicator",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "procedure",
+      "otherEntityRelationshipName": "inspectionProcedure",
+      "relationshipValidateRules": "required",
+      "relationshipName": "procedure",
+      "otherEntityField": "name"
+    }
+  ],
+  "changelogDate": "20200706084025",
+  "javadoc": "The InspectionProcedure entity.\\n@author Chris",
+  "entityTableName": "inspection_procedures",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
 }
