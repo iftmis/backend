@@ -24,6 +24,8 @@ import org.tamisemi.iftmis.repository.UserRepository;
 import org.tamisemi.iftmis.security.AuthoritiesConstants;
 import org.tamisemi.iftmis.security.SecurityUtils;
 import org.tamisemi.iftmis.service.dto.UserDTO;
+import org.tamisemi.iftmis.service.mapper.IndicatorMapper;
+import org.tamisemi.iftmis.service.mapper.UserMapper;
 
 /**
  * Service class for managing users.
@@ -36,7 +38,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-
+    private final UserMapper userMapper;
     private final PersistentTokenRepository persistentTokenRepository;
 
     private final AuthorityRepository authorityRepository;
@@ -48,13 +50,15 @@ public class UserService {
         PasswordEncoder passwordEncoder,
         PersistentTokenRepository persistentTokenRepository,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        UserMapper userMapper
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.persistentTokenRepository = persistentTokenRepository;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.userMapper = userMapper;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -306,6 +310,30 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
+    }
+
+    @Transactional(readOnly = true)
+    public UserDTO getUserWithAuthoritiesById(Long id) {
+        Optional<User> row = userRepository.findOneWithAuthoritiesById(id);
+        if(row.isPresent()){
+            User user = row.get();
+            UserDTO userDTO = new UserDTO();
+            userDTO.setId(user.getId());
+            userDTO.setLogin(user.getLogin());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setFirstName(user.getFirstName());
+            userDTO.setLastName(user.getLastName());
+            userDTO.setLangKey(user.getLangKey());
+            userDTO.setActivated(user.getActivated());
+            userDTO.setCreatedBy(user.getCreatedBy());
+            userDTO.setLastModifiedBy(user.getLastModifiedBy());
+            userDTO.setCreatedDate(user.getCreatedDate());
+            userDTO.setLastModifiedDate(user.getLastModifiedDate());
+            userDTO.setAuthorities(user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()));
+            return userDTO;
+        } else {
+            return null;
+        }
     }
 
     @Transactional(readOnly = true)
