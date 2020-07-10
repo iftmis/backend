@@ -299,6 +299,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public List<User> getAllManagedUsers() {
+        return userRepository.findAllByLoginNot(Constants.ANONYMOUS_USER);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
     }

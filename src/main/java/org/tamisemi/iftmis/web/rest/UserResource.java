@@ -138,12 +138,19 @@ public class UserResource {
     }
 
     /**
-     * {@code GET /users} : get all users.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
+     * @return
      */
     @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        final List<User> items = userService.getAllManagedUsers();
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/users/page")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

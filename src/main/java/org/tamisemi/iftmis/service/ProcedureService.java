@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,12 @@ public class ProcedureService {
         Procedure procedure = procedureMapper.toEntity(procedureDTO);
         procedure = procedureRepository.save(procedure);
         return procedureMapper.toDto(procedure);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Procedure> findAll() {
+        log.debug("Request to get all Procedures");
+        return procedureRepository.findAll();
     }
 
     /**

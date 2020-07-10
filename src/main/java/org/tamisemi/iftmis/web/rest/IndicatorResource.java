@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.domain.Indicator;
 import org.tamisemi.iftmis.service.IndicatorService;
 import org.tamisemi.iftmis.service.dto.IndicatorDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -84,13 +85,23 @@ public class IndicatorResource {
     }
 
     /**
-     * {@code GET  /indicators} : get all the indicators.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of indicators in body.
+     * @return
      */
     @GetMapping("/indicators")
-    public ResponseEntity<List<IndicatorDTO>> getAllIndicators(Pageable pageable) {
+    public ResponseEntity<List<Indicator>> getAllIndicators() {
+        log.debug("REST request to get a page of Indicators");
+        List<Indicator> items = indicatorService.findAll();
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     *
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/indicators/page")
+    public ResponseEntity<List<IndicatorDTO>> getAllPagedIndicators(Pageable pageable) {
         log.debug("REST request to get a page of Indicators");
         Page<IndicatorDTO> page = indicatorService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
