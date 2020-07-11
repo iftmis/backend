@@ -1,13 +1,16 @@
 package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
+import org.tamisemi.iftmis.domain.OrganisationUnit;
+import org.tamisemi.iftmis.domain.OrganisationUnitLevel;
+
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- * A DTO for the {@link org.tamisemi.iftmis.domain.OrganisationUnit} entity.
- */
+
 @ApiModel(description = "The OrganisationUnit entity.\n@author Chris")
 public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializable {
     private Long id;
@@ -31,6 +34,10 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
 
     private String logoContentType;
 
+    private OrganisationUnitLevel organisationUnitLevel;
+
+    private OrganisationUnit parent;
+
     private Long organisationUnitLevelId;
 
     private String organisationUnitLevelName;
@@ -38,6 +45,27 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
     private Long parentId;
 
     private String parentName;
+
+    public OrganisationUnitDTO() {
+    }
+
+    public OrganisationUnitDTO(Long id, @Size(min = 1, max = 64) String code, @NotNull @Size(min = 2, max = 200) String name, String address, String phoneNumber, String email, String background, byte[] logo, String logoContentType, OrganisationUnitLevel organisationUnitLevel, OrganisationUnit parent, Long organisationUnitLevelId, String organisationUnitLevelName, Long parentId, String parentName) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.background = background;
+        this.logo = logo;
+        this.logoContentType = logoContentType;
+        this.organisationUnitLevel = organisationUnitLevel;
+        this.parent = parent;
+        this.organisationUnitLevelId = organisationUnitLevelId;
+        this.organisationUnitLevelName = organisationUnitLevelName;
+        this.parentId = parentId;
+        this.parentName = parentName;
+    }
 
     public Long getId() {
         return id;
@@ -111,6 +139,22 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
         this.logoContentType = logoContentType;
     }
 
+    public OrganisationUnitLevel getOrganisationUnitLevel() {
+        return organisationUnitLevel;
+    }
+
+    public void setOrganisationUnitLevel(OrganisationUnitLevel organisationUnitLevel) {
+        this.organisationUnitLevel = organisationUnitLevel;
+    }
+
+    public OrganisationUnit getParent() {
+        return parent;
+    }
+
+    public void setParent(OrganisationUnit parent) {
+        this.parent = parent;
+    }
+
     public Long getOrganisationUnitLevelId() {
         return organisationUnitLevelId;
     }
@@ -131,51 +175,65 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
         return parentId;
     }
 
-    public void setParentId(Long organisationUnitId) {
-        this.parentId = organisationUnitId;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public String getParentName() {
         return parentName;
     }
 
-    public void setParentName(String organisationUnitName) {
-        this.parentName = organisationUnitName;
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof OrganisationUnitDTO)) {
-            return false;
-        }
-
-        return id != null && id.equals(((OrganisationUnitDTO) o).id);
+        if (this == o) return true;
+        if (!(o instanceof OrganisationUnitDTO)) return false;
+        OrganisationUnitDTO that = (OrganisationUnitDTO) o;
+        return getId().equals(that.getId()) &&
+            getCode().equals(that.getCode()) &&
+            getName().equals(that.getName()) &&
+            getAddress().equals(that.getAddress()) &&
+            getPhoneNumber().equals(that.getPhoneNumber()) &&
+            getEmail().equals(that.getEmail()) &&
+            getBackground().equals(that.getBackground()) &&
+            Arrays.equals(getLogo(), that.getLogo()) &&
+            getLogoContentType().equals(that.getLogoContentType()) &&
+            getOrganisationUnitLevel().equals(that.getOrganisationUnitLevel()) &&
+            getParent().equals(that.getParent()) &&
+            getOrganisationUnitLevelId().equals(that.getOrganisationUnitLevelId()) &&
+            getOrganisationUnitLevelName().equals(that.getOrganisationUnitLevelName()) &&
+            getParentId().equals(that.getParentId()) &&
+            getParentName().equals(that.getParentName());
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        int result = Objects.hash(getId(), getCode(), getName(), getAddress(), getPhoneNumber(), getEmail(), getBackground(), getLogoContentType(), getOrganisationUnitLevel(), getParent(), getOrganisationUnitLevelId(), getOrganisationUnitLevelName(), getParentId(), getParentName());
+        result = 31 * result + Arrays.hashCode(getLogo());
+        return result;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "OrganisationUnitDTO{" +
-            "id=" + getId() +
-            ", code='" + getCode() + "'" +
-            ", name='" + getName() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", phoneNumber='" + getPhoneNumber() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", background='" + getBackground() + "'" +
-            ", logo='" + getLogo() + "'" +
-            ", organisationUnitLevelId=" + getOrganisationUnitLevelId() +
-            ", organisationUnitLevelName='" + getOrganisationUnitLevelName() + "'" +
-            ", parentId=" + getParentId() +
-            ", parentName='" + getParentName() + "'" +
-            "}";
+            "id=" + id +
+            ", code='" + code + '\'' +
+            ", name='" + name + '\'' +
+            ", address='" + address + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", email='" + email + '\'' +
+            ", background='" + background + '\'' +
+            ", logo=" + Arrays.toString(logo) +
+            ", logoContentType='" + logoContentType + '\'' +
+            ", organisationUnitLevel=" + organisationUnitLevel +
+            ", parent=" + parent +
+            ", organisationUnitLevelId=" + organisationUnitLevelId +
+            ", organisationUnitLevelName='" + organisationUnitLevelName + '\'' +
+            ", parentId=" + parentId +
+            ", parentName='" + parentName + '\'' +
+            '}';
     }
 }
