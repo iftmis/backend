@@ -100,6 +100,30 @@ public class OrganisationUnitResource {
     }
 
     /**
+     *
+     * @return
+     */
+    @GetMapping("/organisation-units/by-user")
+    public ResponseEntity<List<OrganisationUnitDTO>> getUserOrganisationUnits() {
+        log.debug("REST request to get a page of OrganisationUnits");
+        List<OrganisationUnitDTO> ous = organisationUnitService.findByUser();
+        return ResponseEntity.ok().body(ous);
+    }
+
+    /**
+     * {@code GET  /organisation-units} : get all the organisationUnits.
+     *
+     * @param parentId the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of organisationUnits in body.
+     */
+    @GetMapping("/organisation-units/by-parent/{parentId}")
+    public ResponseEntity<List<OrganisationUnitDTO>> getByParentOrganisationUnits(@PathVariable Long parentId) {
+        log.debug("REST request to get a page of OrganisationUnits");
+        List<OrganisationUnitDTO> ous = organisationUnitService.findByParent(parentId);
+        return ResponseEntity.ok().body(ous);
+    }
+
+    /**
      * {@code GET  /organisation-units/:id} : get the "id" organisationUnit.
      *
      * @param id the id of the organisationUnitDTO to retrieve.
