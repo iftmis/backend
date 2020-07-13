@@ -1,6 +1,8 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -9,9 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.domain.OrganisationUnit;
 import org.tamisemi.iftmis.repository.OrganisationUnitRepository;
-import org.tamisemi.iftmis.service.dto.OrganisationUnitDTO;
-import org.tamisemi.iftmis.service.mapper.OrganisationUnitMapper;
-
 /**
  * Service Implementation for managing {@link OrganisationUnit}.
  */
@@ -22,36 +21,53 @@ public class OrganisationUnitService {
 
     private final OrganisationUnitRepository organisationUnitRepository;
 
-    private final OrganisationUnitMapper organisationUnitMapper;
-
-    public OrganisationUnitService(OrganisationUnitRepository organisationUnitRepository, OrganisationUnitMapper organisationUnitMapper) {
+    public OrganisationUnitService(OrganisationUnitRepository organisationUnitRepository) {
         this.organisationUnitRepository = organisationUnitRepository;
-        this.organisationUnitMapper = organisationUnitMapper;
     }
 
     /**
-     * Save a organisationUnit.
      *
-     * @param organisationUnitDTO the entity to save.
-     * @return the persisted entity.
+     * @param organisationUnit
+     * @return
      */
-    public OrganisationUnitDTO save(OrganisationUnitDTO organisationUnitDTO) {
-        log.debug("Request to save OrganisationUnit : {}", organisationUnitDTO);
-        OrganisationUnit organisationUnit = organisationUnitMapper.toEntity(organisationUnitDTO);
-        organisationUnit = organisationUnitRepository.save(organisationUnit);
-        return organisationUnitMapper.toDto(organisationUnit);
+    public OrganisationUnit save(OrganisationUnit organisationUnit) {
+        return organisationUnitRepository.save(organisationUnit);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<OrganisationUnit> findAll(Pageable pageable) {
+        return organisationUnitRepository.findAll(pageable);
     }
 
     /**
-     * Get all the organisationUnits.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param query
+     * @param pageable
+     * @return
      */
     @Transactional(readOnly = true)
-    public Page<OrganisationUnitDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all OrganisationUnits");
-        return organisationUnitRepository.findAll(pageable).map(organisationUnitMapper::toDto);
+    public Page<OrganisationUnit> findAll(String query, Pageable pageable) {
+        return organisationUnitRepository.findAll(query, pageable);
+    }
+
+    /**
+     *
+     * @param query
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<OrganisationUnit> findAll(String query) {
+        return organisationUnitRepository.findAll(query);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<OrganisationUnit> findAll() {
+        return organisationUnitRepository.findAll();
     }
 
     /**
@@ -61,9 +77,9 @@ public class OrganisationUnitService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<OrganisationUnitDTO> findOne(Long id) {
+    public Optional<OrganisationUnit> findOne(Long id) {
         log.debug("Request to get OrganisationUnit : {}", id);
-        return organisationUnitRepository.findById(id).map(organisationUnitMapper::toDto);
+        return organisationUnitRepository.findById(id);
     }
 
     /**
