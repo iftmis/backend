@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.domain.Indicator;
 import org.tamisemi.iftmis.repository.IndicatorRepository;
 import org.tamisemi.iftmis.service.dto.IndicatorDTO;
+import org.tamisemi.iftmis.service.dto.SubAreaDTO;
 import org.tamisemi.iftmis.service.mapper.IndicatorMapper;
 
 /**
@@ -53,6 +54,12 @@ public class IndicatorService {
     public Page<IndicatorDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Indicators");
         return indicatorRepository.findAll(pageable).map(indicatorMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<IndicatorDTO> findAll(Long subAreaId, Pageable pageable) {
+        log.debug("Request to get all SubAreas");
+        return indicatorRepository.findAllBySubAreaId(subAreaId, pageable).map(indicatorMapper::toDto);
     }
 
     @Transactional(readOnly = true)

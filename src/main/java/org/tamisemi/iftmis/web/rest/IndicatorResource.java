@@ -12,14 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.domain.Indicator;
 import org.tamisemi.iftmis.service.IndicatorService;
+import org.tamisemi.iftmis.service.dto.IndicatorDTO;
 import org.tamisemi.iftmis.service.dto.IndicatorDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
@@ -97,15 +101,27 @@ public class IndicatorResource {
 
     /**
      *
-     * @param pageable
+     * @param page
+     * @param size
+     * @param subAreaId
+     * @param sortBy
      * @return
      */
     @GetMapping("/indicators/page")
-    public ResponseEntity<List<IndicatorDTO>> getAllPagedIndicators(Pageable pageable) {
+    public ResponseEntity<List<IndicatorDTO>> getAllPagedIndicators(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+                                                                @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+                                                                @RequestParam(value = "subAreaId", defaultValue = Constants.ZERO) Long subAreaId,
+                                                                @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
         log.debug("REST request to get a page of Indicators");
-        Page<IndicatorDTO> page = indicatorService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        Page<IndicatorDTO> items;
+        if (subAreaId == 0) {
+            items = indicatorService.findAll(pageable);
+        } else {
+            items = indicatorService.findAll(subAreaId, pageable);
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
+        return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
 
     /**
