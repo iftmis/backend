@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.domain.Procedure;
 import org.tamisemi.iftmis.service.ProcedureService;
 import org.tamisemi.iftmis.service.dto.ProcedureDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -84,13 +85,24 @@ public class ProcedureResource {
     }
 
     /**
+     *
+     * @return
+     */
+    @GetMapping("/procedures")
+    public ResponseEntity<List<Procedure>> getAllProcedures() {
+        log.debug("REST request to get a page of Procedures");
+        List<Procedure> items = procedureService.findAll();
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
      * {@code GET  /procedures} : get all the procedures.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of procedures in body.
      */
-    @GetMapping("/procedures")
-    public ResponseEntity<List<ProcedureDTO>> getAllProcedures(Pageable pageable) {
+    @GetMapping("/procedures/page")
+    public ResponseEntity<List<ProcedureDTO>> getAllPagedProcedures(Pageable pageable) {
         log.debug("REST request to get a page of Procedures");
         Page<ProcedureDTO> page = procedureService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

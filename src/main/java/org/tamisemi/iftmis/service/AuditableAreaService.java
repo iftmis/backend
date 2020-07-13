@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,16 @@ public class AuditableAreaService {
     public Page<AuditableAreaDTO> findAll(Pageable pageable) {
         log.debug("Request to get all AuditableAreas");
         return auditableAreaRepository.findAll(pageable).map(auditableAreaMapper::toDto);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<AuditableArea> findAll() {
+        log.debug("Request to get all AuditableAreas");
+        return auditableAreaRepository.findAll();
     }
 
     /**

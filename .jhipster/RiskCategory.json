@@ -1,0 +1,33 @@
+{
+  "name": "RiskCategory",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "64",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "200",
+      "fieldValidateRulesMinlength": "2"
+    }
+  ],
+  "relationships": [],
+  "changelogDate": "20200713105139",
+  "javadoc": "The RiskCategory(risk_categories) entity.\\n@author Chris",
+  "entityTableName": "risk_categories",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true
+}

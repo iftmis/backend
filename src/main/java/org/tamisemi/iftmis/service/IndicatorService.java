@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,12 @@ public class IndicatorService {
     public Page<IndicatorDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Indicators");
         return indicatorRepository.findAll(pageable).map(indicatorMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Indicator> findAll() {
+        log.debug("Request to get all Indicators");
+        return indicatorRepository.findAll();
     }
 
     /**

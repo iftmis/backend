@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,21 @@ public class SubAreaService {
     public Page<SubAreaDTO> findAll(Pageable pageable) {
         log.debug("Request to get all SubAreas");
         return subAreaRepository.findAll(pageable).map(subAreaMapper::toDto);
+    }
+
+    /**
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<SubArea> findAll() {
+        log.debug("Request to get all SubAreas");
+        return subAreaRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<SubAreaDTO> findAll(Long areaId, Pageable pageable) {
+        log.debug("Request to get all SubAreas");
+        return subAreaRepository.findAllByAreaId(areaId, pageable).map(subAreaMapper::toDto);
     }
 
     /**

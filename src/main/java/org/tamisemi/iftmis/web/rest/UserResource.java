@@ -24,35 +24,12 @@ import org.tamisemi.iftmis.repository.UserRepository;
 import org.tamisemi.iftmis.security.AuthoritiesConstants;
 import org.tamisemi.iftmis.service.MailService;
 import org.tamisemi.iftmis.service.UserService;
+import org.tamisemi.iftmis.service.dto.ProcedureDTO;
 import org.tamisemi.iftmis.service.dto.UserDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 import org.tamisemi.iftmis.web.rest.errors.EmailAlreadyUsedException;
 import org.tamisemi.iftmis.web.rest.errors.LoginAlreadyUsedException;
 
-/**
- * REST controller for managing users.
- * <p>
- * This class accesses the {@link User} entity, and needs to fetch its collection of authorities.
- * <p>
- * For a normal use-case, it would be better to have an eager relationship between User and Authority,
- * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join
- * which would be good for performance.
- * <p>
- * We use a View Model and a DTO for 3 reasons:
- * <ul>
- * <li>We want to keep a lazy association between the user and the authorities, because people will
- * quite often do relationships with the user, and we don't want them to get the authorities all
- * the time for nothing (for performance reasons). This is the #1 goal: we should not impact our users'
- * application because of this use-case.</li>
- * <li> Not having an outer join causes n+1 requests to the database. This is not a real issue as
- * we have by default a second-level cache. This means on the first HTTP call we do the n+1 requests,
- * but then all authorities come from the cache, so in fact it's much better than doing an outer join
- * (which will get lots of data from the database, for each HTTP call).</li>
- * <li> As this manages users, for security reasons, we'd rather have a DTO layer.</li>
- * </ul>
- * <p>
- * Another option would be to have a specific JPA entity graph to handle this case.
- */
 @RestController
 @RequestMapping("/api")
 public class UserResource {
@@ -73,18 +50,6 @@ public class UserResource {
         this.mailService = mailService;
     }
 
-    /**
-     * {@code POST  /users}  : Creates a new user.
-     * <p>
-     * Creates a new user if the login and email are not already used, and sends an
-     * mail with an activation link.
-     * The user needs to be activated on creation.
-     *
-     * @param userDTO the user to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
-     */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
@@ -109,14 +74,6 @@ public class UserResource {
         }
     }
 
-    /**
-     * {@code PUT /users} : Updates an existing User.
-     *
-     * @param userDTO the user to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
-     */
     @PutMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
@@ -138,20 +95,34 @@ public class UserResource {
     }
 
     /**
-     * {@code GET /users} : get all users.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
+     * @return
      */
     @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        final List<User> items = userService.getAllManagedUsers();
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/users/page")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        UserDTO userDTO = userService.getUserWithAuthoritiesById(id);
+        return ResponseEntity.ok().body(userDTO);
+    }
+
     /**
      * Gets a list of all roles.
+     *
      * @return a string list of all roles.
      */
     @GetMapping("/users/authorities")

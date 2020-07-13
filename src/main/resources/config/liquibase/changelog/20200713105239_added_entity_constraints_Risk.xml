@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity Risk.
+    -->
+    <changeSet id="20200713105239-2" author="chris">
+
+        <addForeignKeyConstraint baseColumnNames="risk_register_id"
+                                 baseTableName="risks"
+                                 constraintName="fk_risks_risk_register_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="risk_registers"/>
+
+        <addForeignKeyConstraint baseColumnNames="objective_id"
+                                 baseTableName="risks"
+                                 constraintName="fk_risks_objective_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="objectives"/>
+
+        <addForeignKeyConstraint baseColumnNames="risk_category_id"
+                                 baseTableName="risks"
+                                 constraintName="fk_risks_risk_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="risk_categories"/>
+
+        <addForeignKeyConstraint baseColumnNames="risk_owner_id"
+                                 baseTableName="risks"
+                                 constraintName="fk_risks_risk_owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organisation_units"/>
+
+    </changeSet>
+</databaseChangeLog>
