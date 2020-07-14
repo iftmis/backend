@@ -46,6 +46,12 @@
     <include file="config/liquibase/changelog/20200706084425_added_entity_Finding.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706084525_added_entity_FindingRecommendation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706084625_added_entity_FindingResponse.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713104839_added_entity_RiskRank.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713104939_added_entity_RiskRegister.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713105039_added_entity_Objective.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713105139_added_entity_RiskCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713105239_added_entity_Risk.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713105339_added_entity_RiskRating.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200706084725_added_entity_constraints_ResponseAttachment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706081825_added_entity_constraints_OrganisationUnit.xml" relativeToChangelogFile="false"/>
@@ -69,6 +75,9 @@
     <include file="config/liquibase/changelog/20200706084425_added_entity_constraints_Finding.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706084525_added_entity_constraints_FindingRecommendation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706084625_added_entity_constraints_FindingResponse.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713105239_added_entity_constraints_Risk.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713105339_added_entity_constraints_RiskRating.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200713104939_added_entity_constraints_RiskRegister.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

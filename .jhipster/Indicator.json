@@ -1,44 +1,37 @@
 {
-    "name": "Indicator",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "unique",
-                "maxlength",
-                "minlength"
-            ],
-            "fieldValidateRulesMaxlength": "1000",
-            "fieldValidateRulesMinlength": "2"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipName": "subArea",
-            "otherEntityName": "subArea",
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": [
-                "required"
-            ],
-            "otherEntityField": "name",
-            "otherEntityRelationshipName": "indicator"
-        }
-    ],
-    "changelogDate": "20200706082725",
-    "javadoc": "The Indicator(indicators) entity.\\n@author Chris",
-    "entityTableName": "indicators",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true,
-    "searchEngine": false,
-    "databaseType": "sql"
+  "name": "Indicator",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "1000",
+      "fieldValidateRulesMinlength": "2"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "subArea",
+      "otherEntityName": "subArea",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name",
+      "otherEntityRelationshipName": "indicator"
+    }
+  ],
+  "changelogDate": "20200706082725",
+  "javadoc": "The Indicator(indicators) entity.\\n@author Chris",
+  "entityTableName": "indicators",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true,
+  "searchEngine": false,
+  "databaseType": "sql"
 }

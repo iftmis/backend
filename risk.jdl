@@ -1,0 +1,78 @@
+/**
+ * The RiskRank(risk_ranks) entity.
+ * @author Chris
+ */
+entity RiskRank(risk_ranks) {
+   name String required unique maxlength(200) minlength(2)
+   minValue Integer min(0) required
+   maxValue Integer max(30) required
+   hexColor String minlength(4) maxlength(7)
+}
+/**
+ * The RiskRegister(risk_registers) entity.
+ * @author Chris
+ */
+entity RiskRegister(risk_registers) {
+    name String required unique maxlength(200) minlength(2)
+    isApproved Boolean
+    approvedDate LocalDate
+    approvedBy String maxlength(200)
+}
+/**
+relationship ManyToOne {
+   // RiskRegister{organisationUnit(name) required} to OrganisationUnit
+  //  RiskRegister{financialYear(name) required} to FinancialYear
+}**/
+
+/**
+ * The Objective(objectives) entity.
+ * @author Chris
+ */
+entity Objective(objectives) {
+    code String required unique maxlength(64) minlength(1)
+    description TextBlob required
+}
+
+/**
+ * The RiskCategory(risk_categories) entity.
+ * @author Chris
+ */
+entity RiskCategory(risk_categories) {
+   code String unique maxlength(64) minlength(1)
+   name String required unique maxlength(200) minlength(2)
+}
+
+/**
+ * The Risk(risks) entity.
+ * @author Chris
+ */
+entity Risk(risks) {
+    code String unique maxlength(64) minlength(1)
+    description TextBlob
+}
+relationship ManyToOne {
+  /**  Risk{riskOwner(name) required} to OrganisationUnit**/
+    Risk{riskRegister required} to RiskRegister
+    Risk{objective(code) required} to Objective
+    Risk{riskCategory(name) required} to RiskCategory
+}
+enum RatingSource {
+    COUNCIL,INSPECTOR
+}
+/**
+ * The RiskRating(risk_ratings) entity.
+ * @author Chris
+ */
+entity RiskRating(risk_ratings) {
+    source RatingSource
+    impact Integer min(0) required
+    likelihood Integer min(0) required
+    comments TextBlob
+}
+relationship ManyToOne {
+    RiskRating{risk required} to Risk
+}
+
+dto all with mapstruct
+paginate * with pagination
+filter Risk

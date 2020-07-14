@@ -1,12 +1,11 @@
 package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
-
+import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Objects;
 
 @ApiModel(description = "The Authority entity. User Management\n@author Kachinga")
 public class AuthorityDTO extends AbstractAuditingDTO implements Serializable {
@@ -15,8 +14,7 @@ public class AuthorityDTO extends AbstractAuditingDTO implements Serializable {
     @Column(length = 50)
     private String name;
 
-    public AuthorityDTO() {
-    }
+    public AuthorityDTO() {}
 
     public AuthorityDTO(@NotNull @Size(max = 50) String name) {
         this.name = name;
@@ -45,8 +43,6 @@ public class AuthorityDTO extends AbstractAuditingDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "AuthorityDTO{" +
-            "name='" + name + '\'' +
-            '}';
+        return "AuthorityDTO{" + "name='" + name + '\'' + '}';
     }
 }

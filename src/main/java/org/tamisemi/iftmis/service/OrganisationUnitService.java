@@ -2,7 +2,7 @@ package org.tamisemi.iftmis.service;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.domain.OrganisationUnit;
 import org.tamisemi.iftmis.repository.OrganisationUnitRepository;
+import org.tamisemi.iftmis.service.dto.OrganisationUnitDTO;
+import org.tamisemi.iftmis.service.mapper.OrganisationUnitMapper;
+
 /**
  * Service Implementation for managing {@link OrganisationUnit}.
  */
@@ -21,53 +24,64 @@ public class OrganisationUnitService {
 
     private final OrganisationUnitRepository organisationUnitRepository;
 
-    public OrganisationUnitService(OrganisationUnitRepository organisationUnitRepository) {
+    private final OrganisationUnitMapper organisationUnitMapper;
+
+    public OrganisationUnitService(OrganisationUnitRepository organisationUnitRepository, OrganisationUnitMapper organisationUnitMapper) {
         this.organisationUnitRepository = organisationUnitRepository;
+        this.organisationUnitMapper = organisationUnitMapper;
     }
 
     /**
+     * Save a organisationUnit.
      *
-     * @param organisationUnit
-     * @return
+     * @param organisationUnitDTO the entity to save.
+     * @return the persisted entity.
      */
-    public OrganisationUnit save(OrganisationUnit organisationUnit) {
-        return organisationUnitRepository.save(organisationUnit);
-    }
-
-
-    @Transactional(readOnly = true)
-    public Page<OrganisationUnit> findAll(Pageable pageable) {
-        return organisationUnitRepository.findAll(pageable);
-    }
-
-    /**
-     *
-     * @param query
-     * @param pageable
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public Page<OrganisationUnit> findAll(String query, Pageable pageable) {
-        return organisationUnitRepository.findAll(query, pageable);
+    public OrganisationUnitDTO save(OrganisationUnitDTO organisationUnitDTO) {
+        log.debug("Request to save OrganisationUnit : {}", organisationUnitDTO);
+        OrganisationUnit organisationUnit = organisationUnitMapper.toEntity(organisationUnitDTO);
+        organisationUnit = organisationUnitRepository.save(organisationUnit);
+        return organisationUnitMapper.toDto(organisationUnit);
     }
 
     /**
+     * Get all the organisationUnits.
      *
-     * @param query
-     * @return
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<OrganisationUnit> findAll(String query) {
-        return organisationUnitRepository.findAll(query);
+    public Page<OrganisationUnitDTO> findAll(Pageable pageable) {
+        log.debug("Request to get all OrganisationUnits");
+        return organisationUnitRepository.findAll(pageable).map(organisationUnitMapper::toDto);
     }
 
     /**
+     * Get child organisationUnits.
      *
-     * @return
+     * @param parentId parentId.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<OrganisationUnit> findAll() {
-        return organisationUnitRepository.findAll();
+    public List<OrganisationUnitDTO> findByParent(Long parentId) {
+        log.debug("Request to get all OrganisationUnits");
+        return organisationUnitRepository
+            .findByParent_Id(parentId)
+            .stream()
+            .map(organisationUnitMapper::toDto)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Get user organisationUnits.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<OrganisationUnitDTO> findByUser() {
+        log.debug("Request to get all user OrganisationUnits");
+        //TODO determine user org unit id
+        return organisationUnitRepository.findByParent_Id(null).stream().map(organisationUnitMapper::toDto).collect(Collectors.toList());
     }
 
     /**
@@ -77,9 +91,9 @@ public class OrganisationUnitService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<OrganisationUnit> findOne(Long id) {
+    public Optional<OrganisationUnitDTO> findOne(Long id) {
         log.debug("Request to get OrganisationUnit : {}", id);
-        return organisationUnitRepository.findById(id);
+        return organisationUnitRepository.findById(id).map(organisationUnitMapper::toDto);
     }
 
     /**

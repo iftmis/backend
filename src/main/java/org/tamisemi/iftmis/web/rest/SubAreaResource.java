@@ -3,13 +3,11 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,10 +98,12 @@ public class SubAreaResource {
     }
 
     @GetMapping("/sub-areas/page")
-    public ResponseEntity<List<SubAreaDTO>> getAllPagedSubAreas(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
-                                                                @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
-                                                                @RequestParam(value = "areaId", defaultValue = Constants.ZERO) Long areaId,
-                                                                @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+    public ResponseEntity<List<SubAreaDTO>> getAllPagedSubAreas(
+        @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+        @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(value = "areaId", defaultValue = Constants.ZERO) Long areaId,
+        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy
+    ) {
         log.debug("REST request to get a page of SubAreas");
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
         Page<SubAreaDTO> items;

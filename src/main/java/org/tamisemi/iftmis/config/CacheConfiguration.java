@@ -81,6 +81,12 @@ public class CacheConfiguration {
             createCache(cm, org.tamisemi.iftmis.domain.Finding.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.FindingRecommendation.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.FindingResponse.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.RiskRank.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.RiskRegister.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Objective.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.RiskCategory.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.Risk.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.RiskRating.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,15 +1,13 @@
 package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
-import org.tamisemi.iftmis.domain.OrganisationUnit;
-import org.tamisemi.iftmis.domain.OrganisationUnitLevel;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import org.tamisemi.iftmis.domain.OrganisationUnit;
+import org.tamisemi.iftmis.domain.OrganisationUnitLevel;
 
 @ApiModel(description = "The OrganisationUnit entity.\n@author Chris")
 public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializable {
@@ -46,10 +44,25 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
 
     private String parentName;
 
-    public OrganisationUnitDTO() {
-    }
+    public OrganisationUnitDTO() {}
 
-    public OrganisationUnitDTO(Long id, @Size(min = 1, max = 64) String code, @NotNull @Size(min = 2, max = 200) String name, String address, String phoneNumber, String email, String background, byte[] logo, String logoContentType, OrganisationUnitLevel organisationUnitLevel, OrganisationUnit parent, Long organisationUnitLevelId, String organisationUnitLevelName, Long parentId, String parentName) {
+    public OrganisationUnitDTO(
+        Long id,
+        @Size(min = 1, max = 64) String code,
+        @NotNull @Size(min = 2, max = 200) String name,
+        String address,
+        String phoneNumber,
+        String email,
+        String background,
+        byte[] logo,
+        String logoContentType,
+        OrganisationUnitLevel organisationUnitLevel,
+        OrganisationUnit parent,
+        Long organisationUnitLevelId,
+        String organisationUnitLevelName,
+        Long parentId,
+        String parentName
+    ) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -192,7 +205,8 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
         if (this == o) return true;
         if (!(o instanceof OrganisationUnitDTO)) return false;
         OrganisationUnitDTO that = (OrganisationUnitDTO) o;
-        return getId().equals(that.getId()) &&
+        return (
+            getId().equals(that.getId()) &&
             getCode().equals(that.getCode()) &&
             getName().equals(that.getName()) &&
             getAddress().equals(that.getAddress()) &&
@@ -206,34 +220,76 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
             getOrganisationUnitLevelId().equals(that.getOrganisationUnitLevelId()) &&
             getOrganisationUnitLevelName().equals(that.getOrganisationUnitLevelName()) &&
             getParentId().equals(that.getParentId()) &&
-            getParentName().equals(that.getParentName());
+            getParentName().equals(that.getParentName())
+        );
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getId(), getCode(), getName(), getAddress(), getPhoneNumber(), getEmail(), getBackground(), getLogoContentType(), getOrganisationUnitLevel(), getParent(), getOrganisationUnitLevelId(), getOrganisationUnitLevelName(), getParentId(), getParentName());
+        int result = Objects.hash(
+            getId(),
+            getCode(),
+            getName(),
+            getAddress(),
+            getPhoneNumber(),
+            getEmail(),
+            getBackground(),
+            getLogoContentType(),
+            getOrganisationUnitLevel(),
+            getParent(),
+            getOrganisationUnitLevelId(),
+            getOrganisationUnitLevelName(),
+            getParentId(),
+            getParentName()
+        );
         result = 31 * result + Arrays.hashCode(getLogo());
         return result;
     }
 
     @Override
     public String toString() {
-        return "OrganisationUnitDTO{" +
-            "id=" + id +
-            ", code='" + code + '\'' +
-            ", name='" + name + '\'' +
-            ", address='" + address + '\'' +
-            ", phoneNumber='" + phoneNumber + '\'' +
-            ", email='" + email + '\'' +
-            ", background='" + background + '\'' +
-            ", logo=" + Arrays.toString(logo) +
-            ", logoContentType='" + logoContentType + '\'' +
-            ", organisationUnitLevel=" + organisationUnitLevel +
-            ", parent=" + parent +
-            ", organisationUnitLevelId=" + organisationUnitLevelId +
-            ", organisationUnitLevelName='" + organisationUnitLevelName + '\'' +
-            ", parentId=" + parentId +
-            ", parentName='" + parentName + '\'' +
-            '}';
+        return (
+            "OrganisationUnitDTO{" +
+            "id=" +
+            id +
+            ", code='" +
+            code +
+            '\'' +
+            ", name='" +
+            name +
+            '\'' +
+            ", address='" +
+            address +
+            '\'' +
+            ", phoneNumber='" +
+            phoneNumber +
+            '\'' +
+            ", email='" +
+            email +
+            '\'' +
+            ", background='" +
+            background +
+            '\'' +
+            ", logo=" +
+            Arrays.toString(logo) +
+            ", logoContentType='" +
+            logoContentType +
+            '\'' +
+            ", organisationUnitLevel=" +
+            organisationUnitLevel +
+            ", parent=" +
+            parent +
+            ", organisationUnitLevelId=" +
+            organisationUnitLevelId +
+            ", organisationUnitLevelName='" +
+            organisationUnitLevelName +
+            '\'' +
+            ", parentId=" +
+            parentId +
+            ", parentName='" +
+            parentName +
+            '\'' +
+            '}'
+        );
     }
 }

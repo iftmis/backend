@@ -315,7 +315,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserDTO getUserWithAuthoritiesById(Long id) {
         Optional<User> row = userRepository.findOneWithAuthoritiesById(id);
-        if(row.isPresent()){
+        if (row.isPresent()) {
             User user = row.get();
             UserDTO userDTO = new UserDTO();
             userDTO.setId(user.getId());

@@ -3,6 +3,11 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,12 +21,6 @@ import org.tamisemi.iftmis.domain.Authority;
 import org.tamisemi.iftmis.service.AuthorityService;
 import org.tamisemi.iftmis.service.dto.AuthorityDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -40,8 +39,7 @@ public class AuthorityResource {
     }
 
     @PostMapping("/authorities")
-    public ResponseEntity<Authority> createAuthority(@Valid @RequestBody AuthorityDTO authorityDTO)
-        throws URISyntaxException {
+    public ResponseEntity<Authority> createAuthority(@Valid @RequestBody AuthorityDTO authorityDTO) throws URISyntaxException {
         log.debug("REST request to save Authority : {}", authorityDTO);
         Authority result = authorityService.save(authorityDTO);
         return ResponseEntity
@@ -89,9 +87,6 @@ public class AuthorityResource {
     public ResponseEntity<Void> deleteAuthority(@PathVariable String name) {
         log.debug("REST request to delete Authority : {}", name);
         authorityService.delete(name);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, name))
-            .build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, name)).build();
     }
 }

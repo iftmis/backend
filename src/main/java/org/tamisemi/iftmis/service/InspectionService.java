@@ -49,9 +49,9 @@ public class InspectionService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<InspectionDTO> findAll(Pageable pageable) {
+    public Page<InspectionDTO> findAll(Long ouId, Pageable pageable) {
         log.debug("Request to get all Inspections");
-        return inspectionRepository.findAll(pageable).map(inspectionMapper::toDto);
+        return inspectionRepository.findByOrganisationUnit_Id(ouId, pageable).map(inspectionMapper::toDto);
     }
 
     /**

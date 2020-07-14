@@ -12,6 +12,5 @@ public final class AuthoritiesConstants {
     public static final String PRIME_MINISTER = "ROLE_PRIME_MINISTER";
     public static final String IAG = "ROLE_IAG";
 
-    private AuthoritiesConstants() {
-    }
+    private AuthoritiesConstants() {}
 }
