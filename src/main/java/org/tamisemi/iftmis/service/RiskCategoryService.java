@@ -1,6 +1,9 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -53,6 +56,18 @@ public class RiskCategoryService {
         log.debug("Request to get all RiskCategories");
         return riskCategoryRepository.findAll(pageable).map(riskCategoryMapper::toDto);
     }
+
+    /**
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<RiskCategoryDTO> findAll() {
+        log.debug("Request to get all RiskCategories");
+        return riskCategoryRepository.findAll().stream().map(riskCategoryMapper::toDto).collect(Collectors.toList());
+    }
+
+
 
     /**
      * Get one riskCategory by id.

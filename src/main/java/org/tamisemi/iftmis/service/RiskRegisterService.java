@@ -1,6 +1,9 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -52,6 +55,82 @@ public class RiskRegisterService {
     public Page<RiskRegisterDTO> findAll(Pageable pageable) {
         log.debug("Request to get all RiskRegisters");
         return riskRegisterRepository.findAll(pageable).map(riskRegisterMapper::toDto);
+    }
+
+    /**
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<RiskRegisterDTO> findAll() {
+        log.debug("Request to get all Risk Registers");
+        return riskRegisterRepository.findAll().stream().map(riskRegisterMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
+     * @param financialYearId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<RiskRegisterDTO> findAllByFinancialYearId(Long financialYearId) {
+        log.debug("Request to get all Risk Registers");
+        return riskRegisterRepository.findAllByFinancialYearId(financialYearId).stream().map(riskRegisterMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
+     *
+     * @param organisationUnitId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<RiskRegisterDTO> findAllByOrganisationUnitId(Long organisationUnitId) {
+        log.debug("Request to get all Risk Registers");
+        return riskRegisterRepository.findAllByOrganisationUnitId(organisationUnitId).stream().map(riskRegisterMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
+     * @param financialYearId
+     * @param pageable
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<RiskRegisterDTO> findAllByFinancialYearId(Long financialYearId, Pageable pageable) {
+        log.debug("Request to get all Risk Registers");
+        return riskRegisterRepository.findAllByFinancialYearId(financialYearId, pageable).map(riskRegisterMapper::toDto);
+    }
+
+    /**
+     *
+     * @param organisationUnitId
+     * @param pageable
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<RiskRegisterDTO> findAllByOrganisationUnitId(Long organisationUnitId, Pageable pageable) {
+        log.debug("Request to get all Risk Registers");
+        return riskRegisterRepository.findAllByOrganisationUnitId(organisationUnitId, pageable).map(riskRegisterMapper::toDto);
+    }
+
+    /**
+     * @param financialYearId
+     * @param organisationUnitId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<RiskRegisterDTO> findAllByFinancialYearIdAndOrganisationUnitId(Long financialYearId, Long organisationUnitId) {
+        log.debug("Request to get all Risk Registers");
+        return riskRegisterRepository.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId).stream().map(riskRegisterMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
+     * @param financialYearId
+     * @param organisationUnitId
+     * @param pageable
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<RiskRegisterDTO> findAllByFinancialYearIdAndOrganisationUnitId(Long financialYearId, Long organisationUnitId, Pageable pageable) {
+        log.debug("Request to get all Risk Registers");
+        return riskRegisterRepository.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId, pageable).map(riskRegisterMapper::toDto);
     }
 
     /**
