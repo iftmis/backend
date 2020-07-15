@@ -56,7 +56,6 @@ public class OrganisationUnitService {
         return organisationUnitRepository.findAll(pageable).map(organisationUnitMapper::toDto);
     }
 
-
     /**
      *
      * @param level

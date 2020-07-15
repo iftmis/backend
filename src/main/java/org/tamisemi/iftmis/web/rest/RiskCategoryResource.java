@@ -3,13 +3,11 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -107,9 +105,11 @@ public class RiskCategoryResource {
      * @return
      */
     @GetMapping("/risk-categories/page")
-    public ResponseEntity<List<RiskCategoryDTO>> getAllPagedRiskCategories(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
-                                                                           @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
-                                                                           @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+    public ResponseEntity<List<RiskCategoryDTO>> getAllPagedRiskCategories(
+        @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+        @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy
+    ) {
         log.debug("REST request to get a page of Risk Categories");
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
         Page<RiskCategoryDTO> items = riskCategoryService.findAll(pageable);

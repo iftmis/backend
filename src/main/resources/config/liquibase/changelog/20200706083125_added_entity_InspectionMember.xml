@@ -50,6 +50,19 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20200706083125-4" author="chris">
+        <addColumn tableName="inspection_members">
+            <column name="inspection_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200706083125-6" author="chris">
+        <dropColumn tableName="inspection_members" columnName="full_name" />
+        <dropColumn tableName="inspection_members" columnName="email" />
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
 </databaseChangeLog>

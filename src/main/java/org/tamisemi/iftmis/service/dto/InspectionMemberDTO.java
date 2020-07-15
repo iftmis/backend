@@ -2,8 +2,7 @@ package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import org.tamisemi.iftmis.domain.enumeration.InspectionRole;
 
 /**
@@ -12,14 +11,6 @@ import org.tamisemi.iftmis.domain.enumeration.InspectionRole;
 @ApiModel(description = "The InspectionMember entity.\n@author Chris")
 public class InspectionMemberDTO extends AbstractAuditingDTO implements Serializable {
     private Long id;
-
-    @NotNull
-    @Size(max = 100)
-    private String fullName;
-
-    @NotNull
-    @Size(max = 100)
-    private String email;
 
     @NotNull
     private InspectionRole role;
@@ -36,28 +27,14 @@ public class InspectionMemberDTO extends AbstractAuditingDTO implements Serializ
 
     private String declarationAttachmentPath;
 
+    private Long inspectionId;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public InspectionRole getRole() {
@@ -116,6 +93,14 @@ public class InspectionMemberDTO extends AbstractAuditingDTO implements Serializ
         this.declarationAttachmentPath = fileResourcePath;
     }
 
+    public Long getInspectionId() {
+        return inspectionId;
+    }
+
+    public void setInspectionId(Long inspectionId) {
+        this.inspectionId = inspectionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -138,8 +123,6 @@ public class InspectionMemberDTO extends AbstractAuditingDTO implements Serializ
     public String toString() {
         return "InspectionMemberDTO{" +
             "id=" + getId() +
-            ", fullName='" + getFullName() + "'" +
-            ", email='" + getEmail() + "'" +
             ", role='" + getRole() + "'" +
             ", userId=" + getUserId() +
             ", userFullName='" + getUserFullName() + "'" +
@@ -147,6 +130,7 @@ public class InspectionMemberDTO extends AbstractAuditingDTO implements Serializ
             ", letterAttachmentPath='" + getLetterAttachmentPath() + "'" +
             ", declarationAttachmentId=" + getDeclarationAttachmentId() +
             ", declarationAttachmentPath='" + getDeclarationAttachmentPath() + "'" +
+            ", inspectionId=" + getInspectionId() +
             "}";
     }
 }

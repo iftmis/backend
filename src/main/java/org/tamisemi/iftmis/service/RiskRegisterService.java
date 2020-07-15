@@ -3,7 +3,6 @@ package org.tamisemi.iftmis.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -73,7 +72,11 @@ public class RiskRegisterService {
     @Transactional(readOnly = true)
     public List<RiskRegisterDTO> findAllByFinancialYearId(Long financialYearId) {
         log.debug("Request to get all Risk Registers");
-        return riskRegisterRepository.findAllByFinancialYearId(financialYearId).stream().map(riskRegisterMapper::toDto).collect(Collectors.toList());
+        return riskRegisterRepository
+            .findAllByFinancialYearId(financialYearId)
+            .stream()
+            .map(riskRegisterMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -84,7 +87,11 @@ public class RiskRegisterService {
     @Transactional(readOnly = true)
     public List<RiskRegisterDTO> findAllByOrganisationUnitId(Long organisationUnitId) {
         log.debug("Request to get all Risk Registers");
-        return riskRegisterRepository.findAllByOrganisationUnitId(organisationUnitId).stream().map(riskRegisterMapper::toDto).collect(Collectors.toList());
+        return riskRegisterRepository
+            .findAllByOrganisationUnitId(organisationUnitId)
+            .stream()
+            .map(riskRegisterMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -118,7 +125,11 @@ public class RiskRegisterService {
     @Transactional(readOnly = true)
     public List<RiskRegisterDTO> findAllByFinancialYearIdAndOrganisationUnitId(Long financialYearId, Long organisationUnitId) {
         log.debug("Request to get all Risk Registers");
-        return riskRegisterRepository.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId).stream().map(riskRegisterMapper::toDto).collect(Collectors.toList());
+        return riskRegisterRepository
+            .findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId)
+            .stream()
+            .map(riskRegisterMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -128,9 +139,15 @@ public class RiskRegisterService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Page<RiskRegisterDTO> findAllByFinancialYearIdAndOrganisationUnitId(Long financialYearId, Long organisationUnitId, Pageable pageable) {
+    public Page<RiskRegisterDTO> findAllByFinancialYearIdAndOrganisationUnitId(
+        Long financialYearId,
+        Long organisationUnitId,
+        Pageable pageable
+    ) {
         log.debug("Request to get all Risk Registers");
-        return riskRegisterRepository.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId, pageable).map(riskRegisterMapper::toDto);
+        return riskRegisterRepository
+            .findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId, pageable)
+            .map(riskRegisterMapper::toDto);
     }
 
     /**

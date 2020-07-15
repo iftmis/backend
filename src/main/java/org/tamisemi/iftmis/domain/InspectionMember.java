@@ -23,16 +23,6 @@ public class InspectionMember extends AbstractAuditingEntity implements Serializ
     private Long id;
 
     @NotNull
-    @Size(max = 100)
-    @Column(name = "full_name", length = 100, nullable = false)
-    private String fullName;
-
-    @NotNull
-    @Size(max = 100)
-    @Column(name = "email", length = 100, nullable = false)
-    private String email;
-
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private InspectionRole role;
@@ -50,6 +40,11 @@ public class InspectionMember extends AbstractAuditingEntity implements Serializ
     @JsonIgnoreProperties(value = "inspectionMembers", allowSetters = true)
     private FileResource declarationAttachment;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = "inspectionMembers", allowSetters = true)
+    private Inspection inspection;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -57,32 +52,6 @@ public class InspectionMember extends AbstractAuditingEntity implements Serializ
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public InspectionMember fullName(String fullName) {
-        this.fullName = fullName;
-        return this;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public InspectionMember email(String email) {
-        this.email = email;
-        return this;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public InspectionRole getRole() {
@@ -137,6 +106,19 @@ public class InspectionMember extends AbstractAuditingEntity implements Serializ
         this.declarationAttachment = fileResource;
     }
 
+    public Inspection getInspection() {
+        return inspection;
+    }
+
+    public InspectionMember inspection(Inspection inspection) {
+        this.inspection = inspection;
+        return this;
+    }
+
+    public void setInspection(Inspection inspection) {
+        this.inspection = inspection;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -160,8 +142,6 @@ public class InspectionMember extends AbstractAuditingEntity implements Serializ
     public String toString() {
         return "InspectionMember{" +
             "id=" + getId() +
-            ", fullName='" + getFullName() + "'" +
-            ", email='" + getEmail() + "'" +
             ", role='" + getRole() + "'" +
             "}";
     }

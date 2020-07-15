@@ -49,9 +49,9 @@ public class InspectionMemberService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<InspectionMemberDTO> findAll(Pageable pageable) {
+    public Page<InspectionMemberDTO> findAll(Long inspectionId, Pageable pageable) {
         log.debug("Request to get all InspectionMembers");
-        return inspectionMemberRepository.findAll(pageable).map(inspectionMemberMapper::toDto);
+        return inspectionMemberRepository.findByInspection_Id(inspectionId, pageable).map(inspectionMemberMapper::toDto);
     }
 
     /**

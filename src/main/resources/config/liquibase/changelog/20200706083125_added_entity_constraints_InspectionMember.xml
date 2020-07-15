@@ -27,4 +27,11 @@
                                  referencedTableName="file_resources"/>
 
     </changeSet>
+    <changeSet id="20200706083125-5" author="chris">
+        <addForeignKeyConstraint baseColumnNames="inspection_id"
+                                 baseTableName="inspection_members"
+                                 constraintName="fk_inspection_members_inspection_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspections"/>
+    </changeSet>
 </databaseChangeLog>
