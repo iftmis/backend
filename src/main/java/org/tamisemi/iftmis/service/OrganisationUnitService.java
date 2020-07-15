@@ -62,7 +62,7 @@ public class OrganisationUnitService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<OrganisationUnitDTO> searchCouncils(Integer level) {
+    public List<OrganisationUnitDTO> councils(Integer level) {
         log.debug("Request to get all Organisation Units");
         return organisationUnitRepository
             .findAllByOrganisationLevel(level)

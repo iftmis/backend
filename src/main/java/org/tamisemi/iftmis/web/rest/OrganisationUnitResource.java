@@ -127,7 +127,7 @@ public class OrganisationUnitResource {
      */
     @GetMapping("/organisation-units/councils")
     public ResponseEntity<List<OrganisationUnitDTO>> councils() {
-        List<OrganisationUnitDTO> items = organisationUnitService.searchCouncils(3);
+        List<OrganisationUnitDTO> items = organisationUnitService.councils(3);
         return ResponseEntity.ok().body(items);
     }
 
