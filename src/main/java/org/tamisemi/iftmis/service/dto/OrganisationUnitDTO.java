@@ -32,10 +32,6 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
 
     private String logoContentType;
 
-    private OrganisationUnitLevel organisationUnitLevel;
-
-    private OrganisationUnit parent;
-
     private Long organisationUnitLevelId;
 
     private String organisationUnitLevelName;
@@ -72,8 +68,6 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
         this.background = background;
         this.logo = logo;
         this.logoContentType = logoContentType;
-        this.organisationUnitLevel = organisationUnitLevel;
-        this.parent = parent;
         this.organisationUnitLevelId = organisationUnitLevelId;
         this.organisationUnitLevelName = organisationUnitLevelName;
         this.parentId = parentId;
@@ -152,22 +146,6 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
         this.logoContentType = logoContentType;
     }
 
-    public OrganisationUnitLevel getOrganisationUnitLevel() {
-        return organisationUnitLevel;
-    }
-
-    public void setOrganisationUnitLevel(OrganisationUnitLevel organisationUnitLevel) {
-        this.organisationUnitLevel = organisationUnitLevel;
-    }
-
-    public OrganisationUnit getParent() {
-        return parent;
-    }
-
-    public void setParent(OrganisationUnit parent) {
-        this.parent = parent;
-    }
-
     public Long getOrganisationUnitLevelId() {
         return organisationUnitLevelId;
     }
@@ -215,8 +193,6 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
             getBackground().equals(that.getBackground()) &&
             Arrays.equals(getLogo(), that.getLogo()) &&
             getLogoContentType().equals(that.getLogoContentType()) &&
-            getOrganisationUnitLevel().equals(that.getOrganisationUnitLevel()) &&
-            getParent().equals(that.getParent()) &&
             getOrganisationUnitLevelId().equals(that.getOrganisationUnitLevelId()) &&
             getOrganisationUnitLevelName().equals(that.getOrganisationUnitLevelName()) &&
             getParentId().equals(that.getParentId()) &&
@@ -235,8 +211,6 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
             getEmail(),
             getBackground(),
             getLogoContentType(),
-            getOrganisationUnitLevel(),
-            getParent(),
             getOrganisationUnitLevelId(),
             getOrganisationUnitLevelName(),
             getParentId(),
@@ -275,10 +249,6 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
             ", logoContentType='" +
             logoContentType +
             '\'' +
-            ", organisationUnitLevel=" +
-            organisationUnitLevel +
-            ", parent=" +
-            parent +
             ", organisationUnitLevelId=" +
             organisationUnitLevelId +
             ", organisationUnitLevelName='" +

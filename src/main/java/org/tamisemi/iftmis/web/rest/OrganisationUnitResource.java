@@ -14,11 +14,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.service.OrganisationUnitQueryService;
 import org.tamisemi.iftmis.service.OrganisationUnitService;
+import org.tamisemi.iftmis.service.dto.OrganisationUnitCriteria;
 import org.tamisemi.iftmis.service.dto.OrganisationUnitDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
@@ -37,8 +38,14 @@ public class OrganisationUnitResource {
 
     private final OrganisationUnitService organisationUnitService;
 
-    public OrganisationUnitResource(OrganisationUnitService organisationUnitService) {
+    private final OrganisationUnitQueryService organisationUnitQueryService;
+
+    public OrganisationUnitResource(
+        OrganisationUnitService organisationUnitService,
+        OrganisationUnitQueryService organisationUnitQueryService
+    ) {
         this.organisationUnitService = organisationUnitService;
+        this.organisationUnitQueryService = organisationUnitQueryService;
     }
 
     /**
@@ -88,13 +95,27 @@ public class OrganisationUnitResource {
     /**
      * {@code GET  /organisation-units} : get all the organisationUnits.
      *
-     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of organisationUnits in body.
      */
     @GetMapping("/organisation-units")
-    public ResponseEntity<List<OrganisationUnitDTO>> getAllOrganisationUnits(Pageable pageable) {
-        log.debug("REST request to get a page of OrganisationUnits");
-        Page<OrganisationUnitDTO> page = organisationUnitService.findAll(pageable);
+    public ResponseEntity<List<OrganisationUnitDTO>> getAllOrganisationUnits(OrganisationUnitCriteria criteria) {
+        log.debug("REST request to get OrganisationUnits by criteria: {}", criteria);
+        List<OrganisationUnitDTO> list = organisationUnitQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(list);
+    }
+
+    /**
+     * {@code GET  /organisation-units} : get all the organisationUnits.
+     *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of organisationUnits in body.
+     */
+    @GetMapping("/organisation-units/page")
+    public ResponseEntity<List<OrganisationUnitDTO>> getPage(OrganisationUnitCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get OrganisationUnits by criteria: {}", criteria);
+        Page<OrganisationUnitDTO> page = organisationUnitQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

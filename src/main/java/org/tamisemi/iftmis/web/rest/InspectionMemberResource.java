@@ -91,10 +91,10 @@ public class InspectionMemberResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspectionMembers in body.
      */
-    @GetMapping("/inspection-members")
-    public ResponseEntity<List<InspectionMemberDTO>> getAllInspectionMembers(Pageable pageable) {
+    @GetMapping("/inspection-members/by-inspection/{inspectionId}")
+    public ResponseEntity<List<InspectionMemberDTO>> getAllInspectionMembers(Pageable pageable, @PathVariable Long inspectionId) {
         log.debug("REST request to get a page of InspectionMembers");
-        Page<InspectionMemberDTO> page = inspectionMemberService.findAll(pageable);
+        Page<InspectionMemberDTO> page = inspectionMemberService.findAll(inspectionId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
