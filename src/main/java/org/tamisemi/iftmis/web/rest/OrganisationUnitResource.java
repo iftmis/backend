@@ -3,11 +3,13 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.service.OrganisationUnitService;
 import org.tamisemi.iftmis.service.dto.OrganisationUnitDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -101,6 +104,16 @@ public class OrganisationUnitResource {
 
     /**
      *
+     * @param query
+     * @return
+     */
+    @GetMapping("/organisation-units/searchCouncils")
+    public ResponseEntity<List<OrganisationUnitDTO>> searchCouncils(@RequestParam(value = "query", defaultValue = "_") String query) {
+        List<OrganisationUnitDTO> items = organisationUnitService.searchCouncils(query);
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
      * @return
      */
     @GetMapping("/organisation-units/by-user")

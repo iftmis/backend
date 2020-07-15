@@ -56,6 +56,22 @@ public class OrganisationUnitService {
         return organisationUnitRepository.findAll(pageable).map(organisationUnitMapper::toDto);
     }
 
+
+    /**
+     *
+     * @param query
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<OrganisationUnitDTO> searchCouncils(String query) {
+        log.debug("Request to get all Organisation Units");
+        return organisationUnitRepository
+            .searchCouncils(query)
+            .stream()
+            .map(organisationUnitMapper::toDto)
+            .collect(Collectors.toList());
+    }
+
     /**
      * Get child organisationUnits.
      *
