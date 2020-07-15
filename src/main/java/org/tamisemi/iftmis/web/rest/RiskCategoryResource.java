@@ -12,12 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.service.RiskCategoryService;
 import org.tamisemi.iftmis.service.dto.RiskCategoryDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -86,17 +89,32 @@ public class RiskCategoryResource {
     }
 
     /**
-     * {@code GET  /risk-categories} : get all the riskCategories.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of riskCategories in body.
+     * @return
      */
     @GetMapping("/risk-categories")
-    public ResponseEntity<List<RiskCategoryDTO>> getAllRiskCategories(Pageable pageable) {
-        log.debug("REST request to get a page of RiskCategories");
-        Page<RiskCategoryDTO> page = riskCategoryService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<List<RiskCategoryDTO>> getAllRiskCategories() {
+        log.debug("REST request to get a list of Risk Categories");
+        List<RiskCategoryDTO> list = riskCategoryService.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    /**
+     * @param page
+     * @param size
+     * @param sortBy
+     * @return
+     */
+    @GetMapping("/risk-categories/page")
+    public ResponseEntity<List<RiskCategoryDTO>> getAllPagedRiskCategories(
+        @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+        @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy
+    ) {
+        log.debug("REST request to get a page of Risk Categories");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        Page<RiskCategoryDTO> items = riskCategoryService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
+        return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
 
     /**

@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.service.OrganisationUnitQueryService;
 import org.tamisemi.iftmis.service.OrganisationUnitService;
 import org.tamisemi.iftmis.service.dto.OrganisationUnitCriteria;
@@ -122,6 +123,16 @@ public class OrganisationUnitResource {
 
     /**
      *
+     * @param query
+     * @return
+     */
+    @GetMapping("/organisation-units/searchCouncils")
+    public ResponseEntity<List<OrganisationUnitDTO>> searchCouncils(@RequestParam(value = "query", defaultValue = "_") String query) {
+        List<OrganisationUnitDTO> items = organisationUnitService.searchCouncils(query);
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
      * @return
      */
     @GetMapping("/organisation-units/by-user")

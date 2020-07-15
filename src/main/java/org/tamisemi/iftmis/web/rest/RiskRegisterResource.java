@@ -12,12 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.service.RiskRegisterService;
 import org.tamisemi.iftmis.service.dto.RiskRegisterDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -86,17 +89,64 @@ public class RiskRegisterResource {
     }
 
     /**
-     * {@code GET  /risk-registers} : get all the riskRegisters.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of riskRegisters in body.
+     * @return
      */
     @GetMapping("/risk-registers")
-    public ResponseEntity<List<RiskRegisterDTO>> getAllRiskRegisters(Pageable pageable) {
+    public ResponseEntity<List<RiskRegisterDTO>> getAllRiskRegisters(
+        @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId,
+        @RequestParam(value = "organisationUnitId", defaultValue = Constants.ZERO) Long organisationUnitId
+    ) {
+        log.debug("REST request to get a list of RiskRegisters");
+        List<RiskRegisterDTO> items;
+        if (financialYearId == 0) {
+            if (organisationUnitId == 0) {
+                items = riskRegisterService.findAll();
+            } else {
+                items = riskRegisterService.findAllByOrganisationUnitId(organisationUnitId);
+            }
+        } else {
+            if (organisationUnitId == 0) {
+                items = riskRegisterService.findAllByFinancialYearId(financialYearId);
+            } else {
+                items = riskRegisterService.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId);
+            }
+        }
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     * @param page
+     * @param size
+     * @param financialYearId
+     * @param sortBy
+     * @return
+     */
+    @GetMapping("/risk-registers/page")
+    public ResponseEntity<List<RiskRegisterDTO>> getAllPagedRiskRegisters(
+        @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+        @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId,
+        @RequestParam(value = "organisationUnitId", defaultValue = Constants.ZERO) Long organisationUnitId,
+        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy
+    ) {
         log.debug("REST request to get a page of RiskRegisters");
-        Page<RiskRegisterDTO> page = riskRegisterService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        Page<RiskRegisterDTO> items;
+        if (financialYearId == 0) {
+            if (organisationUnitId == 0) {
+                items = riskRegisterService.findAll(pageable);
+            } else {
+                items = riskRegisterService.findAllByOrganisationUnitId(organisationUnitId, pageable);
+            }
+        } else {
+            if (organisationUnitId == 0) {
+                items = riskRegisterService.findAllByFinancialYearId(financialYearId, pageable);
+            } else {
+                items = riskRegisterService.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId, pageable);
+            }
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
+        return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
 
     /**

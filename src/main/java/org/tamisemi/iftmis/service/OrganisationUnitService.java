@@ -57,6 +57,17 @@ public class OrganisationUnitService {
     }
 
     /**
+     *
+     * @param query
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<OrganisationUnitDTO> searchCouncils(String query) {
+        log.debug("Request to get all Organisation Units");
+        return organisationUnitRepository.searchCouncils(query).stream().map(organisationUnitMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
      * Get child organisationUnits.
      *
      * @param parentId parentId.
