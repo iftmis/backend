@@ -84,13 +84,22 @@ public class ObjectiveResource {
     }
 
     /**
-     * {@code GET  /objectives} : get all the objectives.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of objectives in body.
+     * @return
      */
     @GetMapping("/objectives")
-    public ResponseEntity<List<ObjectiveDTO>> getAllObjectives(Pageable pageable) {
+    public ResponseEntity<List<ObjectiveDTO>> getAllObjectives() {
+        List<ObjectiveDTO> items = objectiveService.findAll();
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     *
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/objectives/page")
+    public ResponseEntity<List<ObjectiveDTO>> getAllPagedObjectives(Pageable pageable) {
         log.debug("REST request to get a page of Objectives");
         Page<ObjectiveDTO> page = objectiveService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
