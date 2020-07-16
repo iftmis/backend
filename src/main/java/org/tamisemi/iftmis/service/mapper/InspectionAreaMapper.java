@@ -3,11 +3,12 @@ package org.tamisemi.iftmis.service.mapper;
 import org.mapstruct.*;
 import org.tamisemi.iftmis.domain.*;
 import org.tamisemi.iftmis.service.dto.InspectionAreaDTO;
+import org.tamisemi.iftmis.service.dto.InspectionAreaWithObjectiveDTO;
 
 /**
  * Mapper for the entity {@link InspectionArea} and its DTO {@link InspectionAreaDTO}.
  */
-@Mapper(componentModel = "spring", uses = { InspectionMapper.class, AuditableAreaMapper.class })
+@Mapper(componentModel = "spring", uses = { InspectionMapper.class, AuditableAreaMapper.class, InspectionObjectiveMapper.class })
 public interface InspectionAreaMapper extends EntityMapper<InspectionAreaDTO, InspectionArea> {
     @Mapping(source = "inspection.id", target = "inspectionId")
     @Mapping(source = "auditableArea.id", target = "auditableAreaId")

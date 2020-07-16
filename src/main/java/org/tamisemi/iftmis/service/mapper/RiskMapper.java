@@ -9,7 +9,9 @@ import org.tamisemi.iftmis.service.dto.RiskDTO;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { RiskRegisterMapper.class, ObjectiveMapper.class, RiskCategoryMapper.class, OrganisationUnitMapper.class }
+    uses = {
+        RiskRegisterMapper.class, ObjectiveMapper.class, RiskRatingMapper.class, RiskCategoryMapper.class, OrganisationUnitMapper.class,
+    }
 )
 public interface RiskMapper extends EntityMapper<RiskDTO, Risk> {
     @Mapping(source = "riskRegister.id", target = "riskRegisterId")
@@ -21,6 +23,7 @@ public interface RiskMapper extends EntityMapper<RiskDTO, Risk> {
     @Mapping(source = "riskCategory.name", target = "riskCategoryName")
     @Mapping(source = "riskOwner.id", target = "riskOwnerId")
     @Mapping(source = "riskOwner.name", target = "riskOwnerName")
+    @Mapping(source = "riskRatings", target = "riskRatings")
     RiskDTO toDto(Risk risk);
 
     @Mapping(source = "riskRegisterId", target = "riskRegister")

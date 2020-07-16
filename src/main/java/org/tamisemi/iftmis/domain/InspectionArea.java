@@ -2,6 +2,7 @@ package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -34,6 +35,9 @@ public class InspectionArea extends AbstractAuditingEntity implements Serializab
     @ManyToOne
     @JsonIgnoreProperties(value = "inspectionAreas", allowSetters = true)
     private AuditableArea auditableArea;
+
+    @OneToMany(mappedBy = "inspectionArea", fetch = FetchType.LAZY)
+    private Set<InspectionObjective> inspectionObjectives;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -81,6 +85,14 @@ public class InspectionArea extends AbstractAuditingEntity implements Serializab
 
     public void setAuditableArea(AuditableArea auditableArea) {
         this.auditableArea = auditableArea;
+    }
+
+    public Set<InspectionObjective> getInspectionObjectives() {
+        return inspectionObjectives;
+    }
+
+    public void setInspectionObjectives(Set<InspectionObjective> inspectionObjectives) {
+        this.inspectionObjectives = inspectionObjectives;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

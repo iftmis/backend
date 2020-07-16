@@ -2,6 +2,8 @@ package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -52,6 +54,10 @@ public class Risk extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = "risks", allowSetters = true)
     private OrganisationUnit riskOwner;
+
+    @OneToMany(mappedBy = "risk")
+    @JsonIgnoreProperties("risk")
+    private Set<RiskRating> riskRatings = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -138,6 +144,14 @@ public class Risk extends AbstractAuditingEntity implements Serializable {
 
     public void setRiskOwner(OrganisationUnit organsiationUnit) {
         this.riskOwner = organsiationUnit;
+    }
+
+    public Set<RiskRating> getRiskRatings() {
+        return riskRatings;
+    }
+
+    public void setRiskRatings(Set<RiskRating> riskRatings) {
+        this.riskRatings = riskRatings;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
