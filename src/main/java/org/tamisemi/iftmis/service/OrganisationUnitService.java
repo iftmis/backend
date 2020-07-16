@@ -58,13 +58,17 @@ public class OrganisationUnitService {
 
     /**
      *
-     * @param query
+     * @param level
      * @return
      */
     @Transactional(readOnly = true)
-    public List<OrganisationUnitDTO> searchCouncils(String query) {
+    public List<OrganisationUnitDTO> councils(Integer level) {
         log.debug("Request to get all Organisation Units");
-        return organisationUnitRepository.searchCouncils(query).stream().map(organisationUnitMapper::toDto).collect(Collectors.toList());
+        return organisationUnitRepository
+            .findAllByOrganisationLevel(level)
+            .stream()
+            .map(organisationUnitMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**

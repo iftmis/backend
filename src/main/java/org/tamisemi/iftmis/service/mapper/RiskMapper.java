@@ -13,8 +13,10 @@ import org.tamisemi.iftmis.service.dto.RiskDTO;
 )
 public interface RiskMapper extends EntityMapper<RiskDTO, Risk> {
     @Mapping(source = "riskRegister.id", target = "riskRegisterId")
+    @Mapping(source = "riskRegister.name", target = "riskRegisterName")
     @Mapping(source = "objective.id", target = "objectiveId")
     @Mapping(source = "objective.code", target = "objectiveCode")
+    @Mapping(source = "objective.description", target = "objectiveDescription")
     @Mapping(source = "riskCategory.id", target = "riskCategoryId")
     @Mapping(source = "riskCategory.name", target = "riskCategoryName")
     @Mapping(source = "riskOwner.id", target = "riskOwnerId")

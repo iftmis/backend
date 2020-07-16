@@ -125,9 +125,9 @@ public class RiskRegisterResource {
     public ResponseEntity<List<RiskRegisterDTO>> getAllPagedRiskRegisters(
         @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
         @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
         @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId,
-        @RequestParam(value = "organisationUnitId", defaultValue = Constants.ZERO) Long organisationUnitId,
-        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy
+        @RequestParam(value = "organisationUnitId", defaultValue = Constants.ZERO) Long organisationUnitId
     ) {
         log.debug("REST request to get a page of RiskRegisters");
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());

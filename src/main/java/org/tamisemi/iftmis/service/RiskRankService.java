@@ -1,6 +1,9 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -52,6 +55,11 @@ public class RiskRankService {
     public Page<RiskRankDTO> findAll(Pageable pageable) {
         log.debug("Request to get all RiskRanks");
         return riskRankRepository.findAll(pageable).map(riskRankMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RiskRankDTO> findAll() {
+        return riskRankRepository.findAll().stream().map(riskRankMapper::toDto).collect(Collectors.toList());
     }
 
     /**

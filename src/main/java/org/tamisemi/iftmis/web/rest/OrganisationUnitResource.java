@@ -123,12 +123,11 @@ public class OrganisationUnitResource {
 
     /**
      *
-     * @param query
      * @return
      */
-    @GetMapping("/organisation-units/searchCouncils")
-    public ResponseEntity<List<OrganisationUnitDTO>> searchCouncils(@RequestParam(value = "query", defaultValue = "_") String query) {
-        List<OrganisationUnitDTO> items = organisationUnitService.searchCouncils(query);
+    @GetMapping("/organisation-units/councils")
+    public ResponseEntity<List<OrganisationUnitDTO>> councils() {
+        List<OrganisationUnitDTO> items = organisationUnitService.councils(3);
         return ResponseEntity.ok().body(items);
     }
 
