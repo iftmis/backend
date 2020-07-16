@@ -43,7 +43,7 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
 
     private String riskOwnerName;
 
-    private Set<RiskRating> riskRatings = new HashSet<>();
+    private Set<RiskRatingDTO> riskRatings = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -141,11 +141,11 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
         this.riskOwnerName = organisationUnitName;
     }
 
-    public Set<RiskRating> getRiskRatings() {
+    public Set<RiskRatingDTO> getRiskRatings() {
         return riskRatings;
     }
 
-    public void setRiskRatings(Set<RiskRating> riskRatings) {
+    public void setRiskRatings(Set<RiskRatingDTO> riskRatings) {
         this.riskRatings = riskRatings;
     }
 
