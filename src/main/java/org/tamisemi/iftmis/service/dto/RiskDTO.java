@@ -3,8 +3,11 @@ package org.tamisemi.iftmis.service.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Lob;
 import javax.validation.constraints.*;
+import org.tamisemi.iftmis.domain.RiskRating;
 
 /**
  * A DTO for the {@link org.tamisemi.iftmis.domain.Risk} entity.
@@ -35,6 +38,8 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
     private Long riskOwnerId;
 
     private String riskOwnerName;
+
+    private Set<RiskRating> riskRatings = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -114,6 +119,14 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
 
     public void setRiskOwnerName(String organsiationUnitName) {
         this.riskOwnerName = organsiationUnitName;
+    }
+
+    public Set<RiskRating> getRiskRatings() {
+        return riskRatings;
+    }
+
+    public void setRiskRatings(Set<RiskRating> riskRatings) {
+        this.riskRatings = riskRatings;
     }
 
     @Override
