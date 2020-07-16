@@ -7,7 +7,7 @@ import org.tamisemi.iftmis.service.dto.InspectionMemberDTO;
 /**
  * Mapper for the entity {@link InspectionMember} and its DTO {@link InspectionMemberDTO}.
  */
-@Mapper(componentModel = "spring", uses = { UserMapper.class, FileResourceMapper.class })
+@Mapper(componentModel = "spring", uses = { UserMapper.class, FileResourceMapper.class, InspectionMapper.class })
 public interface InspectionMemberMapper extends EntityMapper<InspectionMemberDTO, InspectionMember> {
     @Mapping(source = "user.id", target = "userId")
     @Mapping(
@@ -18,11 +18,13 @@ public interface InspectionMemberMapper extends EntityMapper<InspectionMemberDTO
     @Mapping(source = "letterAttachment.path", target = "letterAttachmentPath")
     @Mapping(source = "declarationAttachment.id", target = "declarationAttachmentId")
     @Mapping(source = "declarationAttachment.path", target = "declarationAttachmentPath")
+    @Mapping(source = "inspection.id", target = "inspectionId")
     InspectionMemberDTO toDto(InspectionMember inspectionMember);
 
     @Mapping(source = "userId", target = "user")
     @Mapping(source = "letterAttachmentId", target = "letterAttachment")
     @Mapping(source = "declarationAttachmentId", target = "declarationAttachment")
+    @Mapping(source = "inspectionId", target = "inspection")
     InspectionMember toEntity(InspectionMemberDTO inspectionMemberDTO);
 
     default InspectionMember fromId(Long id) {
