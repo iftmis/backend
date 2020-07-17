@@ -55,7 +55,7 @@ public class Risk extends AbstractAuditingEntity implements Serializable {
     @JsonIgnoreProperties(value = "risks", allowSetters = true)
     private OrganisationUnit riskOwner;
 
-    @OneToMany(mappedBy = "risk")
+    @OneToMany(mappedBy = "risk", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("risk")
     private Set<RiskRating> riskRatings = new HashSet<>();
 
