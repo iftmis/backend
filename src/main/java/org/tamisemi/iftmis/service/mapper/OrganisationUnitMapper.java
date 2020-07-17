@@ -11,8 +11,10 @@ import org.tamisemi.iftmis.service.dto.OrganisationUnitDTO;
 public interface OrganisationUnitMapper extends EntityMapper<OrganisationUnitDTO, OrganisationUnit> {
     @Mapping(source = "organisationUnitLevel.id", target = "organisationUnitLevelId")
     @Mapping(source = "organisationUnitLevel.name", target = "organisationUnitLevelName")
+    @Mapping(source = "organisationUnitLevel", target = "organisationUnitLevel")
     @Mapping(source = "parent.id", target = "parentId")
     @Mapping(source = "parent.name", target = "parentName")
+    @Mapping(source = "parent", target = "parent")
     OrganisationUnitDTO toDto(OrganisationUnit organisationUnit);
 
     @Mapping(source = "organisationUnitLevelId", target = "organisationUnitLevel")

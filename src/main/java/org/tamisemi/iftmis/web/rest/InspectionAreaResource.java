@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.tamisemi.iftmis.service.InspectionAreaService;
 import org.tamisemi.iftmis.service.dto.InspectionAreaDTO;
+import org.tamisemi.iftmis.service.dto.InspectionAreaWithObjectiveDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -62,6 +63,18 @@ public class InspectionAreaResource {
             .body(result);
     }
 
+    @PostMapping("/inspection-areas/add")
+    public ResponseEntity<Void> addInspectionAreas(@Valid @RequestBody List<InspectionAreaDTO> inspectionAreaDTOs) {
+        inspectionAreaService.saveAll(inspectionAreaDTOs);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/inspection-areas/remove")
+    public ResponseEntity<Void> removeInspectionAreas(@Valid @RequestBody List<InspectionAreaDTO> inspectionAreaDTOs) {
+        inspectionAreaService.saveRemove(inspectionAreaDTOs);
+        return ResponseEntity.noContent().build();
+    }
+
     /**
      * {@code PUT  /inspection-areas} : Updates an existing inspectionArea.
      *
@@ -97,6 +110,32 @@ public class InspectionAreaResource {
         Page<InspectionAreaDTO> page = inspectionAreaService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /inspection-areas} : get all the inspectionAreas by inspection id.
+     *
+     * @param inspectionId inspe id
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspectionAreas in body.
+     */
+    @GetMapping("/inspection-areas/by-inspection/{inspectionId}")
+    public ResponseEntity<List<InspectionAreaDTO>> getAllInspectionAreas(@PathVariable Long inspectionId) {
+        log.debug("REST request to get a page of InspectionAreas");
+        List<InspectionAreaDTO> result = inspectionAreaService.findAllByInspection(inspectionId);
+        return ResponseEntity.ok().body(result);
+    }
+
+    /**
+     * {@code GET  /inspection-areas} : get all the inspectionAreas by inspection id.
+     *
+     * @param inspectionId inspe id
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspectionAreas in body.
+     */
+    @GetMapping("/inspection-areas/by-inspection/{inspectionId}/with-objectives")
+    public ResponseEntity<List<InspectionAreaWithObjectiveDTO>> getWithObjectives(@PathVariable Long inspectionId) {
+        log.debug("REST request to get a page of InspectionAreas");
+        List<InspectionAreaWithObjectiveDTO> result = inspectionAreaService.findAllWithObjective(inspectionId);
+        return ResponseEntity.ok().body(result);
     }
 
     /**

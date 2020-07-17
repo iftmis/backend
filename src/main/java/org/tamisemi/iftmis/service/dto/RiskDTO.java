@@ -3,8 +3,11 @@ package org.tamisemi.iftmis.service.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Lob;
 import javax.validation.constraints.*;
+import org.tamisemi.iftmis.domain.RiskRating;
 
 /**
  * A DTO for the {@link org.tamisemi.iftmis.domain.Risk} entity.
@@ -24,9 +27,13 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
     @ApiModelProperty(value = "Risk{riskOwner(name) required} to OrganisationUnit")
     private Long riskRegisterId;
 
+    private String riskRegisterName;
+
     private Long objectiveId;
 
     private String objectiveCode;
+
+    private String objectiveDescription;
 
     private Long riskCategoryId;
 
@@ -35,6 +42,8 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
     private Long riskOwnerId;
 
     private String riskOwnerName;
+
+    private Set<RiskRatingDTO> riskRatings = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -68,6 +77,14 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
         this.riskRegisterId = riskRegisterId;
     }
 
+    public String getRiskRegisterName() {
+        return riskRegisterName;
+    }
+
+    public void setRiskRegisterName(String riskRegisterName) {
+        this.riskRegisterName = riskRegisterName;
+    }
+
     public Long getObjectiveId() {
         return objectiveId;
     }
@@ -82,6 +99,14 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
 
     public void setObjectiveCode(String objectiveCode) {
         this.objectiveCode = objectiveCode;
+    }
+
+    public String getObjectiveDescription() {
+        return objectiveDescription;
+    }
+
+    public void setObjectiveDescription(String objectiveDescription) {
+        this.objectiveDescription = objectiveDescription;
     }
 
     public Long getRiskCategoryId() {
@@ -104,16 +129,24 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
         return riskOwnerId;
     }
 
-    public void setRiskOwnerId(Long organsiationUnitId) {
-        this.riskOwnerId = organsiationUnitId;
+    public void setRiskOwnerId(Long organisationUnitId) {
+        this.riskOwnerId = organisationUnitId;
     }
 
     public String getRiskOwnerName() {
         return riskOwnerName;
     }
 
-    public void setRiskOwnerName(String organsiationUnitName) {
-        this.riskOwnerName = organsiationUnitName;
+    public void setRiskOwnerName(String organisationUnitName) {
+        this.riskOwnerName = organisationUnitName;
+    }
+
+    public Set<RiskRatingDTO> getRiskRatings() {
+        return riskRatings;
+    }
+
+    public void setRiskRatings(Set<RiskRatingDTO> riskRatings) {
+        this.riskRatings = riskRatings;
     }
 
     @Override
@@ -141,8 +174,10 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
             ", riskRegisterId=" + getRiskRegisterId() +
+            ", riskRegisterName=" + getRiskRegisterName() +
             ", objectiveId=" + getObjectiveId() +
             ", objectiveCode='" + getObjectiveCode() + "'" +
+            ", objectiveDescription='" + getObjectiveDescription() + "'" +
             ", riskCategoryId=" + getRiskCategoryId() +
             ", riskCategoryName='" + getRiskCategoryName() + "'" +
             ", riskOwnerId=" + getRiskOwnerId() +

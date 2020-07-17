@@ -1,11 +1,13 @@
 package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.tamisemi.iftmis.domain.OrganisationUnit;
 import org.tamisemi.iftmis.domain.OrganisationUnitLevel;
 
@@ -36,11 +38,16 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
 
     private String organisationUnitLevelName;
 
+    private OrganisationUnitLevel organisationUnitLevel;
+
     private Long parentId;
 
     private String parentName;
 
-    public OrganisationUnitDTO() {}
+    private OrganisationUnit parent;
+
+    public OrganisationUnitDTO() {
+    }
 
     public OrganisationUnitDTO(
         Long id,
@@ -70,8 +77,10 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
         this.logoContentType = logoContentType;
         this.organisationUnitLevelId = organisationUnitLevelId;
         this.organisationUnitLevelName = organisationUnitLevelName;
+        this.organisationUnitLevel = organisationUnitLevel;
         this.parentId = parentId;
         this.parentName = parentName;
+        this.parent = parent;
     }
 
     public Long getId() {
@@ -178,6 +187,22 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
         this.parentName = parentName;
     }
 
+    public OrganisationUnitLevel getOrganisationUnitLevel() {
+        return organisationUnitLevel;
+    }
+
+    public void setOrganisationUnitLevel(OrganisationUnitLevel organisationUnitLevel) {
+        this.organisationUnitLevel = organisationUnitLevel;
+    }
+
+    public OrganisationUnit getParent() {
+        return parent;
+    }
+
+    public void setParent(OrganisationUnit parent) {
+        this.parent = parent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -185,18 +210,20 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
         OrganisationUnitDTO that = (OrganisationUnitDTO) o;
         return (
             getId().equals(that.getId()) &&
-            getCode().equals(that.getCode()) &&
-            getName().equals(that.getName()) &&
-            getAddress().equals(that.getAddress()) &&
-            getPhoneNumber().equals(that.getPhoneNumber()) &&
-            getEmail().equals(that.getEmail()) &&
-            getBackground().equals(that.getBackground()) &&
-            Arrays.equals(getLogo(), that.getLogo()) &&
-            getLogoContentType().equals(that.getLogoContentType()) &&
-            getOrganisationUnitLevelId().equals(that.getOrganisationUnitLevelId()) &&
-            getOrganisationUnitLevelName().equals(that.getOrganisationUnitLevelName()) &&
-            getParentId().equals(that.getParentId()) &&
-            getParentName().equals(that.getParentName())
+                getCode().equals(that.getCode()) &&
+                getName().equals(that.getName()) &&
+                getAddress().equals(that.getAddress()) &&
+                getPhoneNumber().equals(that.getPhoneNumber()) &&
+                getEmail().equals(that.getEmail()) &&
+                getBackground().equals(that.getBackground()) &&
+                Arrays.equals(getLogo(), that.getLogo()) &&
+                getLogoContentType().equals(that.getLogoContentType()) &&
+                getOrganisationUnitLevelId().equals(that.getOrganisationUnitLevelId()) &&
+                getOrganisationUnitLevelName().equals(that.getOrganisationUnitLevelName()) &&
+                getOrganisationUnitLevel().equals(that.getOrganisationUnitLevel()) &&
+                getParentId().equals(that.getParentId()) &&
+                getParentName().equals(that.getParentName()) &&
+                getParent().equals(that.getParent())
         );
     }
 
@@ -213,8 +240,10 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
             getLogoContentType(),
             getOrganisationUnitLevelId(),
             getOrganisationUnitLevelName(),
+            getOrganisationUnitLevel(),
             getParentId(),
-            getParentName()
+            getParentName(),
+            getParent()
         );
         result = 31 * result + Arrays.hashCode(getLogo());
         return result;
@@ -222,44 +251,22 @@ public class OrganisationUnitDTO extends AbstractAuditingDTO implements Serializ
 
     @Override
     public String toString() {
-        return (
-            "OrganisationUnitDTO{" +
-            "id=" +
-            id +
-            ", code='" +
-            code +
-            '\'' +
-            ", name='" +
-            name +
-            '\'' +
-            ", address='" +
-            address +
-            '\'' +
-            ", phoneNumber='" +
-            phoneNumber +
-            '\'' +
-            ", email='" +
-            email +
-            '\'' +
-            ", background='" +
-            background +
-            '\'' +
-            ", logo=" +
-            Arrays.toString(logo) +
-            ", logoContentType='" +
-            logoContentType +
-            '\'' +
-            ", organisationUnitLevelId=" +
-            organisationUnitLevelId +
-            ", organisationUnitLevelName='" +
-            organisationUnitLevelName +
-            '\'' +
-            ", parentId=" +
-            parentId +
-            ", parentName='" +
-            parentName +
-            '\'' +
-            '}'
-        );
+        return "OrganisationUnitDTO{" +
+            "id=" + id +
+            ", code='" + code + '\'' +
+            ", name='" + name + '\'' +
+            ", address='" + address + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", email='" + email + '\'' +
+            ", background='" + background + '\'' +
+            ", logo=" + Arrays.toString(logo) +
+            ", logoContentType='" + logoContentType + '\'' +
+            ", organisationUnitLevelId=" + organisationUnitLevelId +
+            ", organisationUnitLevelName='" + organisationUnitLevelName + '\'' +
+            ", organisationUnitLevel=" + organisationUnitLevel +
+            ", parentId=" + parentId +
+            ", parentName='" + parentName + '\'' +
+            ", parent=" + parent +
+            '}';
     }
 }

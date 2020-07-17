@@ -8,6 +8,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -27,6 +28,8 @@ public class RiskCriteria implements Serializable, Criteria {
 
     private StringFilter code;
 
+    private StringFilter description;
+
     private LongFilter riskRegisterId;
 
     private LongFilter objectiveId;
@@ -35,11 +38,13 @@ public class RiskCriteria implements Serializable, Criteria {
 
     private LongFilter riskOwnerId;
 
-    public RiskCriteria() {}
+    public RiskCriteria() {
+    }
 
     public RiskCriteria(RiskCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.code = other.code == null ? null : other.code.copy();
+        this.description = other.description == null ? null : other.description.copy();
         this.riskRegisterId = other.riskRegisterId == null ? null : other.riskRegisterId.copy();
         this.objectiveId = other.objectiveId == null ? null : other.objectiveId.copy();
         this.riskCategoryId = other.riskCategoryId == null ? null : other.riskCategoryId.copy();
@@ -65,6 +70,14 @@ public class RiskCriteria implements Serializable, Criteria {
 
     public void setCode(StringFilter code) {
         this.code = code;
+    }
+
+    public StringFilter getDescription() {
+        return description;
+    }
+
+    public void setDescription(StringFilter description) {
+        this.description = description;
     }
 
     public LongFilter getRiskRegisterId() {
@@ -110,29 +123,31 @@ public class RiskCriteria implements Serializable, Criteria {
         final RiskCriteria that = (RiskCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(code, that.code) &&
-            Objects.equals(riskRegisterId, that.riskRegisterId) &&
-            Objects.equals(objectiveId, that.objectiveId) &&
-            Objects.equals(riskCategoryId, that.riskCategoryId) &&
-            Objects.equals(riskOwnerId, that.riskOwnerId)
+                Objects.equals(code, that.code) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(riskRegisterId, that.riskRegisterId) &&
+                Objects.equals(objectiveId, that.objectiveId) &&
+                Objects.equals(riskCategoryId, that.riskCategoryId) &&
+                Objects.equals(riskOwnerId, that.riskOwnerId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, riskRegisterId, objectiveId, riskCategoryId, riskOwnerId);
+        return Objects.hash(id, code, description, riskRegisterId, objectiveId, riskCategoryId, riskOwnerId);
     }
 
     // prettier-ignore
     @Override
     public String toString() {
         return "RiskCriteria{" +
-                (id != null ? "id=" + id + ", " : "") +
-                (code != null ? "code=" + code + ", " : "") +
-                (riskRegisterId != null ? "riskRegisterId=" + riskRegisterId + ", " : "") +
-                (objectiveId != null ? "objectiveId=" + objectiveId + ", " : "") +
-                (riskCategoryId != null ? "riskCategoryId=" + riskCategoryId + ", " : "") +
-                (riskOwnerId != null ? "riskOwnerId=" + riskOwnerId + ", " : "") +
+            (id != null ? "id=" + id + ", " : "") +
+            (code != null ? "code=" + code + ", " : "") +
+            (description != null ? "description=" + description + ", " : "") +
+            (riskRegisterId != null ? "riskRegisterId=" + riskRegisterId + ", " : "") +
+            (objectiveId != null ? "objectiveId=" + objectiveId + ", " : "") +
+            (riskCategoryId != null ? "riskCategoryId=" + riskCategoryId + ", " : "") +
+            (riskOwnerId != null ? "riskOwnerId=" + riskOwnerId + ", " : "") +
             "}";
     }
 }

@@ -3,21 +3,26 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.service.RiskQueryService;
 import org.tamisemi.iftmis.service.RiskService;
 import org.tamisemi.iftmis.service.dto.RiskCriteria;
@@ -89,18 +94,27 @@ public class RiskResource {
     }
 
     /**
-     * {@code GET  /risks} : get all the risks.
-     *
-     * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of risks in body.
+     * @param criteria
+     * @return
      */
     @GetMapping("/risks")
-    public ResponseEntity<List<RiskDTO>> getAllRisks(RiskCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<RiskDTO>> getAllRisks(RiskCriteria criteria) {
+        List<RiskDTO> items = riskQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     *
+     * @param criteria
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/risks/page")
+    public ResponseEntity<List<RiskDTO>> getAllPagedRisks(RiskCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Risks by criteria: {}", criteria);
-        Page<RiskDTO> page = riskQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        Page<RiskDTO> items = riskQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
+        return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
 
     /**
