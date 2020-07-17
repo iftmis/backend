@@ -38,6 +38,8 @@ public class RiskService {
     public RiskDTO save(RiskDTO riskDTO) {
         log.debug("Request to save Risk : {}", riskDTO);
         Risk risk = riskMapper.toEntity(riskDTO);
+        Risk finalRisk = risk;
+        risk.getRiskRatings().forEach(r -> r.setRisk(finalRisk));
         risk = riskRepository.save(risk);
         return riskMapper.toDto(risk);
     }
