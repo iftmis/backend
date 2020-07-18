@@ -1,0 +1,43 @@
+{
+    "name": "InspectionActivityQuarter",
+    "fields": [
+        {
+            "fieldName": "days",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "inspectionActivity",
+            "otherEntityRelationshipName": "inspectionActivityQuarter",
+            "relationshipValidateRules": "required",
+            "relationshipName": "activity",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "quarter",
+            "otherEntityName": "quarter",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "inspectionActivityQuarter"
+        }
+    ],
+    "changelogDate": "20200718085345",
+    "entityTableName": "inspection_activity_quarters",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true,
+    "searchEngine": false,
+    "databaseType": "sql"
+}

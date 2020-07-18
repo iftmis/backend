@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity InspectionPlan.
+    -->
+    <changeSet id="20200718085145-2" author="chris">
+
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_id"
+                                 baseTableName="inspection_plans"
+                                 constraintName="fk_inspection_plans_organisation_unit_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organisation_units"/>
+
+        <addForeignKeyConstraint baseColumnNames="financial_year_id"
+                                 baseTableName="inspection_plans"
+                                 constraintName="fk_inspection_plans_financial_year_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="financial_years"/>
+
+    </changeSet>
+</databaseChangeLog>

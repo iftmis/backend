@@ -1,0 +1,74 @@
+{
+  "name": "InspectionActivity",
+  "fields": [
+    {
+      "fieldName": "days",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "inspectionPlan",
+      "otherEntityRelationshipName": "inspectionActivity",
+      "relationshipValidateRules": "required",
+      "relationshipName": "inspectionPlan",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "objective",
+      "otherEntityName": "objective",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name",
+      "otherEntityRelationshipName": "inspectionActivity"
+    },
+    {
+      "relationshipName": "auditableArea",
+      "otherEntityName": "auditableArea",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name",
+      "otherEntityRelationshipName": "inspectionActivity"
+    },
+    {
+      "relationshipName": "subArea",
+      "otherEntityName": "subArea",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name",
+      "otherEntityRelationshipName": "inspectionActivity"
+    },
+    {
+      "relationshipName": "risk",
+      "otherEntityName": "risk",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "inspectionActivity"
+    },
+    {
+      "relationshipName": "organisationUnits",
+      "otherEntityName": "organisationUnit",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "inspectionActivity"
+    }
+  ],
+  "changelogDate": "20200718085245",
+  "entityTableName": "inspection_activities",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true,
+  "searchEngine": false,
+  "databaseType": "sql"
+}

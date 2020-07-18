@@ -1,80 +1,70 @@
 {
-    "name": "InspectionMember",
-    "fields": [
-        {
-            "fieldName": "fullName",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "100"
-        },
-        {
-            "fieldName": "email",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "100"
-        },
-        {
-            "fieldName": "role",
-            "fieldType": "InspectionRole",
-            "fieldValues": "TEAM_LEAD,MEMBER",
-            "fieldValidateRules": [
-                "required"
-            ]
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "user",
-            "otherEntityRelationshipName": "inspectionMember",
-            "relationshipValidateRules": "required",
-            "relationshipName": "user",
-            "otherEntityField": "fullName"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "fileResource",
-            "otherEntityRelationshipName": "inspectionMember",
-            "relationshipName": "letterAttachment",
-            "otherEntityField": "path"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "fileResource",
-            "otherEntityRelationshipName": "inspectionMember",
-            "relationshipName": "declarationAttachment",
-            "otherEntityField": "path"
-        },
-        {
-            "relationshipName": "inspection",
-            "otherEntityName": "inspection",
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": [
-                "required"
-            ],
-            "otherEntityField": "id",
-            "otherEntityRelationshipName": "inspectionMember"
-        }
-    ],
-    "changelogDate": "20200706083125",
-    "javadoc": "The InspectionMember entity.\\n@author Chris",
-    "entityTableName": "inspection_members",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true,
-    "searchEngine": false,
-    "databaseType": "sql"
+  "name": "InspectionMember",
+  "fields": [
+    {
+      "fieldName": "fullName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "InspectionRole",
+      "fieldValues": "TEAM_LEAD,MEMBER",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "inspectionMember",
+      "relationshipValidateRules": "required",
+      "relationshipName": "user",
+      "otherEntityField": "fullName"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "fileResource",
+      "otherEntityRelationshipName": "inspectionMember",
+      "relationshipName": "letterAttachment",
+      "otherEntityField": "path"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "fileResource",
+      "otherEntityRelationshipName": "inspectionMember",
+      "relationshipName": "declarationAttachment",
+      "otherEntityField": "path"
+    },
+    {
+      "relationshipName": "inspection",
+      "otherEntityName": "inspection",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id",
+      "otherEntityRelationshipName": "inspectionMember"
+    }
+  ],
+  "changelogDate": "20200706083125",
+  "javadoc": "The InspectionMember entity.\\n@author Chris",
+  "entityTableName": "inspection_members",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true,
+  "searchEngine": false,
+  "databaseType": "sql"
 }
