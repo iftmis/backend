@@ -3,11 +3,14 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +24,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.tamisemi.iftmis.config.Constants;
+import org.tamisemi.iftmis.domain.User;
 import org.tamisemi.iftmis.service.RiskRegisterService;
+import org.tamisemi.iftmis.service.UserService;
 import org.tamisemi.iftmis.service.dto.RiskRegisterDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
@@ -39,9 +44,11 @@ public class RiskRegisterResource {
     private String applicationName;
 
     private final RiskRegisterService riskRegisterService;
+    private final UserService userService;
 
-    public RiskRegisterResource(RiskRegisterService riskRegisterService) {
+    public RiskRegisterResource(RiskRegisterService riskRegisterService, UserService userService) {
         this.riskRegisterService = riskRegisterService;
+        this.userService = userService;
     }
 
     /**
@@ -160,6 +167,31 @@ public class RiskRegisterResource {
         log.debug("REST request to get RiskRegister : {}", id);
         Optional<RiskRegisterDTO> riskRegisterDTO = riskRegisterService.findOne(id);
         return ResponseUtil.wrapOrNotFound(riskRegisterDTO);
+    }
+
+
+    @GetMapping("/risk-registers/approve/{id}")
+    public ResponseEntity<RiskRegisterDTO> approve(@PathVariable Long id) {
+        Optional<RiskRegisterDTO> row = riskRegisterService.findOne(id);
+        if (row.isPresent()) {
+            RiskRegisterDTO riskRegisterDTO = row.get();
+            Optional<User> isUser = userService.getUserWithAuthorities();
+            String approvedBy = "";
+            if (isUser.isPresent()) {
+                User user = isUser.get();
+                approvedBy = user.getFirstName() + " " + user.getLastName();
+            }
+            riskRegisterDTO.setApprovedBy(approvedBy);
+            riskRegisterDTO.setIsApproved(true);
+            riskRegisterDTO.setApprovedDate(LocalDate.now());
+            RiskRegisterDTO result = riskRegisterService.save(riskRegisterDTO);
+            return ResponseEntity
+                .ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, riskRegisterDTO.getId().toString()))
+                .body(result);
+        } else {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
     }
 
     /**
