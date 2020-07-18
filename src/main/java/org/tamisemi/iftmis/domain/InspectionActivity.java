@@ -47,7 +47,7 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
     @JsonIgnoreProperties(value = "inspectionActivities", allowSetters = true)
     private SubArea subArea;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(
         name = "inspection_activities_risks",
@@ -56,7 +56,7 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
     )
     private Set<Risk> risks = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH })
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(
         name = "inspection_activities_organisation_units",

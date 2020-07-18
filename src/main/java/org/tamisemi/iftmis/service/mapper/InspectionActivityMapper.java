@@ -26,6 +26,8 @@ public interface InspectionActivityMapper extends EntityMapper<InspectionActivit
     @Mapping(source = "auditableArea.name", target = "auditableAreaName")
     @Mapping(source = "subArea.id", target = "subAreaId")
     @Mapping(source = "subArea.name", target = "subAreaName")
+    @Mapping(target = "organisationUnits", source = "organisationUnits")
+    @Mapping(target = "risks", source = "risks")
     InspectionActivityDTO toDto(InspectionActivity inspectionActivity);
 
     @Mapping(source = "inspectionPlanId", target = "inspectionPlan")
@@ -34,6 +36,8 @@ public interface InspectionActivityMapper extends EntityMapper<InspectionActivit
     @Mapping(source = "subAreaId", target = "subArea")
     @Mapping(target = "removeRisk", ignore = true)
     @Mapping(target = "removeOrganisationUnits", ignore = true)
+    @Mapping(target = "organisationUnits", source = "organisationUnits")
+    @Mapping(target = "risks", source = "risks")
     InspectionActivity toEntity(InspectionActivityDTO inspectionActivityDTO);
 
     default InspectionActivity fromId(Long id) {
