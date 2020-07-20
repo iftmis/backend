@@ -1,0 +1,42 @@
+{
+  "name": "InspectionPlan",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "organisationUnit",
+      "otherEntityName": "organisationUnit",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name",
+      "otherEntityRelationshipName": "inspectionPlan"
+    },
+    {
+      "relationshipName": "financialYear",
+      "otherEntityName": "financialYear",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name",
+      "otherEntityRelationshipName": "inspectionPlan"
+    }
+  ],
+  "changelogDate": "20200718085145",
+  "entityTableName": "inspection_plans",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true,
+  "searchEngine": false,
+  "databaseType": "sql"
+}

@@ -1,73 +1,67 @@
 {
-    "name": "Risk",
-    "fields": [
-        {
-            "fieldName": "code",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "unique",
-                "maxlength",
-                "minlength"
-            ],
-            "fieldValidateRulesMaxlength": "64",
-            "fieldValidateRulesMinlength": "1"
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "riskRegister",
-            "otherEntityRelationshipName": "risk",
-            "relationshipValidateRules": "required",
-            "javadoc": "Risk{riskOwner(name) required} to OrganisationUnit",
-            "relationshipName": "riskRegister",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "objective",
-            "otherEntityRelationshipName": "risk",
-            "relationshipValidateRules": "required",
-            "relationshipName": "objective",
-            "otherEntityField": "code"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "riskCategory",
-            "otherEntityRelationshipName": "risk",
-            "relationshipValidateRules": "required",
-            "relationshipName": "riskCategory",
-            "otherEntityField": "name"
-        },
-        {
-            "relationshipName": "riskOwner",
-            "otherEntityName": "organsiationUnit",
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": [
-                "required"
-            ],
-            "otherEntityField": "name",
-            "otherEntityRelationshipName": "risk"
-        }
-    ],
-    "changelogDate": "20200713105239",
-    "javadoc": "The Risk(risks) entity.\\n@author Chris",
-    "entityTableName": "risks",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true,
-    "searchEngine": false,
-    "databaseType": "sql"
+  "name": "Risk",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "64",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "riskRegister",
+      "otherEntityRelationshipName": "risk",
+      "relationshipValidateRules": "required",
+      "javadoc": "Risk{riskOwner(name) required} to OrganisationUnit",
+      "relationshipName": "riskRegister",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "objective",
+      "otherEntityRelationshipName": "risk",
+      "relationshipValidateRules": "required",
+      "relationshipName": "objective",
+      "otherEntityField": "code"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "riskCategory",
+      "otherEntityRelationshipName": "risk",
+      "relationshipValidateRules": "required",
+      "relationshipName": "riskCategory",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipName": "riskOwner",
+      "otherEntityName": "organsiationUnit",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name",
+      "otherEntityRelationshipName": "risk"
+    }
+  ],
+  "changelogDate": "20200713105239",
+  "javadoc": "The Risk(risks) entity.\\n@author Chris",
+  "entityTableName": "risks",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true,
+  "searchEngine": false,
+  "databaseType": "sql"
 }

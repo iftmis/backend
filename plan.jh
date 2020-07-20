@@ -1,0 +1,32 @@
+entity InspectionPlan(inspection_plans) {
+  name String required
+}
+
+entity InspectionActivity(inspection_activities) {
+   days Integer required
+}
+
+entity InspectionActivityQuarter(inspection_activity_quarters) {
+  days Integer
+}
+
+relationship ManyToOne {
+  InspectionActivity{inspectionPlan required} to InspectionPlan
+  InspectionActivityQuarter{activity required} to InspectionActivity
+}
+
+/** InspectionActivity{objective(name) required} to Objective **/
+ /** InspectionActivity{auditableArea(name) required} to AuditableArea **/
+ /** InspectionActivity{subArea(name) required} to SubArea **/
+  /**  InspectionActivityQuarter{quarter(name) required} to Quarter **/
+
+/**
+relationship ManyToMany {
+  InspectionActivity{risks} to Risk
+  InspectionActivity{organisationUnits} to OrganisationUnit
+}
+**/
+
+dto * with mapstruct
+filter InspectionActivity
+paginate * with pagination

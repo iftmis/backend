@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity InspectionActivity.
+    -->
+    <changeSet id="20200718085245-2" author="chris">
+
+        <addForeignKeyConstraint baseColumnNames="inspection_plan_id"
+                                 baseTableName="inspection_activities"
+                                 constraintName="fk_inspection_activities_inspection_plan_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_plans"/>
+
+        <addForeignKeyConstraint baseColumnNames="objective_id"
+                                 baseTableName="inspection_activities"
+                                 constraintName="fk_inspection_activities_objective_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="objectives"/>
+
+        <addForeignKeyConstraint baseColumnNames="auditable_area_id"
+                                 baseTableName="inspection_activities"
+                                 constraintName="fk_inspection_activities_auditable_area_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="auditable_areas"/>
+
+        <addForeignKeyConstraint baseColumnNames="sub_area_id"
+                                 baseTableName="inspection_activities"
+                                 constraintName="fk_inspection_activities_sub_area_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sub_areas"/>
+
+        <addForeignKeyConstraint baseColumnNames="inspection_activity_id"
+                                 baseTableName="inspection_activities_risks"
+                                 constraintName="fk_inspection_activities_risk_inspection_activities_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_activities"/>
+
+        <addForeignKeyConstraint baseColumnNames="risk_id"
+                                 baseTableName="inspection_activities_risks"
+                                 constraintName="fk_inspection_activities_risk_risk_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="risks"/>
+
+        <addForeignKeyConstraint baseColumnNames="inspection_activity_id"
+                                 baseTableName="inspection_activities_organisation_units"
+                                 constraintName="inspection_activities_organisa_inspection_activities_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspection_activities"/>
+
+        <addForeignKeyConstraint baseColumnNames="organisation_units_id"
+                                 baseTableName="inspection_activities_organisation_units"
+                                 constraintName="inspection_activities_organisa_organisation_units_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organisation_units"/>
+
+    </changeSet>
+</databaseChangeLog>
