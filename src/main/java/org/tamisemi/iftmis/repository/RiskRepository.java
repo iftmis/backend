@@ -9,4 +9,6 @@ import org.tamisemi.iftmis.domain.Risk;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RiskRepository extends JpaRepository<Risk, Long>, JpaSpecificationExecutor<Risk> {}
+public interface RiskRepository extends JpaRepository<Risk, Long>, JpaSpecificationExecutor<Risk> {
+
+}
