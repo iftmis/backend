@@ -3,21 +3,27 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
+import org.tamisemi.iftmis.domain.enumeration.FindingSource;
 import org.tamisemi.iftmis.service.FindingService;
 import org.tamisemi.iftmis.service.dto.FindingDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -84,17 +90,33 @@ public class FindingResource {
     }
 
     /**
-     * {@code GET  /findings} : get all the findings.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of findings in body.
+     * @return
      */
     @GetMapping("/findings")
-    public ResponseEntity<List<FindingDTO>> getAllFindings(Pageable pageable) {
-        log.debug("REST request to get a page of Findings");
-        Page<FindingDTO> page = findingService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<List<FindingDTO>> getAllFindings(@RequestParam(value = "organisationUnitId", defaultValue = Constants.ZERO) Long organisationUnitId,
+                                                           @RequestParam(value = "source", defaultValue = "CAG") FindingSource source) {
+        List<FindingDTO> items = findingService.findAllByOrganisationUnitIdAndSource(organisationUnitId, source);
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     * @param organisationUnitId
+     * @param source
+     * @param page
+     * @param size
+     * @param sortBy
+     * @return
+     */
+    @GetMapping("/findings/page")
+    public ResponseEntity<List<FindingDTO>> getAllPagedFindings(@RequestParam(value = "organisationUnitId", defaultValue = Constants.ZERO) Long organisationUnitId,
+                                                                @RequestParam(value = "source", defaultValue = "CAG") String source,
+                                                                @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+                                                                @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+                                                                @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        Page<FindingDTO> items = findingService.findAllByOrganisationUnitIdAndSource(organisationUnitId, source, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
+        return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
 
     /**
