@@ -3,6 +3,7 @@ package org.tamisemi.iftmis.service;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,16 @@ public class InspectionSubAreaService {
 
     private final InspectionSubAreaMapper inspectionSubAreaMapper;
 
+    private final InspectionIndicatorService inspectionIndicatorService;
+
     public InspectionSubAreaService(
         InspectionSubAreaRepository inspectionSubAreaRepository,
-        InspectionSubAreaMapper inspectionSubAreaMapper
+        InspectionSubAreaMapper inspectionSubAreaMapper,
+        InspectionIndicatorService inspectionIndicatorService
     ) {
         this.inspectionSubAreaRepository = inspectionSubAreaRepository;
         this.inspectionSubAreaMapper = inspectionSubAreaMapper;
+        this.inspectionIndicatorService = inspectionIndicatorService;
     }
 
     /**
@@ -38,10 +43,15 @@ public class InspectionSubAreaService {
      * @param inspectionSubAreaDTO the entity to save.
      * @return the persisted entity.
      */
+    @Transactional
     public InspectionSubAreaDTO save(InspectionSubAreaDTO inspectionSubAreaDTO) {
         log.debug("Request to save InspectionSubArea : {}", inspectionSubAreaDTO);
         InspectionSubArea inspectionSubArea = inspectionSubAreaMapper.toEntity(inspectionSubAreaDTO);
         inspectionSubArea = inspectionSubAreaRepository.save(inspectionSubArea);
+
+        if (inspectionSubAreaDTO.getId() == null) {
+            inspectionIndicatorService.initializeBySubArea(inspectionSubArea);
+        }
         return inspectionSubAreaMapper.toDto(inspectionSubArea);
     }
 

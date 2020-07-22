@@ -36,6 +36,14 @@ public class InspectionIndicator extends AbstractAuditingEntity implements Seria
     @JsonIgnoreProperties(value = "inspectionIndicators", allowSetters = true)
     private Indicator indicator;
 
+    public InspectionIndicator() {}
+
+    public InspectionIndicator(Indicator indicator, InspectionSubArea subArea) {
+        this.indicator = indicator;
+        this.inspectionSubArea = subArea;
+        this.name = indicator.getName();
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;

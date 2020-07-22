@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.repository;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import org.tamisemi.iftmis.domain.Procedure;
@@ -9,4 +10,6 @@ import org.tamisemi.iftmis.domain.Procedure;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ProcedureRepository extends JpaRepository<Procedure, Long> {}
+public interface ProcedureRepository extends JpaRepository<Procedure, Long> {
+    List<Procedure> findByIndicator_Id(Long id);
+}
