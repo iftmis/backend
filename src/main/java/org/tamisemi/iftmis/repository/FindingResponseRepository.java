@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface FindingResponseRepository extends JpaRepository<FindingResponse, Long> {
-    List<FindingResponse> findAllByRecommendationId(@Param("recommendationId") Long recommendationId);
+    List<FindingResponse> findAllByRecommendationIdOrderByCreatedDateDesc(@Param("recommendationId") Long recommendationId);
 
-    Page<FindingResponse> findAllByRecommendationId(@Param("recommendationId") Long recommendationId, Pageable pageable);
+    Page<FindingResponse> findAllByRecommendationIdOrderByCreatedDateDesc(@Param("recommendationId") Long recommendationId, Pageable pageable);
 }

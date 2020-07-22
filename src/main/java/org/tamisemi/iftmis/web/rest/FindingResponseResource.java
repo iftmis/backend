@@ -112,8 +112,8 @@ public class FindingResponseResource {
     public ResponseEntity<List<FindingResponseDTO>> getAllPagedFindingResponses(@RequestParam(value = "recommendationId") Long recommendationId,
                                                                                 @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
                                                                                 @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
-                                                                                @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+                                                                                @RequestParam(value = "sortBy", defaultValue = "createdDate") String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         Page<FindingResponseDTO> items = findingResponseService.findAll(recommendationId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
         return ResponseEntity.ok().headers(headers).body(items.getContent());

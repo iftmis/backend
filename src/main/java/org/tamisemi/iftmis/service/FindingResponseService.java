@@ -54,7 +54,7 @@ public class FindingResponseService {
     @Transactional(readOnly = true)
     public Page<FindingResponseDTO> findAll(Long recommendationId, Pageable pageable) {
         log.debug("Request to get all FindingResponses");
-        return findingResponseRepository.findAllByRecommendationId(recommendationId, pageable).map(findingResponseMapper::toDto);
+        return findingResponseRepository.findAllByRecommendationIdOrderByCreatedDateDesc(recommendationId, pageable).map(findingResponseMapper::toDto);
     }
 
     /**
@@ -63,7 +63,7 @@ public class FindingResponseService {
      */
     @Transactional(readOnly = true)
     public List<FindingResponseDTO> findAll(Long recommendationId) {
-        return findingResponseRepository.findAllByRecommendationId(recommendationId).stream().map(findingResponseMapper::toDto).collect(Collectors.toList());
+        return findingResponseRepository.findAllByRecommendationIdOrderByCreatedDateDesc(recommendationId).stream().map(findingResponseMapper::toDto).collect(Collectors.toList());
     }
 
     /**
