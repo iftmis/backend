@@ -12,17 +12,15 @@ import javax.validation.constraints.Size;
 public class InspectionSubAreaDTO extends AbstractAuditingDTO implements Serializable {
     private Long id;
 
-    @NotNull
-    @Size(max = 1000)
-    private String name;
+    private Long inspectionAreaId;
 
-    private Long inspectionObjectiveId;
-
-    private String inspectionObjectiveName;
+    private String inspectionAreaName;
 
     private Long subAreaId;
 
     private String subAreaName;
+
+    private String generalObjective;
 
     public Long getId() {
         return id;
@@ -30,30 +28,6 @@ public class InspectionSubAreaDTO extends AbstractAuditingDTO implements Seriali
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getInspectionObjectiveId() {
-        return inspectionObjectiveId;
-    }
-
-    public void setInspectionObjectiveId(Long inspectionObjectiveId) {
-        this.inspectionObjectiveId = inspectionObjectiveId;
-    }
-
-    public String getInspectionObjectiveName() {
-        return inspectionObjectiveName;
-    }
-
-    public void setInspectionObjectiveName(String inspectionObjectiveName) {
-        this.inspectionObjectiveName = inspectionObjectiveName;
     }
 
     public Long getSubAreaId() {
@@ -70,6 +44,30 @@ public class InspectionSubAreaDTO extends AbstractAuditingDTO implements Seriali
 
     public void setSubAreaName(String subAreaName) {
         this.subAreaName = subAreaName;
+    }
+
+    public Long getInspectionAreaId() {
+        return inspectionAreaId;
+    }
+
+    public void setInspectionAreaId(Long inspectionAreaId) {
+        this.inspectionAreaId = inspectionAreaId;
+    }
+
+    public String getInspectionAreaName() {
+        return inspectionAreaName;
+    }
+
+    public void setInspectionAreaName(String inspectionAreaName) {
+        this.inspectionAreaName = inspectionAreaName;
+    }
+
+    public String getGeneralObjective() {
+        return generalObjective;
+    }
+
+    public void setGeneralObjective(String generalObjective) {
+        this.generalObjective = generalObjective;
     }
 
     @Override
@@ -94,9 +92,8 @@ public class InspectionSubAreaDTO extends AbstractAuditingDTO implements Seriali
     public String toString() {
         return "InspectionSubAreaDTO{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", inspectionObjectiveId=" + getInspectionObjectiveId() +
-            ", inspectionObjectiveName='" + getInspectionObjectiveName() + "'" +
+            ", inspectionObjectiveId=" + getInspectionAreaId() +
+            ", inspectionObjectiveName='" + getInspectionAreaName() + "'" +
             ", subAreaId=" + getSubAreaId() +
             ", subAreaName='" + getSubAreaName() + "'" +
             "}";

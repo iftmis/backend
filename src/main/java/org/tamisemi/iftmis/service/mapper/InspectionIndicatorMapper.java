@@ -10,7 +10,6 @@ import org.tamisemi.iftmis.service.dto.InspectionIndicatorDTO;
 @Mapper(componentModel = "spring", uses = { InspectionSubAreaMapper.class, IndicatorMapper.class })
 public interface InspectionIndicatorMapper extends EntityMapper<InspectionIndicatorDTO, InspectionIndicator> {
     @Mapping(source = "inspectionSubArea.id", target = "inspectionSubAreaId")
-    @Mapping(source = "inspectionSubArea.name", target = "inspectionSubAreaName")
     @Mapping(source = "indicator.id", target = "indicatorId")
     @Mapping(source = "indicator.name", target = "indicatorName")
     InspectionIndicatorDTO toDto(InspectionIndicator inspectionIndicator);

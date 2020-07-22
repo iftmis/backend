@@ -37,7 +37,7 @@ public class InspectionArea extends AbstractAuditingEntity implements Serializab
     private AuditableArea auditableArea;
 
     @OneToMany(mappedBy = "inspectionArea", fetch = FetchType.LAZY)
-    private Set<InspectionObjective> inspectionObjectives;
+    private Set<InspectionSubArea> inspectionSubAreas;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -83,16 +83,12 @@ public class InspectionArea extends AbstractAuditingEntity implements Serializab
         return this;
     }
 
-    public void setAuditableArea(AuditableArea auditableArea) {
-        this.auditableArea = auditableArea;
+    public Set<InspectionSubArea> getInspectionSubAreas() {
+        return inspectionSubAreas;
     }
 
-    public Set<InspectionObjective> getInspectionObjectives() {
-        return inspectionObjectives;
-    }
-
-    public void setInspectionObjectives(Set<InspectionObjective> inspectionObjectives) {
-        this.inspectionObjectives = inspectionObjectives;
+    public void setInspectionSubAreas(Set<InspectionSubArea> inspectionSubAreas) {
+        this.inspectionSubAreas = inspectionSubAreas;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -62,6 +62,16 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20200706081825-seed-1" author="chris">
+        <loadData tableName="organisation_units"
+                  file="config/liquibase/data/root_organisation.csv"
+                  separator=";">
+            <column name="id" type="numeric"/>
+            <column name="organisation_unit_level_id" type="numeric"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
 </databaseChangeLog>

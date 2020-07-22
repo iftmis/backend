@@ -12,9 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.domain.InspectionArea;
 import org.tamisemi.iftmis.repository.InspectionAreaRepository;
 import org.tamisemi.iftmis.service.dto.InspectionAreaDTO;
-import org.tamisemi.iftmis.service.dto.InspectionAreaWithObjectiveDTO;
+import org.tamisemi.iftmis.service.dto.InspectionAreaWithSubAreaDTO;
 import org.tamisemi.iftmis.service.mapper.InspectionAreaMapper;
-import org.tamisemi.iftmis.service.mapper.InspectionAreaWithObjectiveMapper;
 
 /**
  * Service Implementation for managing {@link InspectionArea}.
@@ -28,16 +27,9 @@ public class InspectionAreaService {
 
     private final InspectionAreaMapper inspectionAreaMapper;
 
-    private final InspectionAreaWithObjectiveMapper inspectionAreaWithObjectiveMapper;
-
-    public InspectionAreaService(
-        InspectionAreaRepository inspectionAreaRepository,
-        InspectionAreaMapper inspectionAreaMapper,
-        InspectionAreaWithObjectiveMapper inspectionAreaWithObjectiveMapper
-    ) {
+    public InspectionAreaService(InspectionAreaRepository inspectionAreaRepository, InspectionAreaMapper inspectionAreaMapper) {
         this.inspectionAreaRepository = inspectionAreaRepository;
         this.inspectionAreaMapper = inspectionAreaMapper;
-        this.inspectionAreaWithObjectiveMapper = inspectionAreaWithObjectiveMapper;
     }
 
     /**
@@ -97,11 +89,11 @@ public class InspectionAreaService {
     }
 
     @Transactional(readOnly = true)
-    public List<InspectionAreaWithObjectiveDTO> findAllWithObjective(Long inspectionId) {
+    public List<InspectionAreaWithSubAreaDTO> findAllWithSubArea(Long inspectionId) {
         return inspectionAreaRepository
             .findByInspection_Id(inspectionId)
             .stream()
-            .map(inspectionAreaWithObjectiveMapper::toDto)
+            .map(inspectionAreaMapper::toDtoWithSubAreas)
             .collect(Collectors.toList());
     }
 

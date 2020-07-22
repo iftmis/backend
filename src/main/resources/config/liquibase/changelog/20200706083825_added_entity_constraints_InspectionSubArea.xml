@@ -21,4 +21,26 @@
                                  referencedTableName="sub_areas"/>
 
     </changeSet>
+
+    <changeSet id="20200706083825-6" author="chris">
+        <dropColumn
+            tableName="inspection_sub_areas"
+            columnName="inspection_objective_id" />
+        <addColumn tableName="inspection_sub_areas">
+            <column name="inspection_area_id" type="bigint" >
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="inspection_sub_areas" baseColumnNames="inspection_area_id"
+                                 constraintName="fk_inspection_sub_area_area_id"
+                                 referencedTableName="inspection_areas"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+
+
+    <changeSet id="20200706083825" author="chris">
+        <dropColumn tableName="inspection_sub_areas" columnName="name" />
+    </changeSet>
+
 </databaseChangeLog>
