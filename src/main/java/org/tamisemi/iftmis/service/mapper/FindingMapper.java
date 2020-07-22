@@ -11,9 +11,11 @@ import org.tamisemi.iftmis.service.dto.FindingDTO;
 public interface FindingMapper extends EntityMapper<FindingDTO, Finding> {
     @Mapping(source = "organisationUnit.id", target = "organisationUnitId")
     @Mapping(source = "organisationUnit.name", target = "organisationUnitName")
+    @Mapping(source = "findingRecommendations", target = "findingRecommendations")
     FindingDTO toDto(Finding finding);
 
     @Mapping(source = "organisationUnitId", target = "organisationUnit")
+    @Mapping(source = "findingRecommendations", target = "findingRecommendations")
     Finding toEntity(FindingDTO findingDTO);
 
     default Finding fromId(Long id) {

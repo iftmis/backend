@@ -1,12 +1,17 @@
 package org.tamisemi.iftmis.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.tamisemi.iftmis.domain.FindingResponse;
 
-/**
- * Spring Data  repository for the FindingResponse entity.
- */
-@SuppressWarnings("unused")
+import java.util.List;
+
 @Repository
-public interface FindingResponseRepository extends JpaRepository<FindingResponse, Long> {}
+public interface FindingResponseRepository extends JpaRepository<FindingResponse, Long> {
+    List<FindingResponse> findAllByRecommendationIdOrderByCreatedDateDesc(@Param("recommendationId") Long recommendationId);
+
+    Page<FindingResponse> findAllByRecommendationIdOrderByCreatedDateDesc(@Param("recommendationId") Long recommendationId, Pageable pageable);
+}
