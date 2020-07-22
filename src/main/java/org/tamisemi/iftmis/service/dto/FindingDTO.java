@@ -123,19 +123,4 @@ public class FindingDTO extends AbstractAuditingDTO implements Serializable {
     public int hashCode() {
         return 31;
     }
-
-    @Override
-    public String toString() {
-        return "FindingDTO{" +
-            "id=" + id +
-            ", source=" + source +
-            ", code='" + code + '\'' +
-            ", description='" + description + '\'' +
-            ", actionPlanCategory=" + actionPlanCategory +
-            ", isClosed=" + isClosed +
-            ", organisationUnitId=" + organisationUnitId +
-            ", organisationUnitName='" + organisationUnitName + '\'' +
-            ", findingRecommendations=" + findingRecommendations +
-            '}';
-    }
 }

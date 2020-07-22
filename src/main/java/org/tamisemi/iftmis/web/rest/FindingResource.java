@@ -6,6 +6,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.domain.User;
 import org.tamisemi.iftmis.domain.enumeration.FindingSource;
 import org.tamisemi.iftmis.service.FindingService;
+import org.tamisemi.iftmis.service.UserService;
 import org.tamisemi.iftmis.service.dto.FindingDTO;
 import org.tamisemi.iftmis.service.dto.RiskRegisterDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -45,9 +47,11 @@ public class FindingResource {
     private String applicationName;
 
     private final FindingService findingService;
+    private final UserService userService;
 
-    public FindingResource(FindingService findingService) {
+    public FindingResource(FindingService findingService, UserService userService) {
         this.findingService = findingService;
+        this.userService = userService;
     }
 
     /**
@@ -144,8 +148,11 @@ public class FindingResource {
     public ResponseEntity<FindingDTO> close(@PathVariable Long id) {
         Optional<FindingDTO> row = findingService.findOne(id);
         if (row.isPresent()) {
+            Optional<User> isUser = userService.getUserWithAuthorities();
             FindingDTO findingDTO = row.get();
             findingDTO.setIsClosed(true);
+            findingDTO.setLastModifiedBy(isUser.get().getLogin());
+            findingDTO.setLastModifiedDate(Instant.now());
             FindingDTO result = findingService.save(findingDTO);
             return ResponseEntity
                 .ok()
