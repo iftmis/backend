@@ -3,21 +3,26 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.service.FindingRecommendationService;
 import org.tamisemi.iftmis.service.dto.FindingRecommendationDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -90,17 +95,32 @@ public class FindingRecommendationResource {
     }
 
     /**
-     * {@code GET  /finding-recommendations} : get all the findingRecommendations.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of findingRecommendations in body.
+     * @param findingId
+     * @return
      */
     @GetMapping("/finding-recommendations")
-    public ResponseEntity<List<FindingRecommendationDTO>> getAllFindingRecommendations(Pageable pageable) {
-        log.debug("REST request to get a page of FindingRecommendations");
-        Page<FindingRecommendationDTO> page = findingRecommendationService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<List<FindingRecommendationDTO>> getAllFindingRecommendations(@RequestParam(value = "findingId") Long findingId) {
+        List<FindingRecommendationDTO> items = findingRecommendationService.findAll(findingId);
+        return ResponseEntity.ok().body(items);
+    }
+
+    /**
+     *
+     * @param findingId
+     * @param page
+     * @param size
+     * @param sortBy
+     * @return
+     */
+    @GetMapping("/finding-recommendations/page")
+    public ResponseEntity<List<FindingRecommendationDTO>> getAllPagedFindingRecommendations(@RequestParam(value = "findingId") Long findingId,
+                                                                                            @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+                                                                                            @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+                                                                                            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        Page<FindingRecommendationDTO> items = findingRecommendationService.findAll(findingId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
+        return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
 
     /**

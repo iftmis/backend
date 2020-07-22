@@ -6,6 +6,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -23,9 +24,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.tamisemi.iftmis.config.Constants;
+import org.tamisemi.iftmis.domain.User;
 import org.tamisemi.iftmis.domain.enumeration.FindingSource;
 import org.tamisemi.iftmis.service.FindingService;
 import org.tamisemi.iftmis.service.dto.FindingDTO;
+import org.tamisemi.iftmis.service.dto.RiskRegisterDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -130,6 +133,27 @@ public class FindingResource {
         log.debug("REST request to get Finding : {}", id);
         Optional<FindingDTO> findingDTO = findingService.findOne(id);
         return ResponseUtil.wrapOrNotFound(findingDTO);
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/findings/close/{id}")
+    public ResponseEntity<FindingDTO> close(@PathVariable Long id) {
+        Optional<FindingDTO> row = findingService.findOne(id);
+        if (row.isPresent()) {
+            FindingDTO findingDTO = row.get();
+            findingDTO.setIsClosed(true);
+            FindingDTO result = findingService.save(findingDTO);
+            return ResponseEntity
+                .ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, findingDTO.getId().toString()))
+                .body(result);
+        } else {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
     }
 
     /**

@@ -1,6 +1,9 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -46,15 +49,24 @@ public class FindingRecommendationService {
     }
 
     /**
-     * Get all the findingRecommendations.
      *
-     * @param pageable the pagination information.
-     * @return the list of entities.
+     * @param findingId
+     * @param pageable
+     * @return
      */
     @Transactional(readOnly = true)
-    public Page<FindingRecommendationDTO> findAll(Pageable pageable) {
+    public Page<FindingRecommendationDTO> findAll(Long findingId, Pageable pageable) {
         log.debug("Request to get all FindingRecommendations");
-        return findingRecommendationRepository.findAll(pageable).map(findingRecommendationMapper::toDto);
+        return findingRecommendationRepository.findAllByFindingId(findingId, pageable).map(findingRecommendationMapper::toDto);
+    }
+
+    /**
+     * @param findingId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<FindingRecommendationDTO> findAll(Long findingId) {
+        return findingRecommendationRepository.findAllByFindingId(findingId).stream().map(findingRecommendationMapper::toDto).collect(Collectors.toList());
     }
 
     /**

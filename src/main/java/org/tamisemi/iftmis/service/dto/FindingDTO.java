@@ -2,7 +2,11 @@ package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
+
+import org.tamisemi.iftmis.domain.FindingRecommendation;
 import org.tamisemi.iftmis.domain.enumeration.ActionPlanCategory;
 import org.tamisemi.iftmis.domain.enumeration.FindingSource;
 
@@ -28,6 +32,8 @@ public class FindingDTO extends AbstractAuditingDTO implements Serializable {
     private Long organisationUnitId;
 
     private String organisationUnitName;
+
+    private Set<FindingRecommendation> findingRecommendations = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -93,6 +99,14 @@ public class FindingDTO extends AbstractAuditingDTO implements Serializable {
         this.organisationUnitName = organisationUnitName;
     }
 
+    public Set<FindingRecommendation> getFindingRecommendations() {
+        return findingRecommendations;
+    }
+
+    public void setFindingRecommendations(Set<FindingRecommendation> findingRecommendations) {
+        this.findingRecommendations = findingRecommendations;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -110,18 +124,18 @@ public class FindingDTO extends AbstractAuditingDTO implements Serializable {
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "FindingDTO{" +
-            "id=" + getId() +
-            ", source='" + getSource() + "'" +
-            ", code='" + getCode() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", actionPlanCategory='" + getActionPlanCategory() + "'" +
-            ", isClosed='" + isIsClosed() + "'" +
-            ", organisationUnitId=" + getOrganisationUnitId() +
-            ", organisationUnitName='" + getOrganisationUnitName() + "'" +
-            "}";
+            "id=" + id +
+            ", source=" + source +
+            ", code='" + code + '\'' +
+            ", description='" + description + '\'' +
+            ", actionPlanCategory=" + actionPlanCategory +
+            ", isClosed=" + isClosed +
+            ", organisationUnitId=" + organisationUnitId +
+            ", organisationUnitName='" + organisationUnitName + '\'' +
+            ", findingRecommendations=" + findingRecommendations +
+            '}';
     }
 }

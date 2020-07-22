@@ -2,7 +2,11 @@ package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
+
+import org.tamisemi.iftmis.domain.FindingResponse;
 import org.tamisemi.iftmis.domain.enumeration.ImplementationStatus;
 
 /**
@@ -18,6 +22,12 @@ public class FindingRecommendationDTO extends AbstractAuditingDTO implements Ser
     private ImplementationStatus implementationStatus;
 
     private Long findingId;
+
+    private String findingCode;
+
+    private String findingDescription;
+
+    private Set<FindingResponse> findingResponses = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -51,6 +61,30 @@ public class FindingRecommendationDTO extends AbstractAuditingDTO implements Ser
         this.findingId = findingId;
     }
 
+    public String getFindingCode() {
+        return findingCode;
+    }
+
+    public void setFindingCode(String findingCode) {
+        this.findingCode = findingCode;
+    }
+
+    public String getFindingDescription() {
+        return findingDescription;
+    }
+
+    public void setFindingDescription(String findingDescription) {
+        this.findingDescription = findingDescription;
+    }
+
+    public Set<FindingResponse> getFindingResponses() {
+        return findingResponses;
+    }
+
+    public void setFindingResponses(Set<FindingResponse> findingResponses) {
+        this.findingResponses = findingResponses;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -68,14 +102,16 @@ public class FindingRecommendationDTO extends AbstractAuditingDTO implements Ser
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "FindingRecommendationDTO{" +
-            "id=" + getId() +
-            ", description='" + getDescription() + "'" +
-            ", implementationStatus='" + getImplementationStatus() + "'" +
-            ", findingId=" + getFindingId() +
-            "}";
+            "id=" + id +
+            ", description='" + description + '\'' +
+            ", implementationStatus=" + implementationStatus +
+            ", findingId=" + findingId +
+            ", findingCode='" + findingCode + '\'' +
+            ", findingDescription='" + findingDescription + '\'' +
+            ", findingResponses=" + findingResponses +
+            '}';
     }
 }
