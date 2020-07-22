@@ -14,13 +14,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.tamisemi.iftmis.service.InspectionAreaService;
 import org.tamisemi.iftmis.service.dto.InspectionAreaDTO;
-import org.tamisemi.iftmis.service.dto.InspectionAreaWithObjectiveDTO;
+import org.tamisemi.iftmis.service.dto.InspectionAreaWithSubAreaDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -131,10 +130,10 @@ public class InspectionAreaResource {
      * @param inspectionId inspe id
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspectionAreas in body.
      */
-    @GetMapping("/inspection-areas/by-inspection/{inspectionId}/with-objectives")
-    public ResponseEntity<List<InspectionAreaWithObjectiveDTO>> getWithObjectives(@PathVariable Long inspectionId) {
+    @GetMapping("/inspection-areas/by-inspection/{inspectionId}/with-sub-areas")
+    public ResponseEntity<List<InspectionAreaWithSubAreaDTO>> getWithObjectives(@PathVariable Long inspectionId) {
         log.debug("REST request to get a page of InspectionAreas");
-        List<InspectionAreaWithObjectiveDTO> result = inspectionAreaService.findAllWithObjective(inspectionId);
+        List<InspectionAreaWithSubAreaDTO> result = inspectionAreaService.findAllWithSubArea(inspectionId);
         return ResponseEntity.ok().body(result);
     }
 

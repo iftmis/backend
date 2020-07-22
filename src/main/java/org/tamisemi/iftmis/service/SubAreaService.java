@@ -2,6 +2,7 @@ package org.tamisemi.iftmis.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -62,6 +63,12 @@ public class SubAreaService {
     public List<SubArea> findAll() {
         log.debug("Request to get all SubAreas");
         return subAreaRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubAreaDTO> findByArea(Long auditableAreaId) {
+        log.debug("Request to get all SubAreas");
+        return subAreaRepository.findAllByAreaId(auditableAreaId).stream().map(subAreaMapper::toDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

@@ -55,6 +55,7 @@
     <include file="config/liquibase/changelog/20200718085145_added_entity_InspectionPlan.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200718085245_added_entity_InspectionActivity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200718085345_added_entity_InspectionActivityQuarter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200721070631_added_entity_InspectionBudget.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200706084725_added_entity_constraints_ResponseAttachment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706081825_added_entity_constraints_OrganisationUnit.xml" relativeToChangelogFile="false"/>
@@ -84,6 +85,8 @@
     <include file="config/liquibase/changelog/20200718085245_added_entity_constraints_InspectionActivity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200718085345_added_entity_constraints_InspectionActivityQuarter.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200718085145_added_entity_constraints_InspectionPlan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200721070631_added_entity_constraints_InspectionBudget.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200721070632_remove_InspectionObjective.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

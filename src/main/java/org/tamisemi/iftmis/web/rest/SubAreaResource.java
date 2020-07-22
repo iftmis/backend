@@ -119,6 +119,19 @@ public class SubAreaResource {
     /**
      * {@code GET  /sub-areas/:id} : get the "id" subArea.
      *
+     * @param auditableAreaId the id of the subAreaDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the subAreaDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/sub-areas/by-area/{auditableAreaId}")
+    public ResponseEntity<List<SubAreaDTO>> getByArea(@PathVariable Long auditableAreaId) {
+        log.debug("REST request to get SubArea : {}", auditableAreaId);
+        List<SubAreaDTO> subAreaDTO = subAreaService.findByArea(auditableAreaId);
+        return ResponseEntity.ok().body(subAreaDTO);
+    }
+
+    /**
+     * {@code GET  /sub-areas/:id} : get the "id" subArea.
+     *
      * @param id the id of the subAreaDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the subAreaDTO, or with status {@code 404 (Not Found)}.
      */
