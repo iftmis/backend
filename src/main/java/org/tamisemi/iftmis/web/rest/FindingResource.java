@@ -67,6 +67,9 @@ public class FindingResource {
         if (findingDTO.getId() != null) {
             throw new BadRequestAlertException("A new finding cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Optional<User> isUser = userService.getUserWithAuthorities();
+        findingDTO.setCreatedBy(isUser.get().getLogin());
+        findingDTO.setCreatedDate(Instant.now());
         FindingDTO result = findingService.save(findingDTO);
         return ResponseEntity
             .created(new URI("/api/findings/" + result.getId()))
@@ -89,6 +92,9 @@ public class FindingResource {
         if (findingDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        Optional<User> isUser = userService.getUserWithAuthorities();
+        findingDTO.setLastModifiedBy(isUser.get().getLogin());
+        findingDTO.setLastModifiedDate(Instant.now());
         FindingDTO result = findingService.save(findingDTO);
         return ResponseEntity
             .ok()
@@ -148,11 +154,8 @@ public class FindingResource {
     public ResponseEntity<FindingDTO> close(@PathVariable Long id) {
         Optional<FindingDTO> row = findingService.findOne(id);
         if (row.isPresent()) {
-            Optional<User> isUser = userService.getUserWithAuthorities();
             FindingDTO findingDTO = row.get();
             findingDTO.setIsClosed(true);
-            findingDTO.setLastModifiedBy(isUser.get().getLogin());
-            findingDTO.setLastModifiedDate(Instant.now());
             FindingDTO result = findingService.save(findingDTO);
             return ResponseEntity
                 .ok()
