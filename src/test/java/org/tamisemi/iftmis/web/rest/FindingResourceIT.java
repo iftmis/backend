@@ -35,7 +35,7 @@ import org.tamisemi.iftmis.service.mapper.FindingMapper;
 @AutoConfigureMockMvc
 @WithMockUser
 public class FindingResourceIT {
-    private static final FindingSource DEFAULT_SOURCE = FindingSource.CAIG;
+    private static final FindingSource DEFAULT_SOURCE = FindingSource.CAG;
     private static final FindingSource UPDATED_SOURCE = FindingSource.PPRA;
 
     private static final String DEFAULT_CODE = "AAAAAAAAAA";
