@@ -7,12 +7,20 @@ import org.tamisemi.iftmis.service.dto.InspectionIndicatorDTO;
 /**
  * Mapper for the entity {@link InspectionIndicator} and its DTO {@link InspectionIndicatorDTO}.
  */
-@Mapper(componentModel = "spring", uses = { InspectionSubAreaMapper.class, IndicatorMapper.class })
+@Mapper(componentModel = "spring", uses = { InspectionSubAreaMapper.class, IndicatorMapper.class, InspectionProcedureMapper.class })
 public interface InspectionIndicatorMapper extends EntityMapper<InspectionIndicatorDTO, InspectionIndicator> {
     @Mapping(source = "inspectionSubArea.id", target = "inspectionSubAreaId")
     @Mapping(source = "indicator.id", target = "indicatorId")
     @Mapping(source = "indicator.name", target = "indicatorName")
+    @Mapping(target = "inspectionProcedures", ignore = true)
     InspectionIndicatorDTO toDto(InspectionIndicator inspectionIndicator);
+
+    @Mapping(source = "inspectionSubArea.id", target = "inspectionSubAreaId")
+    @Mapping(source = "indicator.id", target = "indicatorId")
+    @Mapping(source = "indicator.name", target = "indicatorName")
+    @Mapping(source = "inspectionProcedures", target = "inspectionProcedures")
+    @Named("toDtoWithProcedures")
+    InspectionIndicatorDTO toDtoWithProcedures(InspectionIndicator inspectionIndicator);
 
     @Mapping(source = "inspectionSubAreaId", target = "inspectionSubArea")
     @Mapping(source = "indicatorId", target = "indicator")

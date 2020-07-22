@@ -117,6 +117,19 @@ public class InspectionIndicatorResource {
     }
 
     /**
+     * {@code GET  /inspection-indicators/by-inspection-sub-area/:id} : get the "id" inspectionSubArea.
+     *
+     * @param id the id of the inspection sun area to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the inspectionIndicators with procedures.
+     */
+    @GetMapping("/inspection-indicators/by-inspection-sub-area/{id}")
+    public ResponseEntity<List<InspectionIndicatorDTO>> getByInspectionSubArea(@PathVariable Long id) {
+        log.debug("REST request to get InspectionIndicator : {}", id);
+        List<InspectionIndicatorDTO> inspectionIndicators = inspectionIndicatorService.findByInspectionSubArea(id);
+        return ResponseEntity.ok(inspectionIndicators);
+    }
+
+    /**
      * {@code DELETE  /inspection-indicators/:id} : delete the "id" inspectionIndicator.
      *
      * @param id the id of the inspectionIndicatorDTO to delete.

@@ -2,6 +2,7 @@ package org.tamisemi.iftmis.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -79,6 +80,22 @@ public class InspectionIndicatorService {
     public Optional<InspectionIndicatorDTO> findOne(Long id) {
         log.debug("Request to get InspectionIndicator : {}", id);
         return inspectionIndicatorRepository.findById(id).map(inspectionIndicatorMapper::toDto);
+    }
+
+    /**
+     * Get one inspectionIndicator by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public List<InspectionIndicatorDTO> findByInspectionSubArea(Long id) {
+        log.debug("Request to get InspectionIndicator : {}", id);
+        return inspectionIndicatorRepository
+            .findByInspectionSubArea_Id(id)
+            .stream()
+            .map(inspectionIndicatorMapper::toDtoWithProcedures)
+            .collect(Collectors.toList());
     }
 
     /**

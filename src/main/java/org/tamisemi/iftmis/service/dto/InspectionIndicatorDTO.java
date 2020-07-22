@@ -2,6 +2,7 @@ package org.tamisemi.iftmis.service.dto;
 
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,6 +24,8 @@ public class InspectionIndicatorDTO extends AbstractAuditingDTO implements Seria
     private Long indicatorId;
 
     private String indicatorName;
+
+    private Set<InspectionProcedureDTO> inspectionProcedures;
 
     public Long getId() {
         return id;
@@ -70,6 +73,14 @@ public class InspectionIndicatorDTO extends AbstractAuditingDTO implements Seria
 
     public void setIndicatorName(String indicatorName) {
         this.indicatorName = indicatorName;
+    }
+
+    public Set<InspectionProcedureDTO> getInspectionProcedures() {
+        return inspectionProcedures;
+    }
+
+    public void setInspectionProcedures(Set<InspectionProcedureDTO> inspectionProcedures) {
+        this.inspectionProcedures = inspectionProcedures;
     }
 
     @Override
