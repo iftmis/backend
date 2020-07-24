@@ -97,6 +97,13 @@ public class SubAreaResource {
         return ResponseEntity.ok().body(items);
     }
 
+    @GetMapping("/sub-areas/getAllSubAreaByAreaId/{id}")
+    public ResponseEntity<List<SubAreaDTO>> getAllSubAreaByAreaId(@PathVariable("id") Long id) {
+        log.debug("REST request to get a page of SubAreas");
+        List<SubAreaDTO> items = subAreaService.findAll(id);
+        return ResponseEntity.ok().body(items);
+    }
+
     @GetMapping("/sub-areas/page")
     public ResponseEntity<List<SubAreaDTO>> getAllPagedSubAreas(
         @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
