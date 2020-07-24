@@ -71,7 +71,6 @@ public class CacheConfiguration {
             createCache(cm, org.tamisemi.iftmis.domain.MeetingAgenda.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.MeetingAttachment.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.InspectionArea.class.getName());
-            createCache(cm, org.tamisemi.iftmis.domain.InspectionObjective.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.InspectionSubArea.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.InspectionIndicator.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.InspectionProcedure.class.getName());
@@ -92,6 +91,7 @@ public class CacheConfiguration {
             createCache(cm, org.tamisemi.iftmis.domain.InspectionActivityQuarter.class.getName());
             createCache(cm, org.tamisemi.iftmis.domain.InspectionActivity.class.getName() + ".risks");
             createCache(cm, org.tamisemi.iftmis.domain.InspectionActivity.class.getName() + ".organisationUnits");
+            createCache(cm, org.tamisemi.iftmis.domain.InspectionBudget.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

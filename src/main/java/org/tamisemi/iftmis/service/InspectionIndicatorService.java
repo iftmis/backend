@@ -1,13 +1,18 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tamisemi.iftmis.domain.Indicator;
 import org.tamisemi.iftmis.domain.InspectionIndicator;
+import org.tamisemi.iftmis.domain.InspectionSubArea;
+import org.tamisemi.iftmis.repository.IndicatorRepository;
 import org.tamisemi.iftmis.repository.InspectionIndicatorRepository;
 import org.tamisemi.iftmis.service.dto.InspectionIndicatorDTO;
 import org.tamisemi.iftmis.service.mapper.InspectionIndicatorMapper;
@@ -24,12 +29,20 @@ public class InspectionIndicatorService {
 
     private final InspectionIndicatorMapper inspectionIndicatorMapper;
 
+    private final IndicatorRepository indicatorRepository;
+
+    private final InspectionProcedureService inspectionProcedureService;
+
     public InspectionIndicatorService(
         InspectionIndicatorRepository inspectionIndicatorRepository,
-        InspectionIndicatorMapper inspectionIndicatorMapper
+        InspectionIndicatorMapper inspectionIndicatorMapper,
+        IndicatorRepository indicatorRepository,
+        InspectionProcedureService inspectionProcedureService
     ) {
         this.inspectionIndicatorRepository = inspectionIndicatorRepository;
         this.inspectionIndicatorMapper = inspectionIndicatorMapper;
+        this.indicatorRepository = indicatorRepository;
+        this.inspectionProcedureService = inspectionProcedureService;
     }
 
     /**
@@ -70,6 +83,22 @@ public class InspectionIndicatorService {
     }
 
     /**
+     * Get one inspectionIndicator by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public List<InspectionIndicatorDTO> findByInspectionSubArea(Long id) {
+        log.debug("Request to get InspectionIndicator : {}", id);
+        return inspectionIndicatorRepository
+            .findByInspectionSubArea_Id(id)
+            .stream()
+            .map(inspectionIndicatorMapper::toDtoWithProcedures)
+            .collect(Collectors.toList());
+    }
+
+    /**
      * Delete the inspectionIndicator by id.
      *
      * @param id the id of the entity.
@@ -77,5 +106,16 @@ public class InspectionIndicatorService {
     public void delete(Long id) {
         log.debug("Request to delete InspectionIndicator : {}", id);
         inspectionIndicatorRepository.deleteById(id);
+    }
+
+    public void initializeBySubArea(InspectionSubArea inspectionSubArea) {
+        List<Indicator> indicators = indicatorRepository.findAllBySubAreaId(inspectionSubArea.getSubArea().getId());
+        for (Indicator indicator : indicators) {
+            InspectionIndicator inspectionIndicator = inspectionIndicatorRepository.save(
+                new InspectionIndicator(indicator, inspectionSubArea)
+            );
+
+            inspectionProcedureService.initializeByInspectionIndicator(inspectionIndicator);
+        }
     }
 }

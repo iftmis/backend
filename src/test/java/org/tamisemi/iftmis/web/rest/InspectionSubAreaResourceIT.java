@@ -18,7 +18,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
-import org.tamisemi.iftmis.domain.InspectionObjective;
+import org.tamisemi.iftmis.domain.InspectionArea;
 import org.tamisemi.iftmis.domain.InspectionSubArea;
 import org.tamisemi.iftmis.domain.SubArea;
 import org.tamisemi.iftmis.repository.InspectionSubAreaRepository;
@@ -34,7 +34,6 @@ import org.tamisemi.iftmis.service.mapper.InspectionSubAreaMapper;
 @WithMockUser
 public class InspectionSubAreaResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     @Autowired
     private InspectionSubAreaRepository inspectionSubAreaRepository;
@@ -60,17 +59,17 @@ public class InspectionSubAreaResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static InspectionSubArea createEntity(EntityManager em) {
-        InspectionSubArea inspectionSubArea = new InspectionSubArea().name(DEFAULT_NAME);
+        InspectionSubArea inspectionSubArea = new InspectionSubArea();
         // Add required entity
-        InspectionObjective inspectionObjective;
-        if (TestUtil.findAll(em, InspectionObjective.class).isEmpty()) {
-            inspectionObjective = InspectionObjectiveResourceIT.createEntity(em);
-            em.persist(inspectionObjective);
+        InspectionArea inspectionArea;
+        if (TestUtil.findAll(em, InspectionArea.class).isEmpty()) {
+            inspectionArea = InspectionAreaResourceIT.createEntity(em);
+            em.persist(inspectionArea);
             em.flush();
         } else {
-            inspectionObjective = TestUtil.findAll(em, InspectionObjective.class).get(0);
+            inspectionArea = TestUtil.findAll(em, InspectionArea.class).get(0);
         }
-        inspectionSubArea.setInspectionObjective(inspectionObjective);
+        inspectionSubArea.setInspectionArea(inspectionArea);
         // Add required entity
         SubArea subArea;
         if (TestUtil.findAll(em, SubArea.class).isEmpty()) {
@@ -91,17 +90,17 @@ public class InspectionSubAreaResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static InspectionSubArea createUpdatedEntity(EntityManager em) {
-        InspectionSubArea inspectionSubArea = new InspectionSubArea().name(UPDATED_NAME);
+        InspectionSubArea inspectionSubArea = new InspectionSubArea();
         // Add required entity
-        InspectionObjective inspectionObjective;
-        if (TestUtil.findAll(em, InspectionObjective.class).isEmpty()) {
-            inspectionObjective = InspectionObjectiveResourceIT.createUpdatedEntity(em);
-            em.persist(inspectionObjective);
+        InspectionArea inspectionArea;
+        if (TestUtil.findAll(em, InspectionArea.class).isEmpty()) {
+            inspectionArea = InspectionAreaResourceIT.createUpdatedEntity(em);
+            em.persist(inspectionArea);
             em.flush();
         } else {
-            inspectionObjective = TestUtil.findAll(em, InspectionObjective.class).get(0);
+            inspectionArea = TestUtil.findAll(em, InspectionArea.class).get(0);
         }
-        inspectionSubArea.setInspectionObjective(inspectionObjective);
+        inspectionSubArea.setInspectionArea(inspectionArea);
         // Add required entity
         SubArea subArea;
         if (TestUtil.findAll(em, SubArea.class).isEmpty()) {
@@ -118,28 +117,6 @@ public class InspectionSubAreaResourceIT {
     @BeforeEach
     public void initTest() {
         inspectionSubArea = createEntity(em);
-    }
-
-    @Test
-    @Transactional
-    public void createInspectionSubArea() throws Exception {
-        int databaseSizeBeforeCreate = inspectionSubAreaRepository.findAll().size();
-        // Create the InspectionSubArea
-        InspectionSubAreaDTO inspectionSubAreaDTO = inspectionSubAreaMapper.toDto(inspectionSubArea);
-        restInspectionSubAreaMockMvc
-            .perform(
-                post("/api/inspection-sub-areas")
-                    .with(csrf())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubAreaDTO))
-            )
-            .andExpect(status().isCreated());
-
-        // Validate the InspectionSubArea in the database
-        List<InspectionSubArea> inspectionSubAreaList = inspectionSubAreaRepository.findAll();
-        assertThat(inspectionSubAreaList).hasSize(databaseSizeBeforeCreate + 1);
-        InspectionSubArea testInspectionSubArea = inspectionSubAreaList.get(inspectionSubAreaList.size() - 1);
-        assertThat(testInspectionSubArea.getName()).isEqualTo(DEFAULT_NAME);
     }
 
     @Test
@@ -164,29 +141,6 @@ public class InspectionSubAreaResourceIT {
         // Validate the InspectionSubArea in the database
         List<InspectionSubArea> inspectionSubAreaList = inspectionSubAreaRepository.findAll();
         assertThat(inspectionSubAreaList).hasSize(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    @Transactional
-    public void checkNameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = inspectionSubAreaRepository.findAll().size();
-        // set the field null
-        inspectionSubArea.setName(null);
-
-        // Create the InspectionSubArea, which fails.
-        InspectionSubAreaDTO inspectionSubAreaDTO = inspectionSubAreaMapper.toDto(inspectionSubArea);
-
-        restInspectionSubAreaMockMvc
-            .perform(
-                post("/api/inspection-sub-areas")
-                    .with(csrf())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubAreaDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<InspectionSubArea> inspectionSubAreaList = inspectionSubAreaRepository.findAll();
-        assertThat(inspectionSubAreaList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -224,37 +178,6 @@ public class InspectionSubAreaResourceIT {
     public void getNonExistingInspectionSubArea() throws Exception {
         // Get the inspectionSubArea
         restInspectionSubAreaMockMvc.perform(get("/api/inspection-sub-areas/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    public void updateInspectionSubArea() throws Exception {
-        // Initialize the database
-        inspectionSubAreaRepository.saveAndFlush(inspectionSubArea);
-
-        int databaseSizeBeforeUpdate = inspectionSubAreaRepository.findAll().size();
-
-        // Update the inspectionSubArea
-        InspectionSubArea updatedInspectionSubArea = inspectionSubAreaRepository.findById(inspectionSubArea.getId()).get();
-        // Disconnect from session so that the updates on updatedInspectionSubArea are not directly saved in db
-        em.detach(updatedInspectionSubArea);
-        updatedInspectionSubArea.name(UPDATED_NAME);
-        InspectionSubAreaDTO inspectionSubAreaDTO = inspectionSubAreaMapper.toDto(updatedInspectionSubArea);
-
-        restInspectionSubAreaMockMvc
-            .perform(
-                put("/api/inspection-sub-areas")
-                    .with(csrf())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(inspectionSubAreaDTO))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the InspectionSubArea in the database
-        List<InspectionSubArea> inspectionSubAreaList = inspectionSubAreaRepository.findAll();
-        assertThat(inspectionSubAreaList).hasSize(databaseSizeBeforeUpdate);
-        InspectionSubArea testInspectionSubArea = inspectionSubAreaList.get(inspectionSubAreaList.size() - 1);
-        assertThat(testInspectionSubArea.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test

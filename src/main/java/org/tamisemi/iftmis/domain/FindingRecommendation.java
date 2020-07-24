@@ -2,6 +2,8 @@ package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -36,6 +38,10 @@ public class FindingRecommendation extends AbstractAuditingEntity implements Ser
     @NotNull
     @JsonIgnoreProperties(value = "findingRecommendations", allowSetters = true)
     private Finding finding;
+
+    @OneToMany(mappedBy = "recommendation", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("recommendation")
+    private Set<FindingResponse> findingResponses = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -85,6 +91,14 @@ public class FindingRecommendation extends AbstractAuditingEntity implements Ser
         this.finding = finding;
     }
 
+    public Set<FindingResponse> getFindingResponses() {
+        return findingResponses;
+    }
+
+    public void setFindingResponses(Set<FindingResponse> findingResponses) {
+        this.findingResponses = findingResponses;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -103,13 +117,14 @@ public class FindingRecommendation extends AbstractAuditingEntity implements Ser
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "FindingRecommendation{" +
-            "id=" + getId() +
-            ", description='" + getDescription() + "'" +
-            ", implementationStatus='" + getImplementationStatus() + "'" +
-            "}";
+            "id=" + id +
+            ", description='" + description + '\'' +
+            ", implementationStatus=" + implementationStatus +
+            ", finding=" + finding +
+            ", findingResponses=" + findingResponses +
+            '}';
     }
 }

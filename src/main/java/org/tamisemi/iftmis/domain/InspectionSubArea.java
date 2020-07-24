@@ -21,20 +21,18 @@ public class InspectionSubArea extends AbstractAuditingEntity implements Seriali
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Size(max = 1000)
-    @Column(name = "name", length = 1000, nullable = false)
-    private String name;
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "inspectionSubAreas", allowSetters = true)
-    private InspectionObjective inspectionObjective;
+    private InspectionArea inspectionArea;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "inspectionSubAreas", allowSetters = true)
     private SubArea subArea;
+
+    @Column(name = "general_objective")
+    private String generalObjective;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -43,32 +41,6 @@ public class InspectionSubArea extends AbstractAuditingEntity implements Seriali
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public InspectionSubArea name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public InspectionObjective getInspectionObjective() {
-        return inspectionObjective;
-    }
-
-    public InspectionSubArea inspectionObjective(InspectionObjective inspectionObjective) {
-        this.inspectionObjective = inspectionObjective;
-        return this;
-    }
-
-    public void setInspectionObjective(InspectionObjective inspectionObjective) {
-        this.inspectionObjective = inspectionObjective;
     }
 
     public SubArea getSubArea() {
@@ -82,6 +54,22 @@ public class InspectionSubArea extends AbstractAuditingEntity implements Seriali
 
     public void setSubArea(SubArea subArea) {
         this.subArea = subArea;
+    }
+
+    public InspectionArea getInspectionArea() {
+        return inspectionArea;
+    }
+
+    public void setInspectionArea(InspectionArea inspectionArea) {
+        this.inspectionArea = inspectionArea;
+    }
+
+    public String getGeneralObjective() {
+        return generalObjective;
+    }
+
+    public void setGeneralObjective(String generalObjective) {
+        this.generalObjective = generalObjective;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -107,7 +95,6 @@ public class InspectionSubArea extends AbstractAuditingEntity implements Seriali
     public String toString() {
         return "InspectionSubArea{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
             "}";
     }
 }

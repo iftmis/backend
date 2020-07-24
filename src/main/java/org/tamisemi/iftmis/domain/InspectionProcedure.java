@@ -36,6 +36,14 @@ public class InspectionProcedure extends AbstractAuditingEntity implements Seria
     @JsonIgnoreProperties(value = "inspectionProcedures", allowSetters = true)
     private Procedure procedure;
 
+    public InspectionProcedure() {}
+
+    public InspectionProcedure(Procedure procedure, InspectionIndicator inspectionIndicator) {
+        this.procedure = procedure;
+        this.inspectionIndicator = inspectionIndicator;
+        this.name = procedure.getName();
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;

@@ -35,7 +35,8 @@
     "enableTranslation": false,
     "blueprints": [],
     "skipFakeData": true,
-    "prettierJava": true
+    "prettierJava": true,
+    "lastLiquibaseTimestamp": 1595315191000
   },
   "generator-jhipster-entity-audit": {
     "auditFramework": "custom",

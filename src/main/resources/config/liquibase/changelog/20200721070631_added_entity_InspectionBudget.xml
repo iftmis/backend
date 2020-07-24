@@ -6,31 +6,41 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
-        Added the entity InspectionSubArea.
+        Added the entity InspectionBudget.
     -->
-    <changeSet id="20200706083825-1" author="Chris">
-        <createTable tableName="inspection_sub_areas" remarks="The InspectionSubArea(inspection_sub_areas) entity.\n@author Chris">
+    <changeSet id="20200721070631-1" author="jhipster">
+        <createTable tableName="inspection_budget">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(1000)">
+            <column name="quantity" type="${floatType}">
                 <constraints nullable="false" />
             </column>
-            <column name="inspection_objective_id" type="bigint">
+            <column name="frequency" type="${floatType}">
                 <constraints nullable="false" />
             </column>
-            <column name="sub_area_id" type="bigint">
+            <column name="unit_price" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="gfs_code_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="inspection_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
 
+    <changeSet id="20200721070631-1-relations" author="jhipster">
+
+    </changeSet>
+    
     <!-- Added the entity audit columns -->
-    <changeSet id="20200706083825-audit-1" author="Chris">
-        <addColumn tableName="inspection_sub_areas">
+    <changeSet id="20200721070631-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="inspection_budget">
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
@@ -39,12 +49,6 @@
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="20200706083825-7" author="chris">
-        <addColumn tableName="inspection_sub_areas">
-            <column type="varchar(100)" name="general_objective"/>
         </addColumn>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

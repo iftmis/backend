@@ -44,6 +44,21 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+    <changeSet id="20200706081725-5" author="chris">
+        <dropNotNullConstraint
+            tableName="organisation_unit_levels"
+            columnName="is_inspection_level"/>
+    </changeSet>
+
+    <changeSet id="20200706081725-seed-1" author="chris">
+        <loadData tableName="organisation_unit_levels"
+                  file="config/liquibase/data/root_organisation_level.csv"
+                  separator=";">
+            <column name="id" type="numeric"/>
+            <column name="level" type="numeric"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
 </databaseChangeLog>

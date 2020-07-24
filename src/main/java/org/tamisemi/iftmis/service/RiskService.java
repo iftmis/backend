@@ -36,7 +36,6 @@ public class RiskService {
      * @return the persisted entity.
      */
     public RiskDTO save(RiskDTO riskDTO) {
-        log.debug("Request to save Risk : {}", riskDTO);
         Risk risk = riskMapper.toEntity(riskDTO);
         Risk finalRisk = risk;
         risk.getRiskRatings().forEach(r -> r.setRisk(finalRisk));

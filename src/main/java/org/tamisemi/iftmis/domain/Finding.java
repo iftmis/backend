@@ -2,6 +2,8 @@ package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -48,6 +50,10 @@ public class Finding extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = "findings", allowSetters = true)
     private OrganisationUnit organisationUnit;
+
+    @OneToMany(mappedBy = "finding", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("finding")
+    private Set<FindingRecommendation> findingRecommendations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -136,6 +142,14 @@ public class Finding extends AbstractAuditingEntity implements Serializable {
         this.organisationUnit = organisationUnit;
     }
 
+    public Set<FindingRecommendation> getFindingRecommendations() {
+        return findingRecommendations;
+    }
+
+    public void setFindingRecommendations(Set<FindingRecommendation> findingRecommendations) {
+        this.findingRecommendations = findingRecommendations;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -154,16 +168,17 @@ public class Finding extends AbstractAuditingEntity implements Serializable {
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "Finding{" +
-            "id=" + getId() +
-            ", source='" + getSource() + "'" +
-            ", code='" + getCode() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", actionPlanCategory='" + getActionPlanCategory() + "'" +
-            ", isClosed='" + isIsClosed() + "'" +
-            "}";
+            "id=" + id +
+            ", source=" + source +
+            ", code='" + code + '\'' +
+            ", description='" + description + '\'' +
+            ", actionPlanCategory=" + actionPlanCategory +
+            ", isClosed=" + isClosed +
+            ", organisationUnit=" + organisationUnit +
+            ", findingRecommendations=" + findingRecommendations +
+            '}';
     }
 }

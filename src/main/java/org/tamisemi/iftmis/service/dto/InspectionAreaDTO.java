@@ -1,15 +1,9 @@
 package org.tamisemi.iftmis.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.tamisemi.iftmis.domain.InspectionObjective;
 
 /**
  * A DTO for the {@link org.tamisemi.iftmis.domain.InspectionArea} entity.

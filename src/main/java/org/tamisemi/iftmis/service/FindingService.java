@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.domain.Finding;
+import org.tamisemi.iftmis.domain.Finding;
 import org.tamisemi.iftmis.domain.enumeration.FindingSource;
 import org.tamisemi.iftmis.repository.FindingRepository;
 import org.tamisemi.iftmis.service.dto.FindingDTO;
@@ -40,8 +41,9 @@ public class FindingService {
      * @return the persisted entity.
      */
     public FindingDTO save(FindingDTO findingDTO) {
-        log.debug("Request to save Finding : {}", findingDTO);
         Finding finding = findingMapper.toEntity(findingDTO);
+        Finding finalFinding = finding;
+        finding.getFindingRecommendations().forEach(r -> r.setFinding(finalFinding));
         finding = findingRepository.save(finding);
         return findingMapper.toDto(finding);
     }
@@ -69,7 +71,7 @@ public class FindingService {
     }
 
     /**
-     * 
+     *
      * @param organisationUnitId
      * @param source
      * @param pageable
