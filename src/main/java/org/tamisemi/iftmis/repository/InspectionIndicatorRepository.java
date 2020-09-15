@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.repository;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import org.tamisemi.iftmis.domain.InspectionIndicator;
@@ -9,4 +10,6 @@ import org.tamisemi.iftmis.domain.InspectionIndicator;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface InspectionIndicatorRepository extends JpaRepository<InspectionIndicator, Long> {}
+public interface InspectionIndicatorRepository extends JpaRepository<InspectionIndicator, Long> {
+    List<InspectionIndicator> findByInspectionSubArea_Id(Long inspectionSubAreaId);
+}

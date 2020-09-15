@@ -2,6 +2,7 @@ package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -35,6 +36,10 @@ public class InspectionIndicator extends AbstractAuditingEntity implements Seria
     @NotNull
     @JsonIgnoreProperties(value = "inspectionIndicators", allowSetters = true)
     private Indicator indicator;
+
+    @OneToMany(mappedBy = "inspectionIndicator")
+    @JsonIgnoreProperties("inspectionIndicator")
+    private Set<InspectionProcedure> inspectionProcedures;
 
     public InspectionIndicator() {}
 
@@ -90,6 +95,14 @@ public class InspectionIndicator extends AbstractAuditingEntity implements Seria
 
     public void setIndicator(Indicator indicator) {
         this.indicator = indicator;
+    }
+
+    public Set<InspectionProcedure> getInspectionProcedures() {
+        return inspectionProcedures;
+    }
+
+    public void setInspectionProcedures(Set<InspectionProcedure> inspectionProcedures) {
+        this.inspectionProcedures = inspectionProcedures;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
