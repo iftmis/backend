@@ -32,9 +32,6 @@ public class Risk extends AbstractAuditingEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
-    /**
-     * Risk{riskOwner(name) required} to OrganisationUnit
-     */
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "risks", allowSetters = true)
@@ -49,11 +46,6 @@ public class Risk extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = "risks", allowSetters = true)
     private RiskCategory riskCategory;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = "risks", allowSetters = true)
-    private OrganisationUnit riskOwner;
 
     @OneToMany(mappedBy = "risk", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("risk")
@@ -131,19 +123,6 @@ public class Risk extends AbstractAuditingEntity implements Serializable {
 
     public void setRiskCategory(RiskCategory riskCategory) {
         this.riskCategory = riskCategory;
-    }
-
-    public OrganisationUnit getRiskOwner() {
-        return riskOwner;
-    }
-
-    public Risk riskOwner(OrganisationUnit organsiationUnit) {
-        this.riskOwner = organsiationUnit;
-        return this;
-    }
-
-    public void setRiskOwner(OrganisationUnit organsiationUnit) {
-        this.riskOwner = organsiationUnit;
     }
 
     public Set<RiskRating> getRiskRatings() {

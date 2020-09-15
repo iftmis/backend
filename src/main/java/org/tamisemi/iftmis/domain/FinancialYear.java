@@ -38,6 +38,9 @@ public class FinancialYear extends AbstractAuditingEntity implements Serializabl
     @Column(name = "is_opened", nullable = false)
     private Boolean isOpened;
 
+    @Column(name = "closed")
+    private Boolean closed;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -99,6 +102,14 @@ public class FinancialYear extends AbstractAuditingEntity implements Serializabl
         this.isOpened = isOpened;
     }
 
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -121,11 +132,12 @@ public class FinancialYear extends AbstractAuditingEntity implements Serializabl
     @Override
     public String toString() {
         return "FinancialYear{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", isOpened='" + isIsOpened() + "'" +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", isOpened=" + isOpened +
+            ", closed=" + closed +
+            '}';
     }
 }

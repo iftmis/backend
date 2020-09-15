@@ -21,10 +21,6 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
 
     private String description;
 
-    /**
-     * Risk{riskOwner(name) required} to OrganisationUnit
-     */
-    @ApiModelProperty(value = "Risk{riskOwner(name) required} to OrganisationUnit")
     private Long riskRegisterId;
 
     private String riskRegisterName;
@@ -38,10 +34,6 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
     private Long riskCategoryId;
 
     private String riskCategoryName;
-
-    private Long riskOwnerId;
-
-    private String riskOwnerName;
 
     private Set<RiskRatingDTO> riskRatings = new HashSet<>();
 
@@ -125,22 +117,6 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
         this.riskCategoryName = riskCategoryName;
     }
 
-    public Long getRiskOwnerId() {
-        return riskOwnerId;
-    }
-
-    public void setRiskOwnerId(Long organisationUnitId) {
-        this.riskOwnerId = organisationUnitId;
-    }
-
-    public String getRiskOwnerName() {
-        return riskOwnerName;
-    }
-
-    public void setRiskOwnerName(String organisationUnitName) {
-        this.riskOwnerName = organisationUnitName;
-    }
-
     public Set<RiskRatingDTO> getRiskRatings() {
         return riskRatings;
     }
@@ -180,8 +156,6 @@ public class RiskDTO extends AbstractAuditingDTO implements Serializable {
             ", objectiveDescription='" + getObjectiveDescription() + "'" +
             ", riskCategoryId=" + getRiskCategoryId() +
             ", riskCategoryName='" + getRiskCategoryName() + "'" +
-            ", riskOwnerId=" + getRiskOwnerId() +
-            ", riskOwnerName='" + getRiskOwnerName() + "'" +
             "}";
     }
 }

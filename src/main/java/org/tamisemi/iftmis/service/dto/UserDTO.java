@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.*;
 import org.tamisemi.iftmis.config.Constants;
 import org.tamisemi.iftmis.domain.Authority;
+import org.tamisemi.iftmis.domain.OrganisationUnit;
 import org.tamisemi.iftmis.domain.User;
 
 /**
@@ -47,6 +48,8 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private OrganisationUnit organisationUnit;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -65,6 +68,7 @@ public class UserDTO {
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+        this.organisationUnit = user.getOrganisationUnit();
     }
 
     public Long getId() {
@@ -171,22 +175,11 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
+    public OrganisationUnit getOrganisationUnit() {
+        return organisationUnit;
+    }
+
+    public void setOrganisationUnit(OrganisationUnit organisationUnit) {
+        this.organisationUnit = organisationUnit;
     }
 }

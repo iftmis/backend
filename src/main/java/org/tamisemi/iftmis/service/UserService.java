@@ -1,11 +1,13 @@
 package org.tamisemi.iftmis.service;
 
 import io.github.jhipster.security.RandomUtil;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -168,6 +170,7 @@ public class UserService {
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        user.setOrganisationUnit(userDTO.getOrganisationUnit());
         if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail().toLowerCase());
         }
@@ -215,6 +218,7 @@ public class UserService {
                     user.setLogin(userDTO.getLogin().toLowerCase());
                     user.setFirstName(userDTO.getFirstName());
                     user.setLastName(userDTO.getLastName());
+                    user.setOrganisationUnit(userDTO.getOrganisationUnit());
                     if (userDTO.getEmail() != null) {
                         user.setEmail(userDTO.getEmail().toLowerCase());
                     }
@@ -341,6 +345,12 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
+    @Transactional(readOnly = true)
+    public User currentUser() {
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        return user.orElse(null);
+    }
+
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
      * 30 days.
@@ -382,6 +392,7 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
+     *
      * @return a list of all the authorities.
      */
     @Transactional(readOnly = true)

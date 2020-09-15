@@ -23,8 +23,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.tamisemi.iftmis.config.Constants;
+import org.tamisemi.iftmis.domain.User;
 import org.tamisemi.iftmis.service.RiskQueryService;
 import org.tamisemi.iftmis.service.RiskService;
+import org.tamisemi.iftmis.service.UserService;
 import org.tamisemi.iftmis.service.dto.RiskCriteria;
 import org.tamisemi.iftmis.service.dto.RiskDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -44,10 +46,13 @@ public class RiskResource {
 
     private final RiskService riskService;
 
+    private final UserService userService;
+
     private final RiskQueryService riskQueryService;
 
-    public RiskResource(RiskService riskService, RiskQueryService riskQueryService) {
+    public RiskResource(RiskService riskService, UserService userService, RiskQueryService riskQueryService) {
         this.riskService = riskService;
+        this.userService = userService;
         this.riskQueryService = riskQueryService;
     }
 
@@ -93,26 +98,30 @@ public class RiskResource {
             .body(result);
     }
 
-    /**
-     * @param criteria
-     * @return
-     */
+
     @GetMapping("/risks")
-    public ResponseEntity<List<RiskDTO>> getAllRisks(RiskCriteria criteria) {
-        List<RiskDTO> items = riskQueryService.findByCriteria(criteria);
+    public ResponseEntity<List<RiskDTO>> getAllRisks(@RequestParam(value = "riskRegisterId") Long riskRegisterId) {
+        User user = userService.currentUser();
+        List<RiskDTO> items = riskService.findAllByOrganisationIdAndRiskRegisterId(user.getOrganisationUnit().getId(), riskRegisterId);
         return ResponseEntity.ok().body(items);
     }
 
     /**
      *
-     * @param criteria
-     * @param pageable
+     * @param riskRegisterId
+     * @param page
+     * @param size
+     * @param sortBy
      * @return
      */
     @GetMapping("/risks/page")
-    public ResponseEntity<List<RiskDTO>> getAllPagedRisks(RiskCriteria criteria, Pageable pageable) {
-        log.debug("REST request to get Risks by criteria: {}", criteria);
-        Page<RiskDTO> items = riskQueryService.findByCriteria(criteria, pageable);
+    public ResponseEntity<List<RiskDTO>> getAllPagedRisks(@RequestParam(value = "riskRegisterId") Long riskRegisterId,
+                                                          @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+                                                          @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+                                                          @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+        User user = userService.currentUser();
+        Page<RiskDTO> items = riskService.findAllByOrganisationIdAndRiskRegisterId(user.getOrganisationUnit().getId(), riskRegisterId,pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
         return ResponseEntity.ok().headers(headers).body(items.getContent());
     }

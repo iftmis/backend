@@ -112,15 +112,6 @@ public class RiskQueryService extends QueryService<Risk> {
                         )
                     );
             }
-            if (criteria.getRiskOwnerId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getRiskOwnerId(),
-                            root -> root.join(Risk_.riskOwner, JoinType.LEFT).get(OrganisationUnit_.id)
-                        )
-                    );
-            }
         }
         return specification;
     }

@@ -21,15 +21,12 @@ public interface RiskMapper extends EntityMapper<RiskDTO, Risk> {
     @Mapping(source = "objective.description", target = "objectiveDescription")
     @Mapping(source = "riskCategory.id", target = "riskCategoryId")
     @Mapping(source = "riskCategory.name", target = "riskCategoryName")
-    @Mapping(source = "riskOwner.id", target = "riskOwnerId")
-    @Mapping(source = "riskOwner.name", target = "riskOwnerName")
     @Mapping(source = "riskRatings", target = "riskRatings")
     RiskDTO toDto(Risk risk);
 
     @Mapping(source = "riskRegisterId", target = "riskRegister")
     @Mapping(source = "objectiveId", target = "objective")
     @Mapping(source = "riskCategoryId", target = "riskCategory")
-    @Mapping(source = "riskOwnerId", target = "riskOwner")
     @Mapping(source = "riskRatings", target = "riskRatings")
     Risk toEntity(RiskDTO riskDTO);
 

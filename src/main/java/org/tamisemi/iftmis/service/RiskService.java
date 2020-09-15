@@ -1,10 +1,15 @@
 package org.tamisemi.iftmis.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.domain.Risk;
@@ -75,5 +80,26 @@ public class RiskService {
     public void delete(Long id) {
         log.debug("Request to delete Risk : {}", id);
         riskRepository.deleteById(id);
+    }
+
+    /**
+     * @param organisationUnitId
+     * @param riskRegisterId
+     * @return
+     */
+    public List<RiskDTO> findAllByOrganisationIdAndRiskRegisterId(Long organisationUnitId, Long riskRegisterId) {
+        return riskRepository.findAllByOrganisationIdAndRiskRegisterId(organisationUnitId, riskRegisterId).stream()
+            .map(riskMapper::toDto)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * @param organisationUnitId
+     * @param riskRegisterId
+     * @param pageable
+     * @return
+     */
+    public Page<RiskDTO> findAllByOrganisationIdAndRiskRegisterId(Long organisationUnitId, Long riskRegisterId, Pageable pageable) {
+        return riskRepository.findAllByOrganisationIdAndRiskRegisterId(organisationUnitId, riskRegisterId, pageable).map(riskMapper::toDto);
     }
 }

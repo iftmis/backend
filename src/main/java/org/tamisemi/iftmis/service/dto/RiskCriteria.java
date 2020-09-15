@@ -36,8 +36,6 @@ public class RiskCriteria implements Serializable, Criteria {
 
     private LongFilter riskCategoryId;
 
-    private LongFilter riskOwnerId;
-
     public RiskCriteria() {
     }
 
@@ -48,7 +46,6 @@ public class RiskCriteria implements Serializable, Criteria {
         this.riskRegisterId = other.riskRegisterId == null ? null : other.riskRegisterId.copy();
         this.objectiveId = other.objectiveId == null ? null : other.objectiveId.copy();
         this.riskCategoryId = other.riskCategoryId == null ? null : other.riskCategoryId.copy();
-        this.riskOwnerId = other.riskOwnerId == null ? null : other.riskOwnerId.copy();
     }
 
     @Override
@@ -104,14 +101,6 @@ public class RiskCriteria implements Serializable, Criteria {
         this.riskCategoryId = riskCategoryId;
     }
 
-    public LongFilter getRiskOwnerId() {
-        return riskOwnerId;
-    }
-
-    public void setRiskOwnerId(LongFilter riskOwnerId) {
-        this.riskOwnerId = riskOwnerId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -127,14 +116,13 @@ public class RiskCriteria implements Serializable, Criteria {
                 Objects.equals(description, that.description) &&
                 Objects.equals(riskRegisterId, that.riskRegisterId) &&
                 Objects.equals(objectiveId, that.objectiveId) &&
-                Objects.equals(riskCategoryId, that.riskCategoryId) &&
-                Objects.equals(riskOwnerId, that.riskOwnerId)
+                Objects.equals(riskCategoryId, that.riskCategoryId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, description, riskRegisterId, objectiveId, riskCategoryId, riskOwnerId);
+        return Objects.hash(id, code, description, riskRegisterId, objectiveId, riskCategoryId);
     }
 
     // prettier-ignore
@@ -147,7 +135,6 @@ public class RiskCriteria implements Serializable, Criteria {
             (riskRegisterId != null ? "riskRegisterId=" + riskRegisterId + ", " : "") +
             (objectiveId != null ? "objectiveId=" + objectiveId + ", " : "") +
             (riskCategoryId != null ? "riskCategoryId=" + riskCategoryId + ", " : "") +
-            (riskOwnerId != null ? "riskOwnerId=" + riskOwnerId + ", " : "") +
             "}";
     }
 }
