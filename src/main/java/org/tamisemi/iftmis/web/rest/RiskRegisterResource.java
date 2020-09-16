@@ -98,30 +98,19 @@ public class RiskRegisterResource {
      * @return
      */
     @GetMapping("/risk-registers")
-    public ResponseEntity<List<RiskRegisterDTO>> getAllRiskRegisters(
-        @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId
-    ) {
+    public ResponseEntity<List<RiskRegisterDTO>> getAllRiskRegisters(@RequestParam(value = "financialYearId") Long financialYearId) {
         User currentUser = userService.currentUser();
         Long organisationUnitId = currentUser.getOrganisationUnit().getId();
         List<RiskRegisterDTO> items;
-        if (financialYearId == 0) {
-            if (organisationUnitId == 0) {
-                items = riskRegisterService.findAll();
-            } else {
-                items = riskRegisterService.findAllByOrganisationUnitId(organisationUnitId);
-            }
+        if (organisationUnitId == 0) {
+            items = riskRegisterService.findAllByFinancialYearId(financialYearId);
         } else {
-            if (organisationUnitId == 0) {
-                items = riskRegisterService.findAllByFinancialYearId(financialYearId);
-            } else {
-                items = riskRegisterService.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId);
-            }
+            items = riskRegisterService.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId);
         }
         return ResponseEntity.ok().body(items);
     }
 
     /**
-     *
      * @param page
      * @param size
      * @param sortBy
@@ -133,25 +122,17 @@ public class RiskRegisterResource {
         @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
         @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
         @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-        @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId
+        @RequestParam(value = "financialYearId") Long financialYearId
     ) {
         log.debug("REST request to get a page of RiskRegisters");
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
         User currentUser = userService.currentUser();
         Long organisationUnitId = currentUser.getOrganisationUnit().getId();
         Page<RiskRegisterDTO> items;
-        if (financialYearId == 0) {
-            if (organisationUnitId == 0) {
-                items = riskRegisterService.findAll(pageable);
-            } else {
-                items = riskRegisterService.findAllByOrganisationUnitId(organisationUnitId, pageable);
-            }
+        if (organisationUnitId == 0) {
+            items = riskRegisterService.findAllByFinancialYearId(financialYearId, pageable);
         } else {
-            if (organisationUnitId == 0) {
-                items = riskRegisterService.findAllByFinancialYearId(financialYearId, pageable);
-            } else {
-                items = riskRegisterService.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId, pageable);
-            }
+            items = riskRegisterService.findAllByFinancialYearIdAndOrganisationUnitId(financialYearId, organisationUnitId, pageable);
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
         return ResponseEntity.ok().headers(headers).body(items.getContent());
