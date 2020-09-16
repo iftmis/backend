@@ -1,7 +1,6 @@
 package org.tamisemi.iftmis.repository;
 
 import java.util.List;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -24,20 +23,9 @@ public interface RiskRepository extends JpaRepository<Risk, Long>, JpaSpecificat
         Pageable pageable
     );
 
-    @Query(
-        "FROM Risk r WHERE r.riskRegister.organisationUnit.id =:organisationUnitId AND r.riskRegister.financialYear.id =:financialYearId"
-    )
-    List<Risk> findAllByOrganisationIdAndFinancialYearId(
-        @Param("organisationUnitId") Long organisationUnitId,
-        @Param("financialYearId") Long financialYearId
-    );
+    @Query("FROM Risk r WHERE r.riskRegister.financialYear.id =:financialYearId")
+    List<Risk> findAllByFinancialYearId(@Param("financialYearId") Long financialYearId);
 
-    @Query(
-        "FROM Risk r WHERE r.riskRegister.organisationUnit.id =:organisationUnitId AND r.riskRegister.financialYear.id =:financialYearId"
-    )
-    Page<Risk> findAllByOrganisationIdAndFinancialYearId(
-        @Param("organisationUnitId") Long organisationUnitId,
-        @Param("financialYearId") Long financialYearId,
-        Pageable pageable
-    );
+    @Query("FROM Risk r WHERE r.riskRegister.financialYear.id =:financialYearId")
+    Page<Risk> findAllByFinancialYearId(@Param("financialYearId") Long financialYearId, Pageable pageable);
 }

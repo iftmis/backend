@@ -95,20 +95,6 @@ public class RiskService {
     }
 
     /**
-     *
-     * @param organisationUnitId
-     * @param financialYearId
-     * @return
-     */
-    public List<RiskDTO> findAllByOrganisationIdAndFinancialYearId(Long organisationUnitId, Long financialYearId) {
-        return riskRepository
-            .findAllByOrganisationIdAndFinancialYearId(organisationUnitId, financialYearId)
-            .stream()
-            .map(riskMapper::toDto)
-            .collect(Collectors.toList());
-    }
-
-    /**
      * @param organisationUnitId
      * @param riskRegisterId
      * @param pageable
@@ -118,9 +104,22 @@ public class RiskService {
         return riskRepository.findAllByOrganisationIdAndRiskRegisterId(organisationUnitId, riskRegisterId, pageable).map(riskMapper::toDto);
     }
 
-    public Page<RiskDTO> findAllByOrganisationIdAndFinancialYearId(Long organisationUnitId, Long financialYearId, Pageable pageable) {
-        return riskRepository
-            .findAllByOrganisationIdAndFinancialYearId(organisationUnitId, financialYearId, pageable)
-            .map(riskMapper::toDto);
+    /**
+     *
+     * @param financialYearId
+     * @return
+     */
+    public List<RiskDTO> findAllByFinancialYearId(Long financialYearId) {
+        return riskRepository.findAllByFinancialYearId(financialYearId).stream().map(riskMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
+     *
+     * @param financialYearId
+     * @param pageable
+     * @return
+     */
+    public Page<RiskDTO> findAllByFinancialYearId(Long financialYearId, Pageable pageable) {
+        return riskRepository.findAllByFinancialYearId(financialYearId, pageable).map(riskMapper::toDto);
     }
 }
