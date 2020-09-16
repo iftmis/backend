@@ -16,4 +16,11 @@ public interface RiskRepository extends JpaRepository<Risk, Long>, JpaSpecificat
 
     @Query("FROM Risk r WHERE r.riskRegister.organisationUnit.id =:organisationUnitId AND r.riskRegister.id =:riskRegisterId")
     Page<Risk> findAllByOrganisationIdAndRiskRegisterId(@Param("organisationUnitId") Long organisationUnitId, @Param("riskRegisterId") Long riskRegisterId, Pageable pageable);
+
+
+    @Query("FROM Risk r WHERE r.riskRegister.organisationUnit.id =:organisationUnitId AND r.riskRegister.financialYear.id =:financialYearId")
+    List<Risk> findAllByOrganisationIdAndFinancialYearId(@Param("organisationUnitId") Long organisationUnitId, @Param("financialYearId") Long financialYearId);
+
+    @Query("FROM Risk r WHERE r.riskRegister.organisationUnit.id =:organisationUnitId AND r.riskRegister.financialYear.id =:financialYearId")
+    Page<Risk> findAllByOrganisationIdAndFinancialYearId(@Param("organisationUnitId") Long organisationUnitId, @Param("financialYearId") Long financialYearId, Pageable pageable);
 }

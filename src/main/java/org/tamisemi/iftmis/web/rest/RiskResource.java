@@ -23,7 +23,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.tamisemi.iftmis.config.Constants;
+import org.tamisemi.iftmis.domain.FinancialYear;
 import org.tamisemi.iftmis.domain.User;
+import org.tamisemi.iftmis.service.FinancialYearService;
 import org.tamisemi.iftmis.service.RiskQueryService;
 import org.tamisemi.iftmis.service.RiskService;
 import org.tamisemi.iftmis.service.UserService;
@@ -46,12 +48,15 @@ public class RiskResource {
 
     private final RiskService riskService;
 
+    private final FinancialYearService financialYearService;
+
     private final UserService userService;
 
     private final RiskQueryService riskQueryService;
 
-    public RiskResource(RiskService riskService, UserService userService, RiskQueryService riskQueryService) {
+    public RiskResource(RiskService riskService, FinancialYearService financialYearService, UserService userService, RiskQueryService riskQueryService) {
         this.riskService = riskService;
+        this.financialYearService = financialYearService;
         this.userService = userService;
         this.riskQueryService = riskQueryService;
     }
@@ -107,7 +112,6 @@ public class RiskResource {
     }
 
     /**
-     *
      * @param riskRegisterId
      * @param page
      * @param size
@@ -121,7 +125,7 @@ public class RiskResource {
                                                           @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         User user = userService.currentUser();
-        Page<RiskDTO> items = riskService.findAllByOrganisationIdAndRiskRegisterId(user.getOrganisationUnit().getId(), riskRegisterId,pageable);
+        Page<RiskDTO> items = riskService.findAllByOrganisationIdAndRiskRegisterId(user.getOrganisationUnit().getId(), riskRegisterId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
         return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
@@ -165,5 +169,35 @@ public class RiskResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/risks/getAllByCurrentFinancialYearIdAndCurrentOrganisationUnitId")
+    public ResponseEntity<List<RiskDTO>> getAllByCurrentFinancialYearIdAndCurrentOrganisationUnitId() {
+        User user = userService.currentUser();
+        Optional<FinancialYear> currentFinancialYear = financialYearService.currentYear();
+        Long organisationUnitId = user.getOrganisationUnit().getId();
+        if (currentFinancialYear.isPresent()) {
+            List<RiskDTO> items = riskService.findAllByOrganisationIdAndFinancialYearId(organisationUnitId, currentFinancialYear.get().getId());
+            return ResponseEntity.ok().body(items);
+        } else {
+            throw new BadRequestAlertException("No Current Financial Year Set Yet", ENTITY_NAME, "idnull");
+        }
+    }
+
+    @GetMapping("/risks/getAllPagedByCurrentFinancialYearIdAndCurrentOrganisationUnitId")
+    public ResponseEntity<List<RiskDTO>> getAllPagedByCurrentFinancialYearIdAndCurrentOrganisationUnitId(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+                                                                                                  @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+                                                                                                  @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+        User user = userService.currentUser();
+        Optional<FinancialYear> currentFinancialYear = financialYearService.currentYear();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+        Long organisationUnitId = user.getOrganisationUnit().getId();
+        if (currentFinancialYear.isPresent()) {
+            Page<RiskDTO> items = riskService.findAllByOrganisationIdAndFinancialYearId(organisationUnitId, currentFinancialYear.get().getId(), pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
+            return ResponseEntity.ok().headers(headers).body(items.getContent());
+        } else {
+            throw new BadRequestAlertException("No Current Financial Year Set Yet", ENTITY_NAME, "idnull");
+        }
     }
 }
