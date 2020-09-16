@@ -111,7 +111,6 @@ public class RiskResourceIT {
         } else {
             OrganisationUnit = TestUtil.findAll(em, OrganisationUnit.class).get(0);
         }
-        risk.setRiskOwner(OrganisationUnit);
         return risk;
     }
 
@@ -162,7 +161,6 @@ public class RiskResourceIT {
         } else {
             OrganisationUnit = TestUtil.findAll(em, OrganisationUnit.class).get(0);
         }
-        risk.setRiskOwner(OrganisationUnit);
         return risk;
     }
 
@@ -383,21 +381,6 @@ public class RiskResourceIT {
 
         // Get all the riskList where riskCategory equals to riskCategoryId + 1
         defaultRiskShouldNotBeFound("riskCategoryId.equals=" + (riskCategoryId + 1));
-    }
-
-    @Test
-    @Transactional
-    public void getAllRisksByRiskOwnerIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        OrganisationUnit riskOwner = risk.getRiskOwner();
-        riskRepository.saveAndFlush(risk);
-        Long riskOwnerId = riskOwner.getId();
-
-        // Get all the riskList where riskOwner equals to riskOwnerId
-        defaultRiskShouldBeFound("riskOwnerId.equals=" + riskOwnerId);
-
-        // Get all the riskList where riskOwner equals to riskOwnerId + 1
-        defaultRiskShouldNotBeFound("riskOwnerId.equals=" + (riskOwnerId + 1));
     }
 
     /**

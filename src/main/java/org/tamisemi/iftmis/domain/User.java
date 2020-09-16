@@ -1,6 +1,7 @@
 package org.tamisemi.iftmis.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
@@ -96,6 +97,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<PersistentToken> persistentTokens = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "users", allowSetters = true)
+    private OrganisationUnit organisationUnit;
 
     public Long getId() {
         return id;
@@ -210,6 +215,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.persistentTokens = persistentTokens;
     }
 
+    public OrganisationUnit getOrganisationUnit() {
+        return organisationUnit;
+    }
+
+    public void setOrganisationUnit(OrganisationUnit organisationUnit) {
+        this.organisationUnit = organisationUnit;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -230,14 +243,21 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-            "login='" + login + '\'' +
+            "id=" + id +
+            ", login='" + login + '\'' +
+            ", password='" + password + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
+            ", activated=" + activated +
             ", langKey='" + langKey + '\'' +
+            ", imageUrl='" + imageUrl + '\'' +
             ", activationKey='" + activationKey + '\'' +
-            "}";
+            ", resetKey='" + resetKey + '\'' +
+            ", resetDate=" + resetDate +
+            ", authorities=" + authorities +
+            ", persistentTokens=" + persistentTokens +
+            ", organisationUnit=" + organisationUnit +
+            '}';
     }
 }

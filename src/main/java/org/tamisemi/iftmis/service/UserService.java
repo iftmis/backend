@@ -168,6 +168,7 @@ public class UserService {
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        user.setOrganisationUnit(userDTO.getOrganisationUnit());
         if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail().toLowerCase());
         }
@@ -215,6 +216,7 @@ public class UserService {
                     user.setLogin(userDTO.getLogin().toLowerCase());
                     user.setFirstName(userDTO.getFirstName());
                     user.setLastName(userDTO.getLastName());
+                    user.setOrganisationUnit(userDTO.getOrganisationUnit());
                     if (userDTO.getEmail() != null) {
                         user.setEmail(userDTO.getEmail().toLowerCase());
                     }
@@ -341,6 +343,12 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
+    @Transactional(readOnly = true)
+    public User currentUser() {
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        return user.orElse(null);
+    }
+
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
      * 30 days.
@@ -382,6 +390,7 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
+     *
      * @return a list of all the authorities.
      */
     @Transactional(readOnly = true)

@@ -3,14 +3,12 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +26,7 @@ import org.tamisemi.iftmis.domain.User;
 import org.tamisemi.iftmis.service.RiskRegisterService;
 import org.tamisemi.iftmis.service.UserService;
 import org.tamisemi.iftmis.service.dto.RiskRegisterDTO;
+import org.tamisemi.iftmis.service.dto.UserDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -100,10 +99,10 @@ public class RiskRegisterResource {
      */
     @GetMapping("/risk-registers")
     public ResponseEntity<List<RiskRegisterDTO>> getAllRiskRegisters(
-        @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId,
-        @RequestParam(value = "organisationUnitId", defaultValue = Constants.ZERO) Long organisationUnitId
+        @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId
     ) {
-        log.debug("REST request to get a list of RiskRegisters");
+        User currentUser = userService.currentUser();
+        Long organisationUnitId = currentUser.getOrganisationUnit().getId();
         List<RiskRegisterDTO> items;
         if (financialYearId == 0) {
             if (organisationUnitId == 0) {
@@ -122,10 +121,11 @@ public class RiskRegisterResource {
     }
 
     /**
+     *
      * @param page
      * @param size
-     * @param financialYearId
      * @param sortBy
+     * @param financialYearId
      * @return
      */
     @GetMapping("/risk-registers/page")
@@ -133,11 +133,12 @@ public class RiskRegisterResource {
         @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
         @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
         @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-        @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId,
-        @RequestParam(value = "organisationUnitId", defaultValue = Constants.ZERO) Long organisationUnitId
+        @RequestParam(value = "financialYearId", defaultValue = Constants.ZERO) Long financialYearId
     ) {
         log.debug("REST request to get a page of RiskRegisters");
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        User currentUser = userService.currentUser();
+        Long organisationUnitId = currentUser.getOrganisationUnit().getId();
         Page<RiskRegisterDTO> items;
         if (financialYearId == 0) {
             if (organisationUnitId == 0) {
@@ -168,7 +169,6 @@ public class RiskRegisterResource {
         Optional<RiskRegisterDTO> riskRegisterDTO = riskRegisterService.findOne(id);
         return ResponseUtil.wrapOrNotFound(riskRegisterDTO);
     }
-
 
     @GetMapping("/risk-registers/approve/{id}")
     public ResponseEntity<RiskRegisterDTO> approve(@PathVariable Long id) {

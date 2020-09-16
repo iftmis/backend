@@ -26,6 +26,8 @@ public class FinancialYearDTO extends AbstractAuditingDTO implements Serializabl
     @NotNull
     private Boolean isOpened;
 
+    private Boolean closed;
+
     public Long getId() {
         return id;
     }
@@ -66,6 +68,14 @@ public class FinancialYearDTO extends AbstractAuditingDTO implements Serializabl
         this.isOpened = isOpened;
     }
 
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -87,11 +97,12 @@ public class FinancialYearDTO extends AbstractAuditingDTO implements Serializabl
     @Override
     public String toString() {
         return "FinancialYearDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", isOpened='" + isIsOpened() + "'" +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", isOpened=" + isOpened +
+            ", closed=" + closed +
+            '}';
     }
 }
