@@ -171,29 +171,25 @@ public class RiskResource {
             .build();
     }
 
-    @GetMapping("/risks/getAllByCurrentFinancialYearIdAndCurrentOrganisationUnitId")
-    public ResponseEntity<List<RiskDTO>> getAllByCurrentFinancialYearIdAndCurrentOrganisationUnitId() {
-        User user = userService.currentUser();
+    @GetMapping("/risks/getAllByCurrentFinancialYearId")
+    public ResponseEntity<List<RiskDTO>> getAllByCurrentFinancialYearId() {
         Optional<FinancialYear> currentFinancialYear = financialYearService.currentYear();
-        Long organisationUnitId = user.getOrganisationUnit().getId();
         if (currentFinancialYear.isPresent()) {
-            List<RiskDTO> items = riskService.findAllByOrganisationIdAndFinancialYearId(organisationUnitId, currentFinancialYear.get().getId());
+            List<RiskDTO> items = riskService.findAllByFinancialYearId(currentFinancialYear.get().getId());
             return ResponseEntity.ok().body(items);
         } else {
             throw new BadRequestAlertException("No Current Financial Year Set Yet", ENTITY_NAME, "idnull");
         }
     }
 
-    @GetMapping("/risks/getAllPagedByCurrentFinancialYearIdAndCurrentOrganisationUnitId")
-    public ResponseEntity<List<RiskDTO>> getAllPagedByCurrentFinancialYearIdAndCurrentOrganisationUnitId(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
-                                                                                                  @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
-                                                                                                  @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
-        User user = userService.currentUser();
+    @GetMapping("/risks/getAllPagedByCurrentFinancialYearId")
+    public ResponseEntity<List<RiskDTO>> getAllPagedByCurrentFinancialYearId(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+                                                                                                         @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+                                                                                                         @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
         Optional<FinancialYear> currentFinancialYear = financialYearService.currentYear();
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
-        Long organisationUnitId = user.getOrganisationUnit().getId();
         if (currentFinancialYear.isPresent()) {
-            Page<RiskDTO> items = riskService.findAllByOrganisationIdAndFinancialYearId(organisationUnitId, currentFinancialYear.get().getId(), pageable);
+            Page<RiskDTO> items = riskService.findAllByFinancialYearId(currentFinancialYear.get().getId(), pageable);
             HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
             return ResponseEntity.ok().headers(headers).body(items.getContent());
         } else {
