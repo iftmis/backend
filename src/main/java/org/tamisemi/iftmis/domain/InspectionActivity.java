@@ -27,6 +27,54 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
     @Column(name = "days", nullable = false)
     private Integer days;
 
+    @Column(name = "quarter_one", nullable = true)
+    private String quarter_one;
+
+    @Column(name = "quarter_two", nullable = true)
+    private String quarter_two;
+
+    @Column(name = "quarter_three", nullable = true)
+    private String quarter_three;
+
+    @Column(name = "quarter_four", nullable = true)
+    private String quarter_four;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getQuarter_two() {
+        return quarter_two;
+    }
+
+    public void setQuarter_two(String quarter_two) {
+        this.quarter_two = quarter_two;
+    }
+
+    public String getQuarter_three() {
+        return quarter_three;
+    }
+
+    public void setQuarter_three(String quarter_three) {
+        this.quarter_three = quarter_three;
+    }
+
+    public String getQuarter_four() {
+        return quarter_four;
+    }
+
+    public void setQuarter_four(String quarter_four) {
+        this.quarter_four = quarter_four;
+    }
+
+    public String getQuarter_one() {
+        return quarter_one;
+    }
+
+    public void setQuarter_one(String quarter_one) {
+        this.quarter_one = quarter_one;
+    }
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "inspectionActivities", allowSetters = true)
@@ -209,6 +257,10 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
         return "InspectionActivity{" +
             "id=" + getId() +
             ", days=" + getDays() +
+            ", quarter_one='" + getQuarter_one() + '\'' +
+            ", quarter_two='" + getQuarter_two() + '\'' +
+            ", quarter_three='" + getQuarter_three() + '\'' +
+            ", quarter_four='" + getQuarter_four() + '\'' +
             "}";
     }
 }
