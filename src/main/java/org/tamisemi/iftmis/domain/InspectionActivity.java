@@ -30,6 +30,9 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
     @Column(name = "quarter_one", nullable = true)
     private String quarter_one;
 
+    @Column(name = "activity", nullable = true)
+    private String activity;
+
     @Column(name = "quarter_two", nullable = true)
     private String quarter_two;
 
@@ -38,6 +41,14 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
 
     @Column(name = "quarter_four", nullable = true)
     private String quarter_four;
+
+    public String getActivity() {
+        return activity;
+    }
+
+    public void setActivity(String activity) {
+        this.activity = activity;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -95,7 +106,7 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
     @JsonIgnoreProperties(value = "inspectionActivities", allowSetters = true)
     private SubArea subArea;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH })
+    @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(
         name = "inspection_activities_risks",
@@ -104,7 +115,7 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
     )
     private Set<Risk> risks = new HashSet<>();
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH })
+    @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(
         name = "inspection_activities_organisation_units",
@@ -261,6 +272,8 @@ public class InspectionActivity extends AbstractAuditingEntity implements Serial
             ", quarter_two='" + getQuarter_two() + '\'' +
             ", quarter_three='" + getQuarter_three() + '\'' +
             ", quarter_four='" + getQuarter_four() + '\'' +
+            ", organisationUnits='" + getOrganisationUnits() + '\'' +
+            ", activity='" + getActivity() + '\'' +
             "}";
     }
 }

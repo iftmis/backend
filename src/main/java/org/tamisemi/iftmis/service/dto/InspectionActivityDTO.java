@@ -21,7 +21,7 @@ public class InspectionActivityDTO extends AbstractAuditingDTO implements Serial
     private String objectiveName;
 
     private Long auditableAreaId;
-
+    private String activity;
     private String auditableAreaName;
 
     private Long subAreaId;
@@ -33,6 +33,14 @@ public class InspectionActivityDTO extends AbstractAuditingDTO implements Serial
     private String quarter_two;
     private String quarter_three;
     private String quarter_four;
+
+    public String getActivity() {
+        return activity;
+    }
+
+    public void setActivity(String activity) {
+        this.activity = activity;
+    }
 
     public String getQuarter_two() {
         return quarter_two;
@@ -190,6 +198,7 @@ public class InspectionActivityDTO extends AbstractAuditingDTO implements Serial
             ", quarter_two='" + getQuarter_two() + '\'' +
             ", quarter_three='" + getQuarter_three() + '\'' +
             ", quarter_four='" + getQuarter_four() + '\'' +
+            ", activity='" + getActivity() + '\'' +
             "}";
     }
 }
