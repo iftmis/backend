@@ -972,7 +972,11 @@
                         </plugin>
                     </plugins>
                 </pluginManagement>
+
+
+                <finalName>iftmis</finalName>
             </build>
+
         </profile>
         <!-- jhipster-needle-maven-add-profile -->
     </profiles>
