@@ -1,19 +1,20 @@
 package org.tamisemi.iftmis.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+
 /**
- * The Procedure(procedures) entity.\n@author Chris
+ * The Cluster(clusters) entity.\n@author Kachinga
  */
 @Entity
-@Table(name = "procedures")
+@Table(name = "clusters")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Procedure extends AbstractAuditingEntity implements Serializable {
+public class Cluster extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -21,15 +22,14 @@ public class Procedure extends AbstractAuditingEntity implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Size(min = 2, max = 2000)
-    @Column(name = "name", length = 2000, nullable = false)
-    private String name;
+    @Size(min = 1, max = 64)
+    @Column(name = "code", length = 64, unique = true)
+    private String code;
 
-    @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "procedures", allowSetters = true)
-    private Indicator indicator;
+    @Size(min = 2, max = 200)
+    @Column(name = "name", length = 200, nullable = false)
+    private String name;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -40,30 +40,30 @@ public class Procedure extends AbstractAuditingEntity implements Serializable {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public Cluster code(String code) {
+        this.code = code;
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return name;
     }
 
-    public Procedure name(String name) {
+    public Cluster name(String name) {
         this.name = name;
         return this;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Indicator getIndicator() {
-        return indicator;
-    }
-
-    public Procedure indicator(Indicator indicator) {
-        this.indicator = indicator;
-        return this;
-    }
-
-    public void setIndicator(Indicator indicator) {
-        this.indicator = indicator;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -73,10 +73,10 @@ public class Procedure extends AbstractAuditingEntity implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Procedure)) {
+        if (!(o instanceof Cluster)) {
             return false;
         }
-        return id != null && id.equals(((Procedure) o).id);
+        return id != null && id.equals(((Cluster) o).id);
     }
 
     @Override
@@ -87,8 +87,9 @@ public class Procedure extends AbstractAuditingEntity implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "Procedure{" +
+        return "Cluster{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             "}";
     }

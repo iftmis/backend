@@ -71,7 +71,21 @@ public class FinancialYearResource {
         if (financialYearDTO.getId() != null) {
             throw new BadRequestAlertException("A new financialYear cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        financialYearDTO.setClosed(false);
         FinancialYearDTO result = financialYearService.save(financialYearDTO);
+        User currentUser = userService.currentUser();
+        OrganisationUnit organisationUnit = currentUser.getOrganisationUnit();
+        String riskRegisterName = organisationUnit.getName() + " - " + result.getName();
+        RiskRegisterDTO riskRegisterDTO = new RiskRegisterDTO();
+        riskRegisterDTO.setApprovedDate(null);
+        riskRegisterDTO.setIsApproved(false);
+        riskRegisterDTO.setApprovedBy(null);
+        riskRegisterDTO.setFinancialYearId(result.getId());
+        riskRegisterDTO.setFinancialYearName(result.getName());
+        riskRegisterDTO.setName(riskRegisterName);
+        riskRegisterDTO.setOrganisationUnitId(organisationUnit.getId());
+        riskRegisterDTO.setOrganisationUnitName(organisationUnit.getName());
+        riskRegisterService.save(riskRegisterDTO);
         return ResponseEntity
             .created(new URI("/api/financial-years/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -161,7 +175,11 @@ public class FinancialYearResource {
         if (financialYear.getId() == null) {
             return ResponseEntity.badRequest().body("New Financial Year is required");
         }
-        if (financialYear.getClosed()) {
+        Optional<FinancialYearDTO> x = financialYearService.findOne(financialYear.getId());
+        if (!x.isPresent()) {
+            return ResponseEntity.badRequest().body("Financial Year Selected is not available");
+        }
+        if (x.get().getClosed()) {
             return ResponseEntity.badRequest().body("Financial Year Selected is already closed");
         }
         if (financialYearService.closeCurrentFinancialYear()) {
@@ -171,22 +189,6 @@ public class FinancialYearResource {
                 financialYearDTO.setIsOpened(true);
                 financialYearDTO.setClosed(false);
                 FinancialYearDTO result = financialYearService.save(financialYearDTO);
-                List<RiskRegisterDTO> riskRegisters = riskRegisterService.findAllByFinancialYearId(result.getId());
-                if (riskRegisters.size() == 0) {
-                    User currentUser = userService.currentUser();
-                    OrganisationUnit organisationUnit = currentUser.getOrganisationUnit();
-                    String riskRegisterName = organisationUnit.getName() + " - " + result.getName();
-                    RiskRegisterDTO riskRegisterDTO = new RiskRegisterDTO();
-                    riskRegisterDTO.setApprovedDate(null);
-                    riskRegisterDTO.setIsApproved(false);
-                    riskRegisterDTO.setApprovedBy(null);
-                    riskRegisterDTO.setFinancialYearId(result.getId());
-                    riskRegisterDTO.setFinancialYearName(result.getName());
-                    riskRegisterDTO.setName(riskRegisterName);
-                    riskRegisterDTO.setOrganisationUnitId(organisationUnit.getId());
-                    riskRegisterDTO.setOrganisationUnitName(organisationUnit.getName());
-                    riskRegisterService.save(riskRegisterDTO);
-                }
                 return ResponseEntity
                     .created(new URI("/api/financial-years/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
