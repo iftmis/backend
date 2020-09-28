@@ -791,7 +791,7 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <mainClass>${start-class}</mainClass>
+                        <mainClass>org.tamisemi.iftmis.IftmisApp</mainClass>
                         <fork>true</fork>
                         <!--
                         Enable the line below to have remote debugging of your application on port 5005
