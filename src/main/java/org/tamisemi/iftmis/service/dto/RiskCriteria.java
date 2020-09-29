@@ -8,7 +8,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -36,8 +35,7 @@ public class RiskCriteria implements Serializable, Criteria {
 
     private LongFilter riskCategoryId;
 
-    public RiskCriteria() {
-    }
+    public RiskCriteria() {}
 
     public RiskCriteria(RiskCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
@@ -112,11 +110,11 @@ public class RiskCriteria implements Serializable, Criteria {
         final RiskCriteria that = (RiskCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-                Objects.equals(code, that.code) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(riskRegisterId, that.riskRegisterId) &&
-                Objects.equals(objectiveId, that.objectiveId) &&
-                Objects.equals(riskCategoryId, that.riskCategoryId)
+            Objects.equals(code, that.code) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(riskRegisterId, that.riskRegisterId) &&
+            Objects.equals(objectiveId, that.objectiveId) &&
+            Objects.equals(riskCategoryId, that.riskCategoryId)
         );
     }
 

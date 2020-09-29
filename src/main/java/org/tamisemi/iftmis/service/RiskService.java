@@ -3,7 +3,6 @@ package org.tamisemi.iftmis.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -88,7 +87,9 @@ public class RiskService {
      * @return
      */
     public List<RiskDTO> findAllByOrganisationIdAndRiskRegisterId(Long organisationUnitId, Long riskRegisterId) {
-        return riskRepository.findAllByOrganisationIdAndRiskRegisterId(organisationUnitId, riskRegisterId).stream()
+        return riskRepository
+            .findAllByOrganisationIdAndRiskRegisterId(organisationUnitId, riskRegisterId)
+            .stream()
             .map(riskMapper::toDto)
             .collect(Collectors.toList());
     }
@@ -103,16 +104,13 @@ public class RiskService {
         return riskRepository.findAllByOrganisationIdAndRiskRegisterId(organisationUnitId, riskRegisterId, pageable).map(riskMapper::toDto);
     }
 
-
     /**
      *
      * @param financialYearId
      * @return
      */
     public List<RiskDTO> findAllByFinancialYearId(Long financialYearId) {
-        return riskRepository.findAllByFinancialYearId(financialYearId).stream()
-            .map(riskMapper::toDto)
-            .collect(Collectors.toList());
+        return riskRepository.findAllByFinancialYearId(financialYearId).stream().map(riskMapper::toDto).collect(Collectors.toList());
     }
 
     /**

@@ -75,4 +75,14 @@
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
+
+    <changeSet id="addingActivityInTable" author="nickyrabit">
+        <addColumn tableName="inspection_activities">
+            <column name="activity" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

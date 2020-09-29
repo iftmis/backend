@@ -3,14 +3,12 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,9 +98,7 @@ public class RiskRegisterResource {
      * @return
      */
     @GetMapping("/risk-registers")
-    public ResponseEntity<List<RiskRegisterDTO>> getAllRiskRegisters(
-        @RequestParam(value = "financialYearId") Long financialYearId
-    ) {
+    public ResponseEntity<List<RiskRegisterDTO>> getAllRiskRegisters(@RequestParam(value = "financialYearId") Long financialYearId) {
         User currentUser = userService.currentUser();
         Long organisationUnitId = currentUser.getOrganisationUnit().getId();
         List<RiskRegisterDTO> items;
@@ -154,7 +150,6 @@ public class RiskRegisterResource {
         Optional<RiskRegisterDTO> riskRegisterDTO = riskRegisterService.findOne(id);
         return ResponseUtil.wrapOrNotFound(riskRegisterDTO);
     }
-
 
     @GetMapping("/risk-registers/approve/{id}")
     public ResponseEntity<RiskRegisterDTO> approve(@PathVariable Long id) {

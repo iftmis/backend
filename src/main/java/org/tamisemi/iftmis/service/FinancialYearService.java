@@ -99,7 +99,7 @@ public class FinancialYearService {
         financialYearRepository.deleteById(id);
     }
 
-    public Optional<FinancialYear> currentYear(){
+    public Optional<FinancialYear> currentYear() {
         return financialYearRepository.findFirstByIsOpenedTrue();
     }
 

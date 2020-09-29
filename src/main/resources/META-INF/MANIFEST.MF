@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: org.tamisemi.iftmis.IftmisApp
+Class-Path: C:\Users\Nalely\IdeaProjects\iftmis\backend\src\main\resourc
+ es
+

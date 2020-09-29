@@ -1,10 +1,9 @@
 package org.tamisemi.iftmis.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import org.tamisemi.iftmis.domain.FinancialYear;
-
-import java.util.Optional;
 
 @Repository
 public interface FinancialYearRepository extends JpaRepository<FinancialYear, Long> {

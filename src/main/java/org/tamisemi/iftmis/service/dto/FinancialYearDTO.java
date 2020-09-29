@@ -28,8 +28,6 @@ public class FinancialYearDTO extends AbstractAuditingDTO implements Serializabl
 
     private Boolean closed;
 
-
-
     public Long getId() {
         return id;
     }

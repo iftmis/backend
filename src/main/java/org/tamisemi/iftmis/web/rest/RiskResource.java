@@ -3,13 +3,11 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +52,12 @@ public class RiskResource {
 
     private final RiskQueryService riskQueryService;
 
-    public RiskResource(RiskService riskService, FinancialYearService financialYearService, UserService userService, RiskQueryService riskQueryService) {
+    public RiskResource(
+        RiskService riskService,
+        FinancialYearService financialYearService,
+        UserService userService,
+        RiskQueryService riskQueryService
+    ) {
         this.riskService = riskService;
         this.financialYearService = financialYearService;
         this.userService = userService;
@@ -103,7 +106,6 @@ public class RiskResource {
             .body(result);
     }
 
-
     @GetMapping("/risks")
     public ResponseEntity<List<RiskDTO>> getAllRisks(@RequestParam(value = "riskRegisterId") Long riskRegisterId) {
         User user = userService.currentUser();
@@ -119,13 +121,19 @@ public class RiskResource {
      * @return
      */
     @GetMapping("/risks/page")
-    public ResponseEntity<List<RiskDTO>> getAllPagedRisks(@RequestParam(value = "riskRegisterId") Long riskRegisterId,
-                                                          @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
-                                                          @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
-                                                          @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+    public ResponseEntity<List<RiskDTO>> getAllPagedRisks(
+        @RequestParam(value = "riskRegisterId") Long riskRegisterId,
+        @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+        @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy
+    ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         User user = userService.currentUser();
-        Page<RiskDTO> items = riskService.findAllByOrganisationIdAndRiskRegisterId(user.getOrganisationUnit().getId(), riskRegisterId, pageable);
+        Page<RiskDTO> items = riskService.findAllByOrganisationIdAndRiskRegisterId(
+            user.getOrganisationUnit().getId(),
+            riskRegisterId,
+            pageable
+        );
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);
         return ResponseEntity.ok().headers(headers).body(items.getContent());
     }
@@ -183,9 +191,11 @@ public class RiskResource {
     }
 
     @GetMapping("/risks/getAllPagedByCurrentFinancialYearId")
-    public ResponseEntity<List<RiskDTO>> getAllPagedByCurrentFinancialYearId(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
-                                                                                                         @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
-                                                                                                         @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+    public ResponseEntity<List<RiskDTO>> getAllPagedByCurrentFinancialYearId(
+        @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+        @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy
+    ) {
         Optional<FinancialYear> currentFinancialYear = financialYearService.currentYear();
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         if (currentFinancialYear.isPresent()) {

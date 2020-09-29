@@ -21,7 +21,7 @@ public class InspectionActivityDTO extends AbstractAuditingDTO implements Serial
     private String objectiveName;
 
     private Long auditableAreaId;
-
+    private String activity;
     private String auditableAreaName;
 
     private Long subAreaId;
@@ -29,6 +29,50 @@ public class InspectionActivityDTO extends AbstractAuditingDTO implements Serial
     private String subAreaName;
     private Set<RiskDTO> risks = new HashSet<>();
     private Set<OrganisationUnitDTO> organisationUnits = new HashSet<>();
+    private String quarter_one;
+    private String quarter_two;
+    private String quarter_three;
+    private String quarter_four;
+
+    public String getActivity() {
+        return activity;
+    }
+
+    public void setActivity(String activity) {
+        this.activity = activity;
+    }
+
+    public String getQuarter_two() {
+        return quarter_two;
+    }
+
+    public void setQuarter_two(String quarter_two) {
+        this.quarter_two = quarter_two;
+    }
+
+    public String getQuarter_three() {
+        return quarter_three;
+    }
+
+    public void setQuarter_three(String quarter_three) {
+        this.quarter_three = quarter_three;
+    }
+
+    public String getQuarter_four() {
+        return quarter_four;
+    }
+
+    public void setQuarter_four(String quarter_four) {
+        this.quarter_four = quarter_four;
+    }
+
+    public String getQuarter_one() {
+        return quarter_one;
+    }
+
+    public void setQuarter_one(String quarter_one) {
+        this.quarter_one = quarter_one;
+    }
 
     public Long getId() {
         return id;
@@ -150,6 +194,11 @@ public class InspectionActivityDTO extends AbstractAuditingDTO implements Serial
             ", subAreaName='" + getSubAreaName() + "'" +
             ", risks='" + getRisks() + "'" +
             ", organisationUnits='" + getOrganisationUnits() + "'" +
+            ", quarter_one='" + getQuarter_one() + '\'' +
+            ", quarter_two='" + getQuarter_two() + '\'' +
+            ", quarter_three='" + getQuarter_three() + '\'' +
+            ", quarter_four='" + getQuarter_four() + '\'' +
+            ", activity='" + getActivity() + '\'' +
             "}";
     }
 }

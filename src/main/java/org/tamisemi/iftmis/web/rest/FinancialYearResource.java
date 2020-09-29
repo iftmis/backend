@@ -3,13 +3,11 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,7 +49,11 @@ public class FinancialYearResource {
     private final UserService userService;
     private final RiskRegisterService riskRegisterService;
 
-    public FinancialYearResource(FinancialYearService financialYearService, UserService userService, RiskRegisterService riskRegisterService) {
+    public FinancialYearResource(
+        FinancialYearService financialYearService,
+        UserService userService,
+        RiskRegisterService riskRegisterService
+    ) {
         this.financialYearService = financialYearService;
         this.userService = userService;
         this.riskRegisterService = riskRegisterService;
@@ -132,9 +134,11 @@ public class FinancialYearResource {
      * @return
      */
     @GetMapping("/financial-years/page")
-    public ResponseEntity<List<FinancialYearDTO>> getAllPagedFinancialYears(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
-                                                                            @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
-                                                                            @RequestParam(value = "sortBy", defaultValue = "startDate") String sortBy) {
+    public ResponseEntity<List<FinancialYearDTO>> getAllPagedFinancialYears(
+        @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+        @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(value = "sortBy", defaultValue = "startDate") String sortBy
+    ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         Page<FinancialYearDTO> items = financialYearService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), items);

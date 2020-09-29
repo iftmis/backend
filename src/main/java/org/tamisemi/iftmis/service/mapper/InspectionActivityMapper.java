@@ -43,6 +43,7 @@ public interface InspectionActivityMapper extends EntityMapper<InspectionActivit
     default InspectionActivity fromId(Long id) {
         if (id == null) {
             return null;
+            //lllkpokpokpo
         }
         InspectionActivity inspectionActivity = new InspectionActivity();
         inspectionActivity.setId(id);
