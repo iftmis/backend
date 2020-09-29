@@ -8,26 +8,26 @@
 
 
     <!--
-        Added the entity Procedure.
+        Added the entity Cluster.
     -->
-    <changeSet id="20200706082825-1" author="Chris">
-        <createTable tableName="procedures" remarks="The Procedure(procedures) entity.\n@author Chris">
+    <changeSet id="20200706082425-1" author="Kachinga">
+        <createTable tableName="clusters" remarks="The Cluster(clusters) entity.\n@author Kachinga">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(2000)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_procedures_name"/>
+            <column name="code" type="varchar(64)">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_clusters_code" />
             </column>
-            <column name="indicator_id" type="bigint">
-                <constraints nullable="false"/>
+            <column name="name" type="varchar(200)">
+                <constraints nullable="false" uniqueConstraintName="ux_clusters_name" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
 
     <!-- Added the entity audit columns -->
-    <changeSet id="20200706082825-audit-1" author="Chris">
-        <addColumn tableName="procedures">
+    <changeSet id="20200706082425-audit-1" author="Kachinga">
+        <addColumn tableName="clusters">
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
