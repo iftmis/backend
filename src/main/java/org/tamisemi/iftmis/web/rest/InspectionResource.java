@@ -136,11 +136,9 @@ public class InspectionResource {
      */
     @GetMapping("/inspections/by-date-range/{startDate}/{endDate}")
     public ResponseEntity<List<InspectionDTO>> getAllInspectionsByDateRange(Pageable pageable, @PathVariable String startDate,@PathVariable String endDate ) {
-        log.debug("REST request to get a page of Inspections");
-        //default, ISO_LOCAL_DATE
+        log.debug("REST request to get a page of Inspections By date Range");
         LocalDate ISOStartDate = LocalDate.parse(startDate);
         LocalDate ISOEndDate = LocalDate.parse(endDate);
-        
         Page<InspectionDTO> page = inspectionService.findByDateRange(ISOStartDate, ISOEndDate, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
