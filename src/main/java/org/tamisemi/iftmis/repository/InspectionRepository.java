@@ -16,5 +16,7 @@ import org.tamisemi.iftmis.domain.Inspection;
 public interface InspectionRepository extends JpaRepository<Inspection, Long> {
     Page<Inspection> findByOrganisationUnit_Id(Long organisationUnitId, Pageable page);
     Page<Inspection> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDate startDate, LocalDate endDate, Pageable page);
+    Page<Inspection> findAll(Pageable page);
+
 
 }

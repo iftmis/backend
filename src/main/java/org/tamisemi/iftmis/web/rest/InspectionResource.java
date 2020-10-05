@@ -93,7 +93,7 @@ public class InspectionResource {
     @GetMapping("/inspections/by-ou/{organisationUnitId}")
     public ResponseEntity<List<InspectionDTO>> getAllInspections(Pageable pageable, @PathVariable Long organisationUnitId) {
         log.debug("REST request to get a page of Inspections");
-        Page<InspectionDTO> page = inspectionService.findAll(organisationUnitId, pageable);
+        Page<InspectionDTO> page = inspectionService.findByOrganisationUnitId(organisationUnitId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -143,4 +143,20 @@ public class InspectionResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+    
+    /**
+     * {@code GET  /inspections} : get all the inspections List.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspections in body.
+     */
+    @GetMapping("/inspections/")
+    public ResponseEntity<List<InspectionDTO>> getAllInspectionsByDateRange(Pageable pageable ) {
+        log.debug("REST request to get a page of Inspections By date Range");
+        Page<InspectionDTO> page = inspectionService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+    
+    
 }
