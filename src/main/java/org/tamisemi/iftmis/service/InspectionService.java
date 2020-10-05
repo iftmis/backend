@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,5 +75,18 @@ public class InspectionService {
     public void delete(Long id) {
         log.debug("Request to delete Inspection : {}", id);
         inspectionRepository.deleteById(id);
+    }
+    
+    
+    /**
+     * Get all the inspections By date range.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<InspectionDTO> findByDateRange(LocalDate startDate, LocalDate endDate , Pageable pageable) {
+        log.debug("Request to get all Inspections");
+        return inspectionRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate, pageable).map(inspectionMapper::toDto);
     }
 }

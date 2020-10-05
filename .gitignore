@@ -146,6 +146,11 @@ Desktop.ini
 ######################
 .eslintcache
 src/main/resources/config/application-dev.yml
+src/main/resources/config/application-dev-postgres.yml
+src/main/resources/config/application-dev.sample.yml
+src/main/resources/config/application-prod.yml
+src/main/resources/config/application-tls.yml
+src/main/resources/config/application.yml
 
 ######################
 # Jar Build Stuff

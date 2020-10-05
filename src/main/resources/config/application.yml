@@ -1,8 +1,7 @@
 # ===================================================================
-# Spring Boot configuration.
+# Spring Boot configuration for the "dev" profile.
 #
-# This configuration will be overridden by the Spring profile you use,
-# for example application-dev.yml if you use the "dev" profile.
+# This configuration overrides the application.yml file.
 #
 # More information on profiles: https://www.jhipster.tech/profiles/
 # More information on configuration properties: https://www.jhipster.tech/common-application-properties/
@@ -12,116 +11,59 @@
 # Standard Spring Boot properties.
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
-# ===================================================================
-
-management:
-  endpoints:
-    web:
-      base-path: /management
-      exposure:
-        include: ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump']
-  endpoint:
-    health:
-      show-details: when_authorized
-      roles: 'ROLE_ADMIN'
-    jhimetrics:
-      enabled: true
-  info:
-    git:
-      mode: full
-  health:
-    mail:
-      enabled: false # When using the MailService, configure an SMTP server and set this to true
-  metrics:
-    export:
-      # Prometheus is the default metrics backend
-      prometheus:
-        enabled: true
-        step: 60
-    enable:
-      http: true
-      jvm: true
-      logback: true
-      process: true
-      system: true
-    distribution:
-      percentiles-histogram:
-        all: true
-      percentiles:
-        all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
-    tags:
-      application: ${spring.application.name}
-    web:
-      server:
-        request:
-          autotime:
-            enabled: true
+# ===============================a====================================
+    
+logging:
+  level:
+    ROOT: DEBUG
+    io.github.jhipster: DEBUG
+    org.tamisemi.iftmis: DEBUG
 
 spring:
   application:
     name: iftmis
-  profiles:
-    # The commented value for `active` can be replaced with valid Spring profiles to load.
-    # Otherwise, it will be filled in by maven when building the JAR file
-    # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
-    active: #spring.profiles.active#
-  jmx:
-    enabled: false
-  data:
-    jpa:
-      repositories:
-        bootstrap-mode: deferred
-  jpa:
-    open-in-view: false
-    properties:
-      hibernate.jdbc.time_zone: UTC
-      hibernate.id.new_generator_mappings: true
-      hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: true
-      hibernate.cache.use_query_cache: false
-      hibernate.generate_statistics: false
-      # modify batch size as necessary
-      hibernate.jdbc.batch_size: 25
-      hibernate.order_inserts: true
-      hibernate.order_updates: true
-      hibernate.query.fail_on_pagination_over_collection_fetch: true
-      hibernate.query.in_clause_parameter_padding: true
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-  messages:
-    basename: i18n/messages
-  main:
+  main: 
+#    web-application-type: none
     allow-bean-definition-overriding: true
-  task:
-    execution:
-      thread-name-prefix: iftmis-task-
-      pool:
-        core-size: 2
-        max-size: 50
-        queue-capacity: 10000
-    scheduling:
-      thread-name-prefix: iftmis-scheduling-
-      pool:
-        size: 2
+  profiles:
+#    active: dev
+    include:
+      - swagger
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: false
+  jackson:
+    serialization:
+      indent-output: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/iftmisdb
+    username: nrdout
+    password: nrdout
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  liquibase:
+    contexts: dev
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
-    mode: HTML
-  output:
-    ansi:
-      console-available: true
+    cache: false
 
 server:
-  servlet:
-    session:
-      cookie:
-        http-only: true
-
-# Properties to be exposed on the /info management endpoint
-info:
-  # Comma separated list of profiles that will trigger the ribbon to show
-  display-ribbon-on-profiles: 'dev'
+  port: 8080
 
 # ===================================================================
 # JHipster specific properties
@@ -132,27 +74,38 @@ info:
 jhipster:
   clientApp:
     name: 'iftmisApp'
-  # By default CORS is disabled. Uncomment to enable.
-  # cors:
-  #     allowed-origins: "*"
-  #     allowed-methods: "*"
-  #     allowed-headers: "*"
-  #     exposed-headers: "Link,X-Total-Count"
-  #     allow-credentials: true
-  #     max-age: 1800
-  mail:
-    from: iftmis@localhost
-  swagger:
-    default-include-pattern: /api/.*
-    title: iftmis API
-    description: iftmis API documentation
-    version: 0.0.1
-    terms-of-service-url:
-    contact-name:
-    contact-url:
-    contact-email:
-    license:
-    license-url:
+  cache: # Cache configuration
+    ehcache: # Ehcache configuration
+      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      max-entries: 100 # Number of objects in each cache entry
+  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+  cors:
+    allowed-origins: '*'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Link,X-Total-Count'
+    allow-credentials: true
+    max-age: 1800
+  security:
+    remember-me:
+      # security key (this key should be unique for your application, and kept secret)
+      key: f672843a193284f448c29b6bc581a6739b0326879c12cf2bbafabfee858a31ff115d5d3a4d7c6e4eb1e84f59a257968008df
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://127.0.0.1:8080
+  metrics:
+    logs: # Reports metrics in the logs
+      enabled: false
+      report-frequency: 60 # in seconds
+  logging:
+    use-json-format: false # By default, logs are not in Json format
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: false
+      host: localhost
+      port: 5000
+      queue-size: 512
+  audit-events:
+    retention-period: 30 # Number of days before audit events are deleted.
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

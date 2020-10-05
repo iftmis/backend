@@ -5,6 +5,7 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -124,5 +125,24 @@ public class InspectionResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+    
+    
+    /**
+     * {@code GET  /inspections} : get all the inspections By date Range.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspections in body.
+     */
+    @GetMapping("/inspections/by-date-range/{startDate}/{endDate}")
+    public ResponseEntity<List<InspectionDTO>> getAllInspectionsByDateRange(Pageable pageable, @PathVariable String startDate,@PathVariable String endDate ) {
+        log.debug("REST request to get a page of Inspections");
+        //default, ISO_LOCAL_DATE
+        LocalDate ISOStartDate = LocalDate.parse(startDate);
+        LocalDate ISOEndDate = LocalDate.parse(endDate);
+        
+        Page<InspectionDTO> page = inspectionService.findByDateRange(ISOStartDate, ISOEndDate, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }
