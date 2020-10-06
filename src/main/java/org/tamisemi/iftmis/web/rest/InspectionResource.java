@@ -3,6 +3,8 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -157,6 +159,22 @@ public class InspectionResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+    
+    /**
+     * {@code GET  /inspections} : get all the inspections By date Range.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspections in body.
+     */
+    @GetMapping("/inspections/by/organisation-unit/{organisationUnit}/financial-year/{financialYear}")
+    public ResponseEntity<List<InspectionDTO>> getAllByFinancialYearAndOrganisationUnit(Pageable pageable, @PathVariable Long organisationUnit,@PathVariable Long financialYear ) {
+        log.debug("REST request to get a page of Inspections By organisationUnit andfinancialYear ");
+       
+        Page<InspectionDTO> page = inspectionService.findAllByFinancialYearAndOrganisationUnit(financialYear, organisationUnit, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+    
     
     
 }

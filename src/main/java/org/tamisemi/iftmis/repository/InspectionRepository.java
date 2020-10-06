@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.repository;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 
 import org.springframework.data.domain.Page;
@@ -17,6 +18,9 @@ public interface InspectionRepository extends JpaRepository<Inspection, Long> {
     Page<Inspection> findByOrganisationUnit_Id(Long organisationUnitId, Pageable page);
     Page<Inspection> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDate startDate, LocalDate endDate, Pageable page);
     Page<Inspection> findAll(Pageable page);
+    Page<Inspection> findAllByFinancialYear_IdAndOrganisationUnit_Id(Long financialYear, Long organisationUnit, Pageable page);
+    
+
 
 
 }
