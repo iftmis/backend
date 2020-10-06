@@ -1,5 +1,6 @@
 package org.tamisemi.iftmis.service;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -100,5 +101,19 @@ public class InspectionService {
     public Page<InspectionDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Inspections");
         return inspectionRepository.findAll(pageable).map(inspectionMapper::toDto);
+    }
+    
+    
+    
+    /**
+     * Get all the inspections By financialYear and organisationUnit.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<InspectionDTO> findAllByFinancialYearAndOrganisationUnit(Long financialYear, Long organisationUnit , Pageable pageable) {
+        log.debug("Request to get all Inspections by Financial Year And Organisation Unit");
+        return inspectionRepository.findAllByFinancialYear_IdAndOrganisationUnit_Id(financialYear, organisationUnit, pageable).map(inspectionMapper::toDto);
     }
 }
