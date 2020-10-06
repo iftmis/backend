@@ -51,7 +51,7 @@ public class FindingCategoryResource {
     @PostMapping("/finding-categories")
     public ResponseEntity<FindingCategoryDTO> createFindingCategory(@Valid @RequestBody FindingCategoryDTO findingCategoryDTO)
         throws URISyntaxException {
-        log.debug("REST request to save FindingCategory : {}", findingCategoryDfTO);
+        log.debug("REST request to save FindingCategory : {}", findingCategoryDTO);
         if (findingCategoryDTO.getId() != null) {
             throw new BadRequestAlertException("A new findingCategory cannot already have an ID", ENTITY_NAME, "idexists");
         }
