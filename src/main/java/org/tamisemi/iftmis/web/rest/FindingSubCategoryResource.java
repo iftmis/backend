@@ -71,6 +71,7 @@ public class FindingSubCategoryResource {
      * or with status {@code 500 (Internal Server Error)} if the findingSubCategoryDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+
     @PutMapping("/finding-sub-categories")
     public ResponseEntity<FindingSubCategoryDTO> updateFindingSubCategory(@Valid @RequestBody FindingSubCategoryDTO findingSubCategoryDTO)
         throws URISyntaxException {
@@ -91,6 +92,7 @@ public class FindingSubCategoryResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of findingSubCategories in body.
      */
+
     @GetMapping("/finding-sub-categories")
     public ResponseEntity<List<FindingSubCategoryDTO>> getAllFindingSubCategories(Pageable pageable) {
         log.debug("REST request to get a page of FindingSubCategories");
@@ -105,6 +107,7 @@ public class FindingSubCategoryResource {
      * @param id the id of the findingSubCategoryDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the findingSubCategoryDTO, or with status {@code 404 (Not Found)}.
      */
+
     @GetMapping("/finding-sub-categories/{id}")
     public ResponseEntity<FindingSubCategoryDTO> getFindingSubCategory(@PathVariable Long id) {
         log.debug("REST request to get FindingSubCategory : {}", id);
@@ -118,6 +121,7 @@ public class FindingSubCategoryResource {
      * @param id the id of the findingSubCategoryDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+
     @DeleteMapping("/finding-sub-categories/{id}")
     public ResponseEntity<Void> deleteFindingSubCategory(@PathVariable Long id) {
         log.debug("REST request to delete FindingSubCategory : {}", id);
