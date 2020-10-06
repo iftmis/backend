@@ -99,19 +99,6 @@ public class FindingCategoryResource {
     }
 
     /**
-     * {@code GET  /finding-categories/:id} : get the "id" findingCategory.
-     *
-     * @param id the id of the findingCategoryDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the findingCategoryDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/finding-categories/{id}")
-    public ResponseEntity<FindingCategoryDTO> getFindingCategory(@PathVariable Long id) {
-        log.debug("REST request to get FindingCategory : {}", id);
-        Optional<FindingCategoryDTO> findingCategoryDTO = findingCategoryService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(findingCategoryDTO);
-    }
-
-    /**
      * {@code DELETE  /finding-categories/:id} : delete the "id" findingCategory.
      *
      * @param id the id of the findingCategoryDTO to delete.
