@@ -3,7 +3,6 @@ package org.tamisemi.iftmis.web.rest;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.domain.enumeration.InspectionType;
 import org.tamisemi.iftmis.service.InspectionService;
 import org.tamisemi.iftmis.service.dto.InspectionDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -128,8 +128,7 @@ public class InspectionResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
-    
-    
+
     /**
      * {@code GET  /inspections} : get all the inspections By date Range.
      *
@@ -137,7 +136,11 @@ public class InspectionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspections in body.
      */
     @GetMapping("/inspections/by-date-range/{startDate}/{endDate}")
-    public ResponseEntity<List<InspectionDTO>> getAllInspectionsByDateRange(Pageable pageable, @PathVariable String startDate,@PathVariable String endDate ) {
+    public ResponseEntity<List<InspectionDTO>> getAllInspectionsByDateRange(
+        Pageable pageable,
+        @PathVariable String startDate,
+        @PathVariable String endDate
+    ) {
         log.debug("REST request to get a page of Inspections By date Range");
         LocalDate ISOStartDate = LocalDate.parse(startDate);
         LocalDate ISOEndDate = LocalDate.parse(endDate);
@@ -145,7 +148,7 @@ public class InspectionResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
-    
+
     /**
      * {@code GET  /inspections} : get all the inspections List.
      *
@@ -153,28 +156,37 @@ public class InspectionResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspections in body.
      */
     @GetMapping("/inspections/")
-    public ResponseEntity<List<InspectionDTO>> getAllInspectionsByDateRange(Pageable pageable ) {
+    public ResponseEntity<List<InspectionDTO>> getAllInspectionsByDateRange(Pageable pageable) {
         log.debug("REST request to get a page of Inspections By date Range");
         Page<InspectionDTO> page = inspectionService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
-    
+
     /**
      * {@code GET  /inspections} : get all the inspections By date Range.
      *
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of inspections in body.
      */
-    @GetMapping("/inspections/by/organisation-unit/{organisationUnit}/financial-year/{financialYear}")
-    public ResponseEntity<List<InspectionDTO>> getAllByFinancialYearAndOrganisationUnit(Pageable pageable, @PathVariable Long organisationUnit,@PathVariable Long financialYear ) {
+    @GetMapping(
+        "/inspections/by/organisation-unit/{organisationUnit}/financial-year/{financialYear}/inspection-type/{inspectionTypeString}"
+    )
+    public ResponseEntity<List<InspectionDTO>> getAllByFinancialYearAndOrganisationUnit(
+        Pageable pageable,
+        @PathVariable Long organisationUnit,
+        @PathVariable Long financialYear,
+        @PathVariable String inspectionTypeString
+    ) {
         log.debug("REST request to get a page of Inspections By organisationUnit andfinancialYear ");
-       
-        Page<InspectionDTO> page = inspectionService.findAllByFinancialYearAndOrganisationUnit(financialYear, organisationUnit, pageable);
+        InspectionType inspectionType = InspectionType.valueOf(inspectionTypeString);
+        Page<InspectionDTO> page = inspectionService.findAllByFinancialYearAndOrganisationUnit(
+            financialYear,
+            organisationUnit,
+            inspectionType,
+            pageable
+        );
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
-    
-    
-    
 }

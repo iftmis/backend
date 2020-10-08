@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.domain.Inspection;
+import org.tamisemi.iftmis.domain.enumeration.InspectionType;
 import org.tamisemi.iftmis.repository.InspectionRepository;
 import org.tamisemi.iftmis.service.dto.InspectionDTO;
 import org.tamisemi.iftmis.service.mapper.InspectionMapper;
@@ -77,8 +78,7 @@ public class InspectionService {
         log.debug("Request to delete Inspection : {}", id);
         inspectionRepository.deleteById(id);
     }
-    
-    
+
     /**
      * Get all the inspections By date range.
      *
@@ -86,11 +86,13 @@ public class InspectionService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<InspectionDTO> findByDateRange(LocalDate startDate, LocalDate endDate , Pageable pageable) {
+    public Page<InspectionDTO> findByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
         log.debug("Request to get all Inspections");
-        return inspectionRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate, pageable).map(inspectionMapper::toDto);
+        return inspectionRepository
+            .findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate, pageable)
+            .map(inspectionMapper::toDto);
     }
-    
+
     /**
      * Get all the inspections.
      *
@@ -102,18 +104,25 @@ public class InspectionService {
         log.debug("Request to get all Inspections");
         return inspectionRepository.findAll(pageable).map(inspectionMapper::toDto);
     }
-    
-    
-    
+
     /**
      * Get all the inspections By financialYear and organisationUnit.
      *
+     *
+     * @param inspectionType
      * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<InspectionDTO> findAllByFinancialYearAndOrganisationUnit(Long financialYear, Long organisationUnit , Pageable pageable) {
+    public Page<InspectionDTO> findAllByFinancialYearAndOrganisationUnit(
+        Long financialYear,
+        Long organisationUnit,
+        InspectionType inspectionType,
+        Pageable pageable
+    ) {
         log.debug("Request to get all Inspections by Financial Year And Organisation Unit");
-        return inspectionRepository.findAllByFinancialYear_IdAndOrganisationUnit_Id(financialYear, organisationUnit, pageable).map(inspectionMapper::toDto);
+        return inspectionRepository
+            .findAllByFinancialYear_IdAndOrganisationUnit_IdAndInspectionType(financialYear, organisationUnit, inspectionType, pageable)
+            .map(inspectionMapper::toDto);
     }
 }
