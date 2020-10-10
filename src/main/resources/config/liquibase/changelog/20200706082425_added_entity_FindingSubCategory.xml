@@ -25,6 +25,15 @@
         </createTable>
     </changeSet>
 
+
+    <changeSet id="addingCategoryIdFindingSubcategory" author="nickyrabit">
+        <addColumn tableName="finding_sub_categories">
+            <column name="finding_category_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
     <!-- Added the entity audit columns -->
     <changeSet id="20200706082425-audit-1" author="Chris">
         <addColumn tableName="finding_sub_categories">
