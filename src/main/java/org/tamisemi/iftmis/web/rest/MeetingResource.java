@@ -54,6 +54,7 @@ public class MeetingResource {
         if (meetingDTO.getId() != null) {
             throw new BadRequestAlertException("A new meeting cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
         MeetingDTO result = meetingService.save(meetingDTO);
         return ResponseEntity
             .created(new URI("/api/meetings/" + result.getId()))
