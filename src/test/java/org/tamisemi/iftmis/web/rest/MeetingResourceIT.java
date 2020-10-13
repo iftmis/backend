@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.IftmisApp;
 import org.tamisemi.iftmis.domain.Inspection;
 import org.tamisemi.iftmis.domain.Meeting;
+import org.tamisemi.iftmis.domain.enumeration.MeetingType;
 import org.tamisemi.iftmis.repository.MeetingRepository;
 import org.tamisemi.iftmis.service.MeetingService;
 import org.tamisemi.iftmis.service.dto.MeetingDTO;
