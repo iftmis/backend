@@ -10,16 +10,19 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.tamisemi.iftmis.config.ApplicationProperties;
+import org.tamisemi.iftmis.helper.storage.StorageProperties;
+import org.tamisemi.iftmis.service.StorageService;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
+@EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class, StorageProperties.class })
 public class IftmisApp {
     private static final Logger log = LoggerFactory.getLogger(IftmisApp.class);
 
@@ -101,5 +104,13 @@ public class IftmisApp {
             contextPath,
             env.getActiveProfiles()
         );
+    }
+
+    @Bean
+    CommandLineRunner init(StorageService storageService) {
+        return args -> {
+            storageService.deleteAll();
+            storageService.init();
+        };
     }
 }
