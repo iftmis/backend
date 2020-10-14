@@ -5,6 +5,8 @@ package org.tamisemi.iftmis.web.rest;
  **/
 import java.io.IOException;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,7 @@ import org.tamisemi.iftmis.service.StorageService;
 @RequestMapping("/api")
 public class FileUploadResource {
     private final StorageService storageService;
+    private final Logger log = LoggerFactory.getLogger(FileUploadResource.class);
 
     @Autowired
     public FileUploadResource(StorageService storageService) {
@@ -61,6 +64,7 @@ public class FileUploadResource {
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         storageService.store(file);
         redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+        log.debug("You have sucessfully uploaded  " + file.getOriginalFilename() + "   at the ");
 
         return "redirect:/";
     }
