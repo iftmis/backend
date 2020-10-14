@@ -1,6 +1,7 @@
 package org.tamisemi.iftmis.service;
 
 import java.util.Optional;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -8,7 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tamisemi.iftmis.domain.Meeting;
+import org.tamisemi.iftmis.domain.enumeration.InspectionType;
+import org.tamisemi.iftmis.domain.enumeration.MeetingType;
 import org.tamisemi.iftmis.repository.MeetingRepository;
+import org.tamisemi.iftmis.service.dto.InspectionDTO;
 import org.tamisemi.iftmis.service.dto.MeetingDTO;
 import org.tamisemi.iftmis.service.mapper.MeetingMapper;
 
@@ -74,5 +78,11 @@ public class MeetingService {
     public void delete(Long id) {
         log.debug("Request to delete Meeting : {}", id);
         meetingRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MeetingDTO> findByInspection_IdAndType(Long inspection_id, @NotNull MeetingType type, Pageable page) {
+        log.debug("Request to get all Inspections by Financial Year And Organisation Unit");
+        return meetingRepository.findByInspection_IdAndType(inspection_id, type, page).map(meetingMapper::toDto);
     }
 }

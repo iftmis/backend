@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.tamisemi.iftmis.domain.Meeting;
+import org.tamisemi.iftmis.domain.enumeration.MeetingType;
 import org.tamisemi.iftmis.service.MeetingService;
 import org.tamisemi.iftmis.service.dto.MeetingDTO;
 import org.tamisemi.iftmis.web.rest.errors.BadRequestAlertException;
@@ -109,6 +111,20 @@ public class MeetingResource {
         log.debug("REST request to get Meeting : {}", id);
         Optional<MeetingDTO> meetingDTO = meetingService.findOne(id);
         return ResponseUtil.wrapOrNotFound(meetingDTO);
+    }
+
+    @GetMapping("/meetings/inspection/{inspectionId}/type/{meetingType}")
+    public ResponseEntity<List<MeetingDTO>> getMeetingByInspectionIdAndMeetingType(
+        Pageable pageable,
+        @PathVariable Long inspectionId,
+        @PathVariable String meetingType
+    ) {
+        log.debug("REST request to get MInspection id : {}", inspectionId);
+        MeetingType meetingTypeEnum = MeetingType.valueOf(meetingType);
+        Page<MeetingDTO> page = meetingService.findByInspection_IdAndType(inspectionId, meetingTypeEnum, pageable);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
