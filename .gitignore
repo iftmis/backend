@@ -157,3 +157,4 @@ src/main/resources/config/application.yml
 ######################
 src/main/META-INF
 
+/upload-dir/
