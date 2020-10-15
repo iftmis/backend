@@ -1,7 +1,48 @@
 {
     "fluentMethods": true,
     "clientRootFolder": "",
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "theClusters",
+            "otherEntityName": "theClusters",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "fundingManagement"
+        },
+        {
+            "relationshipName": "findingSubCategory",
+            "otherEntityName": "findingSubCategory",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "fundingManagement"
+        },
+        {
+            "relationshipName": "financialYear",
+            "otherEntityName": "financialYear",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "fundingManagement"
+        },
+        {
+            "relationshipName": "organisationUnitLevel",
+            "otherEntityName": "organisationUnitLevel",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "fundingManagement"
+        }
+    ],
     "fields": [
         {
             "fieldName": "title",
@@ -9,6 +50,58 @@
         },
         {
             "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "code",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "level",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "conditions",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "causes",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "impact",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "implication",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "recommendation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "managementResponse",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "implementation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "auditComment",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "contacts",
             "fieldType": "String"
         }
     ],

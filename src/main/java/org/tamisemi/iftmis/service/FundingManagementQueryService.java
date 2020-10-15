@@ -97,6 +97,61 @@ public class FundingManagementQueryService extends QueryService<FundingManagemen
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), FundingManagement_.description));
             }
+            if (criteria.getType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getType(), FundingManagement_.type));
+            }
+            if (criteria.getCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCode(), FundingManagement_.code));
+            }
+            if (criteria.getLevel() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLevel(), FundingManagement_.level));
+            }
+            if (criteria.getConditions() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getConditions(), FundingManagement_.conditions));
+            }
+            if (criteria.getCauses() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCauses(), FundingManagement_.causes));
+            }
+            if (criteria.getImpact() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImpact(), FundingManagement_.impact));
+            }
+            if (criteria.getImplication() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImplication(), FundingManagement_.implication));
+            }
+            if (criteria.getRecommendation() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getRecommendation(), FundingManagement_.recommendation));
+            }
+            if (criteria.getManagementResponse() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getManagementResponse(), FundingManagement_.managementResponse));
+            }
+            if (criteria.getImplementation() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImplementation(), FundingManagement_.implementation));
+            }
+            if (criteria.getAuditComment() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAuditComment(), FundingManagement_.auditComment));
+            }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getStatus(), FundingManagement_.status));
+            }
+            if (criteria.getContacts() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getContacts(), FundingManagement_.contacts));
+            }
+            if (criteria.getTheClustersId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTheClustersId(),
+                    root -> root.join(FundingManagement_.theClusters, JoinType.LEFT).get(TheClusters_.id)));
+            }
+            if (criteria.getFindingSubCategoryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getFindingSubCategoryId(),
+                    root -> root.join(FundingManagement_.findingSubCategory, JoinType.LEFT).get(FindingSubCategory_.id)));
+            }
+            if (criteria.getFinancialYearId() != null) {
+                specification = specification.and(buildSpecification(criteria.getFinancialYearId(),
+                    root -> root.join(FundingManagement_.financialYear, JoinType.LEFT).get(FinancialYear_.id)));
+            }
+            if (criteria.getOrganisationUnitLevelId() != null) {
+                specification = specification.and(buildSpecification(criteria.getOrganisationUnitLevelId(),
+                    root -> root.join(FundingManagement_.organisationUnitLevel, JoinType.LEFT).get(OrganisationUnitLevel_.id)));
+            }
         }
         return specification;
     }

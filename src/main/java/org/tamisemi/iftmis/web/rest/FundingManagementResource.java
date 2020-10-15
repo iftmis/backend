@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -56,7 +57,7 @@ public class FundingManagementResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/funding-managements")
-    public ResponseEntity<FundingManagementDTO> createFundingManagement(@RequestBody FundingManagementDTO fundingManagementDTO) throws URISyntaxException {
+    public ResponseEntity<FundingManagementDTO> createFundingManagement(@Valid @RequestBody FundingManagementDTO fundingManagementDTO) throws URISyntaxException {
         log.debug("REST request to save FundingManagement : {}", fundingManagementDTO);
         if (fundingManagementDTO.getId() != null) {
             throw new BadRequestAlertException("A new fundingManagement cannot already have an ID", ENTITY_NAME, "idexists");
@@ -77,7 +78,7 @@ public class FundingManagementResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/funding-managements")
-    public ResponseEntity<FundingManagementDTO> updateFundingManagement(@RequestBody FundingManagementDTO fundingManagementDTO) throws URISyntaxException {
+    public ResponseEntity<FundingManagementDTO> updateFundingManagement(@Valid @RequestBody FundingManagementDTO fundingManagementDTO) throws URISyntaxException {
         log.debug("REST request to update FundingManagement : {}", fundingManagementDTO);
         if (fundingManagementDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
