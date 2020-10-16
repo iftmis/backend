@@ -63,7 +63,7 @@ logging:
     org.tamisemi.iftmis: DEBUG
 
 
-file:
+uploads:
     upload-dir: /home/nrdout/tamisemi/iftmis/v5/uploads
     
 spring:

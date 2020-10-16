@@ -2,7 +2,7 @@ package org.tamisemi.iftmis.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "file")
+@ConfigurationProperties(prefix = "uploads")
 public class FileStorageProperties {
 
 	private String uploadDir;
