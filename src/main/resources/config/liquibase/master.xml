@@ -56,6 +56,8 @@
     <include file="config/liquibase/changelog/20200718085245_added_entity_InspectionActivity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200718085345_added_entity_InspectionActivityQuarter.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200721070631_added_entity_InspectionBudget.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201015064351_added_entity_TheClusters.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201015064607_added_entity_FundingManagement.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200706084725_added_entity_constraints_ResponseAttachment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706081825_added_entity_constraints_OrganisationUnit.xml" relativeToChangelogFile="false"/>
@@ -93,6 +95,7 @@
     <include file="config/liquibase/changelog/20200918082425_added_entity_clusters.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200918105233_added_entity_ClusterAuditReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200918105239_added_entity_constraints_ClusterReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201015064607_added_entity_constraints_FundingManagement.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

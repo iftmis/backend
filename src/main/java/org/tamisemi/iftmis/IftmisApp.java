@@ -2,6 +2,8 @@ package org.tamisemi.iftmis;
 
 import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -22,6 +24,7 @@ import org.tamisemi.iftmis.helper.storage.StorageProperties;
 import org.tamisemi.iftmis.service.StorageService;
 
 @SpringBootApplication
+@EnableSwagger2
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class, StorageProperties.class })
 public class IftmisApp {
     private static final Logger log = LoggerFactory.getLogger(IftmisApp.class);

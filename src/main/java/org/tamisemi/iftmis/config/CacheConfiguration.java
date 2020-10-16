@@ -92,6 +92,8 @@ public class CacheConfiguration {
             createCache(cm, org.tamisemi.iftmis.domain.InspectionActivity.class.getName() + ".risks");
             createCache(cm, org.tamisemi.iftmis.domain.InspectionActivity.class.getName() + ".organisationUnits");
             createCache(cm, org.tamisemi.iftmis.domain.InspectionBudget.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.TheClusters.class.getName());
+            createCache(cm, org.tamisemi.iftmis.domain.FundingManagement.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

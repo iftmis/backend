@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    
+    <!--
+        Added the entity FundingManagement.
+    -->
+    <changeSet id="20201015064607-1" author="jhipster">
+        <createTable tableName="funding_management">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="code" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="level" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="conditions" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="causes" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="impact" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="implication" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="recommendation" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="management_response" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="implementation" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="audit_comment" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="contacts" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="the_clusters_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="finding_sub_category_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="financial_year_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="organisation_unit_level_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20201015064607-1-relations" author="jhipster">
+
+    </changeSet>
+    
+    <!-- Added the entity audit columns -->
+    <changeSet id="20201015064607-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="funding_management">
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+</databaseChangeLog>
