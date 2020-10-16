@@ -16,16 +16,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.tamisemi.iftmis.config.ApplicationProperties;
+import org.tamisemi.iftmis.config.FileStorageProperties;
 import org.tamisemi.iftmis.helper.storage.StorageProperties;
 import org.tamisemi.iftmis.service.StorageService;
 
 @SpringBootApplication
 @EnableSwagger2
-@EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class, StorageProperties.class })
+@EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class, StorageProperties.class, FileStorageProperties.class })
 public class IftmisApp {
     private static final Logger log = LoggerFactory.getLogger(IftmisApp.class);
 
