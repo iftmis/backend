@@ -48,13 +48,18 @@ public class MeetingMemberResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new meetingMemberDTO, or with status {@code 400 (Bad Request)} if the meetingMember has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/meeting-members")
-    public ResponseEntity<MeetingMemberDTO> createMeetingMember(@Valid @RequestBody MeetingMemberDTO meetingMemberDTO)
+    @PostMapping("/meeting-members/{meetingId}")
+    public ResponseEntity<MeetingMemberDTO> createMeetingMember(
+        @Valid @RequestBody MeetingMemberDTO meetingMemberDTO,
+        @PathVariable Long meetingId
+    )
         throws URISyntaxException {
         log.debug("REST request to save MeetingMember : {}", meetingMemberDTO);
         if (meetingMemberDTO.getId() != null) {
             throw new BadRequestAlertException("A new meetingMember cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        meetingMemberDTO.setMeetingId(meetingId);
+
         MeetingMemberDTO result = meetingMemberService.save(meetingMemberDTO);
         return ResponseEntity
             .created(new URI("/api/meeting-members/" + result.getId()))
