@@ -1,9 +1,14 @@
 package org.tamisemi.iftmis.web.rest;
 
+import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
+
+import io.github.jhipster.web.util.HeaderUtil;
 /**
  * @author : Nickyrabit
  **/
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +57,9 @@ public class FileUploadResource {
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException {
         Resource file = storageService.loadAsResource(filename);
+
         return ResponseEntity
             .ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
@@ -66,7 +72,7 @@ public class FileUploadResource {
         redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
         log.debug("You have sucessfully uploaded  " + file.getOriginalFilename() + "   at the ");
 
-        return "redirect:/";
+        return "/api/files/" + file.getOriginalFilename();
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
