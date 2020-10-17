@@ -62,6 +62,9 @@ logging:
     io.github.jhipster: DEBUG
     org.tamisemi.iftmis: DEBUG
 
+uploads:
+  upload-dir: N:\Firebase\
+
 spring:
   application:
     name: iftmis
@@ -102,6 +105,7 @@ spring:
     show-sql: true
   liquibase:
     contexts: dev
+    # drop-first: true
   mail:
     host: localhost
     port: 25
