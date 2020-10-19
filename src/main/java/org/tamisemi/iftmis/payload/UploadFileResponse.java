@@ -1,5 +1,7 @@
 package org.tamisemi.iftmis.payload;
 
+import org.springframework.http.ResponseEntity;
+import org.tamisemi.iftmis.service.dto.FileResourceDTO;
 
 public class UploadFileResponse {
 
@@ -10,9 +12,11 @@ public class UploadFileResponse {
     private String fileExtension;
     private long size;
     private String md5;
+    private FileResourceDTO fileResourceDTO;
     
+
 	public UploadFileResponse(String fileName, String fileDownloadUri, String fileType, String fileExtension, long size,
-			String md5) {
+			String md5, FileResourceDTO fileResourceDTO) {
 		super();
 		this.fileName = fileName;
 		this.fileDownloadUri = fileDownloadUri;
@@ -20,7 +24,14 @@ public class UploadFileResponse {
 		this.fileExtension = fileExtension;
 		this.size = size;
 		this.md5 = md5;
+		this.fileResourceDTO = fileResourceDTO;
 	}
+	
+	public UploadFileResponse(String fileName2, String fileDownloadUri2, String contentType, String extension,
+			long size2, String md52, ResponseEntity<FileResourceDTO> result) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getFileName() {
 		return fileName;
 	}
@@ -57,5 +68,12 @@ public class UploadFileResponse {
 	public void setMd5(String md5) {
 		this.md5 = md5;
 	}
+	public FileResourceDTO getFileResourceDTO() {
+		return fileResourceDTO;
+	}
+	public void setFileResourceDTO(FileResourceDTO fileResourceDTO) {
+		this.fileResourceDTO = fileResourceDTO;
+	}
+   
 	
 }
