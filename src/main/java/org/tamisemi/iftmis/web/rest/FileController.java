@@ -15,10 +15,12 @@ import org.tamisemi.iftmis.service.FileStorageService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import java.security.DigestInputStream;
 @RestController
 @RequestMapping("/api")
 public class FileController {
@@ -31,15 +33,18 @@ public class FileController {
     @PostMapping("/upload-file")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
-        
-
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/download-file/")
                 .path(fileName)
                 .toUriString();
+        
+        String md5 = fileStorageService.getMd5(file);
+        String extension = fileStorageService.getExtension(file);
+        
+
 
         return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+                file.getContentType(), extension,file.getSize(), md5);
     }
 
     @PostMapping("/upload-multiple-files")
