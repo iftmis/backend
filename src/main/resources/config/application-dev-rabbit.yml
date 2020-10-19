@@ -62,19 +62,12 @@ logging:
     io.github.jhipster: DEBUG
     org.tamisemi.iftmis: DEBUG
 
-
 uploads:
-    upload-dir: /home/nrdout/tamisemi/iftmis/v5/uploads
-    
+  upload-dir: N:\Firebase\
+
 spring:
   application:
     name: iftmis
-  servlet:
-    multipart:
-      enabled: true
-      file-size-threshold: 2KB
-      max-file-size: 200MB
-      max-request-size: 215MB
   main:
     #    web-application-type: none
     allow-bean-definition-overriding: true
@@ -112,6 +105,7 @@ spring:
     show-sql: true
   liquibase:
     contexts: dev
+    # drop-first: true
   mail:
     host: localhost
     port: 25

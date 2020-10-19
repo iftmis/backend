@@ -1,14 +1,6 @@
 package org.tamisemi.iftmis.web.rest;
 
-import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
-
-import io.github.jhipster.web.util.HeaderUtil;
-/**
- * @author : Nickyrabit
- **/
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.tamisemi.iftmis.service.StorageService;
+
+/**
+ * @author : Nickyrabit
+ **/
 
 @RestController
 @RequestMapping("/api")
