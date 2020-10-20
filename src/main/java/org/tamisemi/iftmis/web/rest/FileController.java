@@ -80,6 +80,22 @@ public class FileController {
                 file.getContentType(), extension,file.getSize(), md5, result);
     
     }
+    
+    @PostMapping(value="/upload-multiple-files", consumes = { "application/json" })
+    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+        return Arrays.asList(files)
+                .stream()
+                .map(file -> {
+					try {
+						return uploadFile(file);
+					} catch (URISyntaxException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return null;
+				})
+                .collect(Collectors.toList());
+    }
 
 
 

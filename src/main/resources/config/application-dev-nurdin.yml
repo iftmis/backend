@@ -72,7 +72,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      file-size-threshold: 2KB
+#      file-size-threshold: 2KB
+      file-size-threshold: 200MB
       max-file-size: 200MB
       max-request-size: 215MB
   main:
@@ -99,19 +100,20 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:file:./target/h2db/db/iftmis;DB_CLOSE_DELAY=-1
-    username: iftmis
-    password: iftmis
+    url: jdbc:postgresql://localhost:5432/iftmisdb
+    username: nrdout
+    password: nrdout
     hikari:
       poolName: Hikari
       auto-commit: false
-  h2:
-    console:
-      enabled: false
   jpa:
-    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
   liquibase:
     contexts: dev
+    drop-first: true
   mail:
     host: localhost
     port: 25
